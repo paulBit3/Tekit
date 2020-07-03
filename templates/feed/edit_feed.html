@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+   	<section id="showcase-inner">
+
+	   <div class="container">
+	     <div class="card bg-light mb-3" style="max-width: 25rem;">
+	       <div class="card-header">Edit Feed</div> 
+	       
+	     </div>
+            <h5 class="card-title"><p><a href="{% url 'feed:topic' topic.id %}">{{ topic }}</a></p></h5>
+	       	<form class="form-group" action="{% url 'feed:edit_feed' feed.id %}" method="post">
+		        {% csrf_token %}
+		        {{ form|crispy}}
+		        <input class="btn btn-primary" type="submit" value="Update">
+	       </form>
+	       
+	   </div>
+
+	</section>
+
+{% endblock content %}

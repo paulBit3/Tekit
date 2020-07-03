@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="container">
+  {% block page_header %}
+    <h5>{{ topic }}</h5>
+  {% endblock page_header %}
+   <p><a class="btn btn-primary" href="{% url 'feed:new_feed' topic.id %}">New Feed</a></p>
+  <section id="showcase-inner">
+    
+      {% for feed in feeds %}
+       <div class="card bg-light mb-3"style="max-width: 50rem;">
+         <h5 class="card-header">
+           
+             {{ feed.date_added | date:'M d, Y H:i a' }}<small>
+                <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></small>
+          </h5>
+         <div class="card-body">
+              {{ feed.text|linebreaks }}
+        </div>
+       </div>
+       {% empty %}
+         <p class="card-text">There are no entries for this topic yet.</p>
+       {% endfor %}
+    
+
+   </section>
+ </div>
+
+  
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} | Account Login {% endblock %}
+
+{% block content %}
+    <section id="login" class="bg-light py-5">
+        <div class="container">
+            <div class="authpage">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-6 mx-auto">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4>
+                                <i class="fas fa-sign-in-alt"></i>Login</h4>
+                        </div>
+                        <div class="card-body">
+                         
+                            <form action="{% url 'accounts:_login' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" name="username" class="form-control" required></input>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input type="password" name="password" class="form-control" required></input>
+                                </div>
+
+                                <button type="submit" value="Login" class="btn btn-primary btn-block">Login</button>
+                            </form>
+                        </div>
+                    </div>
+                          <div class="login-help">
+                              <p>Forgot your <a class="nav-link" href="#">username or</a><a class="nav-link" href="#">password?</a></p>
+                            </div>
+                            <div class="has-text-centered">
+                              <p class="has-text-grey-darker signup-text">New to Tekit?
+                                <a class="nav-link" href="{% url 'accounts:register' %}">SIGN UP</a></p>
+                            </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

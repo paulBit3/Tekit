@@ -1,0 +1,10 @@
+
+       {% autoescape off %}
+       Hi {{user.username }}
+
+       Please click on the link below to activate your account.
+
+       {{protocol}}://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+
+       Your username is: {{ user.get_username }}
+       {% endautoescape %}

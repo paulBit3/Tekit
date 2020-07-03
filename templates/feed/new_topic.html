@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+	<section id="showcase-inner">
+
+	   <div class="container">
+	     <div class="card bg-light mb-3" style="max-width: 25rem;">
+	       <div class="card-header">Post a Feed</div> 
+	      
+	       <div class="card-body">
+	       	<form class="form-inline" action="{% url 'feed:new_topic' %}" method="post">
+		        {% csrf_token %}
+		        {{ form|crispy }}
+		        <input class="btn btn-primary" type="submit" value="Post">
+	       </form>
+	      </div>
+	     </div>
+	   </div>
+
+	</section>
+
+{% endblock content %}

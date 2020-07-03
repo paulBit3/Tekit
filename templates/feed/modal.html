@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+	<div class="container">
+		<div class="noo-heading-content">
+			<h1 class="page-title eff">Login</h1>
+			<div class="noo-page-breadcrumb eff"></div>
+		</div>
+	</div>
+
+	<!-- Triggering the modal -->
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+		LOGIN
+	</button>
+
+	<!--The Modal-->
+	<div class="modal fade" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<h5 class="modal-title">...</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			
+				<div class="modal-body">
+					<p></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">Save changes</button>
+	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+		    </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

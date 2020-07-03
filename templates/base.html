@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="X-UA-Compatible" content="ie=edge">
+      <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Lato&family=Montserrat&family=Oswald&family=Roboto&display=swap">
+      <!-- Font Awesome -->
+    <script src="https://use.fontawesome.com/releases/v5.9.0/js/all.js"></script>
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <title>Tekit</title>
+</head>
+<body>
+
+
+    <!-- Auth -->
+    {% include 'partials/_navbar.html' %}
+    <main role="main" class="container">
+        <div class="pb-2 mb-3 border-bottom">
+            {% block page_header %}
+            {% include 'partials/_alerts.html' %}
+            {% endblock page_header %}
+        </div>
+    </main>
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+    <!-- Footer -->
+    {% include 'partials/_footer.html' %}
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
