@@ -6,22 +6,36 @@
 		{% block page_header %}
 		   <h5>{{ topic }}</h5>
 		{% endblock page_header %}
-	    
-			<section id="showcase-inner">
-				<div class="jumbotron">
-					{% for feedlist in feed %}
-					<div class="card bg-light mb-3"style="max-width: 20rem;">
-						<h5 class="card-header">
-							{{ feedlist.date_added | date:'M d, Y H:i, a' }}
-						</h5>
-						<div class="card-body">
-							{{ feedlist.text|slice:":400" }}
+		<!-- Feeds column -->
+	      <div class="row">
+	      	<div class="col-md-8 mt3 left">
+	      		<section id="showcase-inner">
+					<div class="jumbotron">
+						{% for feedlist in feed %}
+						<div class="card bg-light mb-3"style="max-width: 20rem;">
+						   
+                                <h5 class="card-header text-muted">
+									
+									 {{ feedlist.date_added | date:'M d, Y H:i, a' }}
+								</h5>
+
+								<div class="card-body">
+									<p card-text>
+										<!-- Limited the words on the excerpts to 400 characters-->
+										{{ feedlist.text|slice:":400" }}
+									</p>
+									<a href="" class="btn btn-primary">Read More &rarr;</a>
+									
+								</div>
+                            
 						</div>
+						  {% empty %}
+		                 <li class="card-text"><h3>No feed has been added yet.</h3></li>
+						{% endfor %}
 					</div>
-					  {% empty %}
-	                 <li class="card-text"><h3>No feed has been added yet.</h3></li>
-					{% endfor %}
-				</div>
-			</section>
+			    </section>
+	      	</div>
+			
+		 </div>
 	</div>
 {% endblock %}

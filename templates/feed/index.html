@@ -1,17 +1,29 @@
 {% extends 'base.html' %}
 
 {% block page_header %}
-
-    <div class="jumbotron">
-    	<p class="lead"><a class="logo-text" href="">Tekit</a> is a social platform helps you keep share your histories how technology change your life or your business, and where you can learn track your learning, for any topic.</p>
-    </div>
-<!-- 	<section id="showcase-inner" class="py-5">
-		<div class="container">
-			<div class="col-md-12">
-				
-			</div>
-		</div>
-		 
-	</section> -->
-   
+  <div class="container">
+    <header class="masthead">
+    	<div class="overlay">
+    		<div class="container">
+    			<div class="">
+    				<div class="row">
+	    				<div class="col-md-8 col-md-10 mx-auto">
+	    					<div class="site-heading">
+	    						<p class="lead">
+	    							<a class="logo-text" href="">Tekit</a> is a social platform for sharing your Technology history with others. How Technology change your life or your business. Share and learn track your feeds, for any topic from others.
+	    							<a class="btn btn-primary" href="{% url 'accounts:register' %}">+Join &raquo;</a>
+	    						</p>
+	    						
+	    					</div>
+	    				</div>
+    			    </div>
+    			</div>
+    			
+    		</div>
+    	</div>
+    </header>
+      {% include 'partials/sidebar.html' %} 
+  </div>
 {% endblock page_header %}
+
+

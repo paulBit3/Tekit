@@ -17,13 +17,15 @@ class Topic(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.text
+        return "%s - %s " % (self.text, self.owner.username)
+
 
 # For user to record
 class Feed(models.Model):
     """Something specific learned about a topic"""
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     text = models.TextField()
+    image = models.ImageField(upload_to='photos/%Y/%m/%d/')
     date_added = models.DateTimeField(auto_now=True)
 
     class Meta:

@@ -20,6 +20,6 @@ class FeedForm(forms.ModelForm):
 
     class Meta:
         model = Feed
-        fields = ['text']
+        fields = ['text', 'image',]
         labels = {'text': ''}
         widgets = {'text': forms.Textarea(attrs={'cols': 80, 'rows': 4, 'placeholder': 'Tell your Tech history'})}

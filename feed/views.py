@@ -93,10 +93,10 @@ def edit_feed(request, feed_id):
 
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry
-        form = EntryForm(instance=feed)
+        form = FeedForm(instance=feed)
     else:
         # POST data submitted; process data
-        form = EntryForm(instance=feed, data=request.POST)
+        form = FeedForm(instance=feed, data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Feed successfully updated')
@@ -108,7 +108,7 @@ def edit_feed(request, feed_id):
 
 # Displaying all new posts or feeds
 def feeds(request, topic_id):
-    
+
     try:
         feed = Feed.objects.all().order_by('-date_added')
         topic = Topic.objects.get(id=topic_id)
