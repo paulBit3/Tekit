@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<div class="container-fluid">
+		{% block page_header %}
+		   <h5>{{ topic }}</h5>
+		{% endblock page_header %}
+	    
+			<section id="showcase-inner">
+				<div class="jumbotron">
+					{% for feedlist in feed %}
+					<div class="card bg-light mb-3"style="max-width: 20rem;">
+						<h5 class="card-header">
+							{{ feedlist.date_added | date:'M d, Y H:i, a' }}
+						</h5>
+						<div class="card-body">
+							{{ feedlist.text|slice:":400" }}
+						</div>
+					</div>
+					  {% empty %}
+	                 <li class="card-text"><h3>No feed has been added yet.</h3></li>
+					{% endfor %}
+				</div>
+			</section>
+	</div>
+{% endblock %}

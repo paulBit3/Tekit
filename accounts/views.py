@@ -75,7 +75,7 @@ def _login(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'You are now logged in !')
-            return redirect('learning:topics')
+            return redirect('feed:topics')
         else:
             messages.error(request, "Hmm, we don't recognize that credentials. Please try again.")
             return redirect('accounts:_login')
@@ -87,7 +87,7 @@ def logout(request):
     if request.method == 'POST':
         auth.logout(request)
         messages.success(request, 'You are logged out.')
-    return redirect('learning:index')
+    return redirect('feed:index')
 
 
 def password_reset(request,):

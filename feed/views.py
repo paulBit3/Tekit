@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.shortcuts import  get_object_or_404
 from django.contrib import messages
 
 from .models import Topic, Feed
@@ -103,3 +104,33 @@ def edit_feed(request, feed_id):
 
     context = {'feed': feed, 'topic': topic, 'form': form}
     return render(request, 'feed/edit_feed.html', context)
+
+
+# Displaying all new posts or feeds
+def feeds(request, topic_id):
+    
+    try:
+        feed = Feed.objects.all().order_by('-date_added')
+        topic = Topic.objects.get(id=topic_id)
+        #output = ''.join([q.text for q in feed])
+    except Feed.DoesNotExist:
+        raise messages.error('Feed not found!')
+
+    context = {
+        'feed': feed,
+        'topic': topic
+        }
+
+    return render(request, 'feed/feed_list.html', context)
+
+
+# def feeds(request, topic_id):
+#     """Show all feeds"""
+#     feeds = Topic.objects.all().order_by('-date_added')
+
+#     context = {
+#         'topic': topic,
+#         }
+
+#     return render(request, 'feed/feed_list.html', context)
+
