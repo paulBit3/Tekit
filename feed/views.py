@@ -4,6 +4,8 @@ from django.http import Http404
 from django.shortcuts import  get_object_or_404
 from django.contrib import messages
 
+from PIL import Image
+
 from .models import Topic, Feed
 from .forms import TopicForm, FeedForm
 
@@ -69,11 +71,13 @@ def new_feed(request, topic_id):
         form = FeedForm()
     else:
         # POST data submitted; process data
-        form = FeedForm(data=request.POST)
+        form = FeedForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.topic = topic
-            post.save()
+            nfeed = Feed(image = request.FILES['image'])
+            nfeed = nfeed.rotate(18, expand=True)
+            nfeed = form.save(commit=False)
+            nfeed.topic = topic
+            nfeed.save()
             messages.success(request, 'Your post has been submitted')
             return redirect('feed:topic', topic_id=topic_id)
 

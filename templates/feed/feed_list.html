@@ -12,11 +12,15 @@
 	      		<section id="showcase-inner">
 					<div class="jumbotron">
 						{% for feedlist in feed %}
-						<div class="card bg-light mb-3"style="max-width: 20rem;">
-						   
+						<div class="card bg-light mb-3"style="max-width: 25rem;">
+						    {% if feedlist.image %}
+	                                	<div class="card-img-top">
+											<img src="{{ feedlist.image.url }}" alt="">
+	                                	</div>
+							{% endif %} 
                                 <h5 class="card-header text-muted">
-									
-									 {{ feedlist.date_added | date:'M d, Y H:i, a' }}
+                                	
+									| {{ feedlist.date_added | date:'M d, Y H:i, a' }}
 								</h5>
 
 								<div class="card-body">
