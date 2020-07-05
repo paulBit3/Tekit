@@ -10,7 +10,9 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib import auth, messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
+
 
 # Create your views here.
 
@@ -118,7 +120,42 @@ def activate(request, uidb64, token):
     else:
         return HttpResponse('Activation link is inactive!')
 
+
 # Update user profile
 def update_profile(request, user_id):
     user = User.objects.get(pk=user_id)
     user.profile.photo
+
+
+# password reset request
+def password_reset_request(request):
+    if request.method == 'POST':
+        pw_reset_form = PasswordResetForm(request.POST)
+        if pw_reset_form.is_valid:
+            data = pw_reset_form.cleaned_data['email']
+            ass_users = User.objects.filter(email=data, username=data)
+            if ass_users.exists():
+                current_site = get_current_site(request)
+                subject = 'Password Reset Requested'
+                email_temp_name = 'accounts/password_reset_email.html'
+                email_from = settings.DEFAULT_FROM_EMAIL
+
+                context = {
+                    'user': user,
+                    'email': user.email,
+                    'domain': current_site.domain,
+                    'protocol': 'https' if request.is_secure() else 'http',
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': account_activation_token.make_token(user)
+                }
+
+                subject = ''.join(subject.splitlines())
+                email = render_to_string(email_temp_name, context)
+                html_message = email
+                user.email_user(subject, html_message, email_from, fail_silently=False)
+
+                return render(request, 'accounts/password_reset_done.html')
+    else:
+        return render(request, 'accounts/password_reset.html')
+
+
