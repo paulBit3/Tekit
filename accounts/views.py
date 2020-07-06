@@ -13,6 +13,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 
+from .forms import UserForm, UserProfileInfoForm
+
 
 # Create your views here.
 
@@ -29,7 +31,7 @@ def register(request):
             return redirect('accounts:register')
         else:
             if User.objects.filter(email=email).exists():
-                messages.error(request, 'That email is already in used')
+                messages.error(request, 'That email is already in use')
                 return redirect('accounts:register')
             else:
                 # Looks good
@@ -92,9 +94,6 @@ def logout(request):
     return redirect('feed:index')
 
 
-def password_reset(request,):
-    return
-
 # Sent activation link
 def activation_sent(request):
     return render(request, 'accounts/account_activation_sent.html')
@@ -112,19 +111,37 @@ def activate(request, uidb64, token):
         """if valid, set active true"""
         user.is_active = True
         user.save()
+
+        # Log the user in and redirect to home page
         login(request, user)
         # return redirect('index')
-        messages.success(request,  'Registration completed. Please login to your account. ')
-        return redirect('accounts:_login')
+        messages.success(request,  'Your account has been activated successfully.')
+        return redirect('feed:index')
         # return render(request, 'accounts/login.html')
     else:
         return HttpResponse('Activation link is inactive!')
 
 
 # Update user profile
-def update_profile(request, user_id):
-    user = User.objects.get(pk=user_id)
-    user.profile.photo
+# def update_profile(request, user_id):
+#     user = User.objects.get(pk=user_id)
+#     user.profile.photo
+#     user.save()
+
+def update_profile(request):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileInfoForm(request.POST, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile was successfully updated')
+
+
+
+# Sent password reset link
+def password_reset_sent(request):
+    return render(request, 'accounts/password_reset_sent.html')
 
 
 # password reset request

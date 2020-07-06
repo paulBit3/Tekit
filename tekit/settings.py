@@ -122,7 +122,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# AUTH_USER_MODEL = 'core.User'
+# AUTH_USER_MODEL = 'feed.Profile'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
