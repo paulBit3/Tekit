@@ -74,7 +74,7 @@ def new_feed(request, topic_id):
         form = FeedForm(request.POST, request.FILES)
         if form.is_valid():
             nfeed = Feed(image = request.FILES['image'])
-            nfeed = nfeed.rotate(18, expand=True)
+            # nfeed = nfeed.rotate(18, expand=True)
             nfeed = form.save(commit=False)
             nfeed.topic = topic
             nfeed.save()

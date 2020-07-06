@@ -3,6 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+
+from PIL import Image
+
 # Create your models here.
 
 
@@ -25,21 +28,40 @@ class Profile(models.Model):
         if len(stripped_phone) < 10:
            raise messages.error(request, 'Enter a valid phone number. e.g.555-555-5555')
         return self.clean_data['phone']
+    
+    # Resizing the user profile photo
+    def resize_image(self):
+    	SQUARE_FIT_SIZE = 300
+    	img = Image.open(self.photo.path)
+        
+        # Check if image needs to be resized.
+    	if img.width > SQUARE_FIT_SIZE or img.height > SQUARE_FIT_SIZE:
+    		# Calculate the new width and height to resize to
+    		if width > height:
+    			height = int((SQUARE_FIT_SIZE / width) * height)
+    			width = SQUARE_FIT_SIZE
+    		else:
+    			width = int((SQUARE_FIT_SIZE / height) * width)
+    			height = SQUARE_FIT_SIZE
+
+    		# Resize the image
+    		img = img.resize(width, height)
+    		img.save(self.photo.path)
 
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(username=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
 
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
 
 
-@receiver(post_save, sender=User)
-def update_profile_signal(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(username=instance)
-    instance.profile.save()     
+# @receiver(post_save, sender=User)
+# def update_profile_signal(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+#     instance.profile.save()     

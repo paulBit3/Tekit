@@ -7,16 +7,16 @@
 		   <h5>{{ topic }}</h5>
 		{% endblock page_header %}
 		<!-- Feeds column -->
-	      <div class="row">
+	    <div class="row">
 	      	<div class="col-md-8 mt3 left">
 	      		<section id="showcase-inner">
 					<div class="jumbotron">
 						{% for feedlist in feed %}
 						<div class="card bg-light mb-3"style="max-width: 25rem;">
 						    {% if feedlist.image %}
-	                                	<div class="card-img-top">
-											<img src="{{ feedlist.image.url }}" alt="">
-	                                	</div>
+	                            <div class="card-img-top">
+	                            	<img src="{{ feedlist.image.url }}" alt="">
+	                            </div>
 							{% endif %} 
                                 <h5 class="card-header text-muted">
                                 	
@@ -31,7 +31,6 @@
 									<a href="" class="btn btn-primary">Read More &rarr;</a>
 									
 								</div>
-                            
 						</div>
 						  {% empty %}
 		                 <li class="card-text"><h3>No feed has been added yet.</h3></li>
@@ -39,7 +38,6 @@
 					</div>
 			    </section>
 	      	</div>
-			
 		 </div>
 	</div>
 {% endblock %}

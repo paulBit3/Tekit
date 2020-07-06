@@ -123,19 +123,19 @@ def activate(request, uidb64, token):
 
 
 # Update user profile
-# def update_profile(request, user_id):
-#     user = User.objects.get(pk=user_id)
-#     user.profile.photo
-#     user.save()
+def update_profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    user.profile.photo
+    user.save()
 
-def update_profile(request):
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UserProfileInfoForm(request.POST, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, 'Your profile was successfully updated')
+# def update_profile(request):
+#     if request.method == 'POST':
+#         user_form = UserForm(request.POST, instance=request.user)
+#         profile_form = UserProfileInfoForm(request.POST, instance=request.user.profile)
+#         if user_form.is_valid() and profile_form.is_valid():
+#             user_form.save()
+#             profile_form.save()
+#             messages.success(request, 'Your profile was successfully updated')
 
 
 
