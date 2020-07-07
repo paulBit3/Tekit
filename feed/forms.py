@@ -23,3 +23,12 @@ class FeedForm(forms.ModelForm):
         fields = ['text', 'image',]
         labels = {'text': ''}
         widgets = {'text': forms.Textarea(attrs={'cols': 80, 'rows': 4, 'placeholder': 'Tell your Tech history'})}
+
+
+class CommentForm(forms.ModelForm):
+    """docstring for CommentFomr"""
+    class Meta:
+        model = Comment
+        fields = ('text')
+            
+        

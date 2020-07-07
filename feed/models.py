@@ -78,7 +78,12 @@ class Comment(models.Model):
     class meta:
         """A meta class"""
         ordering = ['created_on']
-            
+    
+    # approve user comment before displaying
+    def approve(self):
+        self.active = True
+        self.save()
+
 
     def __str__(self):
         return 'Comment {} - {}'.format(self.text, self.user.username)
