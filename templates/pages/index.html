@@ -38,36 +38,42 @@
     <section id="feedlist" class="py-5">
 		<div class="container">
 			<div class="jumbotron">
-			    <h3 class="text-center mb-3">Latest Posts</h3>
-			    {% if topic %}
-			      <h5>{{ topic }}</h5>
-			    {% endif %}
-			    {% if feeds %}
-			      {% for feed in feeds %}
-			        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
-					  {% if feed.image %}
-		                <div class="card-img-top">
-		                	<img src="{{ feed.image.url }}" alt="">
-		                </div>
-					   {% endif %}
-					   <h5 class="card-header text-muted">
-					   	  Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}
-						</h5>
-						<div class="card-body">
-							<p card-text>
-								<!-- Limited the words on the excerpts to 400 characters-->
-								{{ feed.text|slice:":400" }}
-							</p>
-							<a href="" class="btn btn-primary">Read More &rarr;</a>
-						</div>
+				<div class="row">
+					<div class="col-md-6">
+						  <h3 class="text-center mb-3">Latest Posts</h3>
+					    {% if topic %}
+					      <h5>{{ topic }}</h5>
+					    {% endif %}
+					    {% if feeds %}
+					      {% for feed in feeds %}
+					        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
+							  {% if feed.image %}
+				                <div class="card-img-top">
+				                	<img src="{{ feed.image.url }}" alt="">
+				                </div>
+							   {% endif %}
+							   <h5 class="card-header text-muted">
+							   	  Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}
+								</h5>
+								<div class="card-body">
+									<p card-text>
+										<!-- Limited the words on the excerpts to 400 characters-->
+										{{ feed.text|slice:":400" }}
+									</p>
+									<a href="" class="btn btn-primary">Read More &rarr;</a>
+								</div>
+							</div>
+						   {% empty %}
+					          <li class="card-text"><h3>No feed has been added yet.</h3></li>
+					      {% endfor %}
 					</div>
-				   {% empty %}
-			          <li class="card-text"><h3>No feed has been added yet.</h3></li>
-			      {% endfor %}
+					    {% else %}
+					     <p><a class="btn btn-primary" href="">New Feed</a></p>
+					    {% endif %}
+				</div>
+			  
 		    </div>
-		    {% else %}
-		     <p><a class="btn btn-primary" href="">New Feed</a></p>
-		    {% endif %}
+		    
 		</div>
     </section>
 {% endblock %}

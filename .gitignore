@@ -14,6 +14,9 @@ __pycache__/
 
 local_settings.py
 db.sqlite3
+__init__.py
+asgi.pi
+wsgi.py
 /media
 static/* linguist-vendored
 
