@@ -13,7 +13,13 @@ from .forms import TopicForm, FeedForm
 
 def index(request):
     """The home page for our Learning app """
-    return render(request, 'feed/index.html')
+    feeds = Feed.objects.order_by('-date_added').filter(is_published=True)[:3]
+    # topic = Topic.objects.get(id=topic_id)
+
+    context = {
+        'feeds': feeds,
+    }
+    return render(request, 'pages/index.html', context)
 
 
 # Restricting Access to the Topic Page

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block page_header %}
+
+    <header class="masthead">
+      <div class="container">
+    			<div class="row">
+	    				<div class="col-md-8 col-md-10 mx-auto">
+	    					<div class="site-heading">
+                  {% if user.is_authenticated %}
+  	    						<p class="lead">
+  	    							<a class="logo-text" href="">Tekit</a> is a social platform for sharing your Technology history with others. How Technology change your life or your business. Share and learn track your feeds, for any topic from others.
+  	    						</p>
+
+  	    					{% else %}
+                     <p class="lead">
+                      <a class="logo-text" href="">Tekit</a> is a social platform for sharing your Technology history with others. How Technology change your life or your business. Share and learn track your feeds, for any topic from others.
+                      <a class="btn btn-primary" href="{% url 'accounts:register' %}">+Join &raquo;</a>
+                    </p>
+                    
+                  {% endif %}
+	    					</div>
+	    				</div>
+    			</div>
+      </div>
+    </header>
+    
+{% endblock page_header %}
+{% block content %}
+   {% include 'partials/sidebar.html' %} 
+{% endblock content %}
+
+

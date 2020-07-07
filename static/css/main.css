@@ -1,5 +1,5 @@
 body {
-  font-family: "Montserrat";
+  font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4feff;
@@ -152,9 +152,13 @@ body {
   background: #B0DCFC;
   height: 100px;
   padding-bottom: 5px;
-  padding-top: 40px;
+  padding-top: 10px;
 }
 
+.card {
+  border: none;
+  box-shadow: 0 16px 48px #E3E7EB;
+}
 
 .card-img-top img {
   display: block;
@@ -170,6 +174,29 @@ body {
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
   opacity: 0.3;
 }
+
+
+/*#showcase {
+  background: url(../images/showcase6.jpg) no-repeat top center;
+  position: relative;
+  min-height: 650px;
+  color: #fff;
+  padding-top: 6rem;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#showcase .overlay {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 400px;
+  width: 100%;
+  background: rgba(51, 51, 51, 0.8); 
+  }*/
 
 
   /* Footer Section */

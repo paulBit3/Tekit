@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-
+from PIL import Image
 
 
 # Create your models here.
@@ -25,8 +25,9 @@ class Feed(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     text = models.TextField()
     image = models.ImageField(upload_to='photos/%Y/%m/%d/' , blank=True)
+    is_published = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now_add=True)
-
+    
     class Meta:
         verbose_name_plural = 'feeds'
 
@@ -34,6 +35,26 @@ class Feed(models.Model):
         """Return a string representation of the model"""
         # Showing the first 50 characters of text
         return f"{self.text[:50]}..."
+
+      # Resizing the user profile photo
+    def resize_image(self):
+        SQUARE_FIT_SIZE = 300
+        img = Image.open(self.image.path)
+        
+        # Check if image needs to be resized.
+        if img.width > SQUARE_FIT_SIZE or img.height > SQUARE_FIT_SIZE:
+            # Calculate the new width and height to resize to
+            if width > height:
+                height = int((SQUARE_FIT_SIZE / width) * height)
+                width = SQUARE_FIT_SIZE
+            else:
+                width = int((SQUARE_FIT_SIZE / height) * width)
+                height = SQUARE_FIT_SIZE
+
+            # Resize the image
+            img = img.resize(width, height)
+            img.save(self.iamge.path)
+
 
 # A temp table
 class Temp(models.Model):

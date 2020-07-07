@@ -2,17 +2,23 @@
 
 {% block content %}
 
-	<div class="container-fluid">
-		{% block page_header %}
-		   <h5>{{ topic }}</h5>
-		{% endblock page_header %}
+	<div class="container py-2">
+
+		{% include 'partials/_topnote.html' %} 
+
+		<br>
+		
 		<!-- Feeds column -->
 	    <div class="row">
 	      	<div class="col-md-8 mt3 left">
 	      		<section id="showcase-inner">
 					<div class="jumbotron">
+
+						{% block page_header %}
+						   <h5>{{ topic }}</h5>
+						{% endblock page_header %}
 						{% for feedlist in feed %}
-						<div class="card bg-light mb-3"style="max-width: 25rem;">
+						<div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
 						    {% if feedlist.image %}
 	                            <div class="card-img-top">
 	                            	<img src="{{ feedlist.image.url }}" alt="">
@@ -20,7 +26,7 @@
 							{% endif %} 
                                 <h5 class="card-header text-muted">
                                 	
-									| {{ feedlist.date_added | date:'M d, Y H:i, a' }}
+									Post by {{ user.username }} | {{ feedlist.date_added | date:'M d, Y H:i, a' }}
 								</h5>
 
 								<div class="card-body">
