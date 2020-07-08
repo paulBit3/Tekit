@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from PIL import Image
 
-from .models import Topic, Feed
+from .models import Topic, Feed, Comment
 from .forms import TopicForm, FeedForm,CommentForm
 
 # Create your views here.
@@ -161,6 +161,20 @@ def add_comment_feed(request, feed_id):
     return render(request, 'feed/add_comment.html', {'form': form})
 
 
+# Comment approved method, if user are logged in
+@login_required
+def comment_approved(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.approve()
+    return redirect('feed:feed_detail', pk=comment.feed.pk)
+
+
+
+# Comment remove method, if uder are logged in
+def comment_removed(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    return redirect('feed:feed_detail', pk=comment.feed.pk)
 
 
 # def feeds(request, topic_id):
