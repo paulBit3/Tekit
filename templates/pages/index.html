@@ -64,7 +64,7 @@
 										{{ feed.text|slice:":300" }}
 									</p>
 									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="text-muted"><small>Comments: {{ feed.comments.count }}</small></a>
-									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="btn btn-primary">Read More &rarr;</a>
+									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
 								</div>
 							</div>
 						   {% empty %}

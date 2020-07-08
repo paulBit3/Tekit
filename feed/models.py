@@ -73,7 +73,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)  # to prevent spam
+    approved = models.BooleanField(default=False)  # to prevent spam
 
     class meta:
         """A meta class"""
@@ -81,7 +81,7 @@ class Comment(models.Model):
     
     # approve user comment before displaying
     def approve(self):
-        self.active = True
+        self.approved = True
         self.save()
 
 

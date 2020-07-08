@@ -44,21 +44,32 @@
                         		<small>{{ total_comments }} comments</small>
                         		<p>
                         		  {% endwith %}
+                        		   <a class="btn btn-default btn-sm" href="{% url 'feed:add_comment_feed' feed.id %}">comment</a>
                         		  {% for comment in comments %}
+                        		   {% if user.is_authenticated or comment.approved %}
                         		</p>
 	                        		<div class="comments">
 	                        			<p class="font-weight-bold">
 	                        				<div class="date text-muted">{{ comment.date_added }}</div>
+	                        				{% if not comment.approved %}
+
+	                        				 <a class="btn btn-default" href="{% url 'feed:comment_removed' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+
+	                        				 <a class="btn btn-default" href="{% url 'feed:comment_approved' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+
+	                        				{% endif %}
 	                        			</p>
+	                        			<strong>{{ user.username }}</strong>
 	                        			{{ comment.text|slice:":300" }}
 	                        		</div>
+	                        		{% endif %}
 	                        	   {% empty %}
 	                        	   	<p>No comments here yet :(</p>
 	                        	   {% endfor %}
                         	</div>
                         </div>
                         {% if user.is_authenticated %}
-                           <a class="btn btn-primary" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
+                           <a class="btn btn-primary btn-sm" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
                         {% endif %}
 					</div>
 				  

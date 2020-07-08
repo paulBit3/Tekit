@@ -92,6 +92,7 @@ def new_feed(request, topic_id):
     context = {'topic': topic, 'form': form}
     return render(request, 'feed/new_feed.html', context)
 
+
 @login_required
 def edit_feed(request, feed_id):
     """Edit an existing feed"""

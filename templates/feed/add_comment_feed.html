@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %} | Welcome {% endblock %}
+
+{% block content %}
+ <div class="container">
+ 	<div class="row">
+ 		<div class="col-md-8 card mb-4 mt-3">
+ 			<h5>Leave a comment</h5>
+ 			<div class="card-body">
+ 				<form class="form-group" action="{% url 'feed:add_comment_feed' %}" method="post">
+ 					{% csrf_token %}
+ 					{{ form|crispy }}
+
+ 					<input type="submit" value="Send" class="save btn btn-default ">
+ 				</form>
+ 			</div>
+ 		</div>
+ 	</div>
+ </div>
+{% endblock %}
