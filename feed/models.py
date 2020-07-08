@@ -24,6 +24,7 @@ class Feed(models.Model):
     """Something specific learned about a topic"""
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     text = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='photos/%Y/%m/%d/' , blank=True)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
     is_published = models.BooleanField(default=True)
@@ -84,9 +85,13 @@ class Comment(models.Model):
         self.approved = True
         self.save()
 
+    def approved_comments(self):
+        return self.comments.filter(approve=True)
+
+
 
     def __str__(self):
-        return 'Comment {} - {}'.format(self.text, self.user.username)
+        return 'Comment {} - by {}'.format(self.text, self.user.username)
 
 
 # Like class to like a topic or a feed

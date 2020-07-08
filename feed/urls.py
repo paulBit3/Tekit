@@ -20,14 +20,14 @@ urlpatterns = [
     # Page for editing a post
     path('edit_feed/<int:feed_id>/', views.edit_feed, name='edit_feed'),
     # Page that shows all of the feeds
-    path('feeds/<int:topic_id>/', views.feeds, name='feeds'),
+    path('feeds/', views.feeds, name='feeds'),
     # Page that shows all feed details
-    path('feeds/<int:feed_id>/', views.feed_detail, name='feed_detail'),
+    path('feeds/<int:pk>/', views.feed_detail, name='feed_detail'),
     # Page that shows all comments related to a feed
-    path('feeds/<int:feed_id>/comment', views.add_comment_feed, name='add_comment_feed'),
+    path('feeds/<int:pk>/comment/', views.add_comment_feed, name='add_comment_feed'),
     # Managing comment approved 
-    path('feeds/<int:pk>/approve', views.comment_approved, name='comment_approved'),
+    path('comment/<int:pk>/approve/', views.comment_approved, name='comment_approved'),
     # Removing comment
-    path('feeds/<int:pk>/remove', views.comment_removed, name='comment_removed'),
+    path('comment/<int:pk>/remove/', views.comment_removed, name='comment_removed'),
 
 ]

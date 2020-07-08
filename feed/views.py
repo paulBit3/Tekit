@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import  get_object_or_404
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
 
@@ -120,45 +121,55 @@ def edit_feed(request, feed_id):
 
 
 # Displaying all new posts or feeds
-def feeds(request, topic_id):
+def feeds(request):
 
     try:
-        feed = Feed.objects.all().filter(date_added=timezone.now()).order_by('-date_added')
-        topic = Topic.objects.get(id=topic_id)
+        # feed = Feed.objects.all().filter(date_added=timezone.now()).order_by('-date_added')
+        feed = Feed.objects.all().order_by('-date_added')
+        # topic = Topic.objects.get(pk=topic_id)
         #output = ''.join([q.text for q in feed])
     except Feed.DoesNotExist:
         raise messages.error('Feed not found!')
 
+
     context = {
         'feed': feed,
-        'topic': topic
+        # 'topic': topic
         }
 
     return render(request, 'feed/feed_list.html', context)
 
 # Feed details
-def feed_detail(request, feed_id):
-    feed = get_object_or_404(Feed, feed_id=feed_id)
+def feed_detail(request, pk):
+    feed = get_object_or_404(Feed, pk=pk)
     return render(request, 'feed/feed_detail.html', {'feed': feed})
 
 
 # adding comment to feed
-def add_comment_feed(request, feed_id):
-    feed = get_object_or_404(Feed, feed_id)
+def add_comment_feed(request, pk):
+    feed = get_object_or_404(Feed, pk=pk)
+    comments = feed.comments.filter(approved=True)
+    new_comment = None
 
     # Comment posted
     if request.method == 'POST':
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST or None)
         if form.is_valid():
+
             # Create Comment object but don't save to database yet
-            comment = form.save(commit=False)
-            comment.feed = feed
-            comment.save()
-            return redirect('feed:feed_detail', feed_id=feed_id)
+            new_comment = form.save(commit=False)
+            new_comment.feed = feed
+            new_comment.user = request.user
+            new_comment.save()
+            return redirect('feed:feed_detail', pk=feed.pk)
 
     else:
         form = CommentForm()
-    return render(request, 'feed/add_comment.html', {'form': form})
+    return render(request, 'feed/add_comment_feed.html', {'feed': feed,
+                                                          'comments': comments,
+                                                          'new_comment': new_comment,
+                                                          'form': form
+                                                          })
 
 
 # Comment approved method, if user are logged in

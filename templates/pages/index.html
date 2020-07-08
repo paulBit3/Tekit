@@ -63,7 +63,7 @@
 										<!-- Limited the words on the excerpts to 400 characters-->
 										{{ feed.text|slice:":300" }}
 									</p>
-									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="text-muted"><small>Comments: {{ feed.comments.count }}</small></a>
+									 <a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.approved_comments.count }}</small></a><br>
 									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
 								</div>
 							</div>

@@ -13,7 +13,7 @@
 						<div class="col-md-8 card mb-4 mt-3 left top">
 							  <h3 class="text-center mb-3">Feed comments</h3>
 						      <div class="card-body">
-						      	<h5>{% block title %} {{ topic }} {% endblock title %}</h5>
+						      	<h5>{% block page_header %} {{ topic }} {% endblock page_header %}</h5>
 						      	
 						        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
 								  
@@ -44,7 +44,7 @@
                         		<small>{{ total_comments }} comments</small>
                         		<p>
                         		  {% endwith %}
-                        		   <a class="btn btn-default btn-sm" href="{% url 'feed:add_comment_feed' feed.id %}">comment</a>
+                        		   <a class="btn btn-secondary active btn-sm" href="{% url 'feed:add_comment_feed' feed.id %}">Add Comment</a>
                         		  {% for comment in comments %}
                         		   {% if user.is_authenticated or comment.approved %}
                         		</p>
@@ -53,9 +53,9 @@
 	                        				<div class="date text-muted">{{ comment.date_added }}</div>
 	                        				{% if not comment.approved %}
 
-	                        				 <a class="btn btn-default" href="{% url 'feed:comment_removed' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+	                        				 <a class="btn btn-secondary active btn-sm" href="{% url 'feed:comment_removed' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
 
-	                        				 <a class="btn btn-default" href="{% url 'feed:comment_approved' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+	                        				 <a class="btn btn-secondary active btn-sm" href="{% url 'feed:comment_approved' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
 
 	                        				{% endif %}
 	                        			</p>
@@ -66,11 +66,12 @@
 	                        	   {% empty %}
 	                        	   	<p>No comments here yet :(</p>
 	                        	   {% endfor %}
-                        	</div>
-                        </div>
-                        {% if user.is_authenticated %}
-                           <a class="btn btn-primary btn-sm" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
-                        {% endif %}
+                        	</div> 
+		                        {% if user.is_authenticated %}
+		                           <a class="btn btn-primary btn-sm" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
+		                        {% endif %}
+	                    </div>
+                       
 					</div>
 				  
 			    </div>
