@@ -3,11 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import  get_object_or_404
 from django.contrib import messages
+from django.utils import timezone
 
 from PIL import Image
 
 from .models import Topic, Feed
-from .forms import TopicForm, FeedForm
+from .forms import TopicForm, FeedForm,CommentForm
 
 # Create your views here.
 
@@ -116,11 +117,12 @@ def edit_feed(request, feed_id):
     return render(request, 'feed/edit_feed.html', context)
 
 
+
 # Displaying all new posts or feeds
 def feeds(request, topic_id):
 
     try:
-        feed = Feed.objects.all().order_by('-date_added')
+        feed = Feed.objects.all().filter(date_added=timezone.now()).order_by('-date_added')
         topic = Topic.objects.get(id=topic_id)
         #output = ''.join([q.text for q in feed])
     except Feed.DoesNotExist:
@@ -132,6 +134,32 @@ def feeds(request, topic_id):
         }
 
     return render(request, 'feed/feed_list.html', context)
+
+# Feed details
+def feed_detail(request, feed_id):
+    feed = get_object_or_404(Feed, feed_id=feed_id)
+    return render(request, 'feed/feed_detail.html', {'feed': feed})
+
+
+# adding comment to feed
+def add_comment_feed(request, feed_id):
+    feed = get_object_or_404(Feed, feed_id)
+
+    # Comment posted
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            # Create Comment object but don't save to database yet
+            comment = form.save(commit=False)
+            comment.feed = feed
+            comment.save()
+            return redirect('feed:feed_detail', feed_id=feed_id)
+
+    else:
+        form = CommentForm()
+    return render(request, 'feed/add_comment.html', {'form': form})
+
+
 
 
 # def feeds(request, topic_id):

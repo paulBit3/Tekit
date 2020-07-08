@@ -19,7 +19,11 @@ urlpatterns = [
     path('new_feed/<int:topic_id>/', views.new_feed, name='new_feed'),
     # Page for editing a post
     path('edit_feed/<int:feed_id>/', views.edit_feed, name='edit_feed'),
-    # Page that show all of the feeds
-    path('feeds/<int:topic_id>/', views.feeds, name='feeds')
+    # Page that shows all of the feeds
+    path('feeds/<int:topic_id>/', views.feeds, name='feeds'),
+    # Page that shows all feed details
+    path('feeds/<int:feed_id>/', views.feed_detail, name='feed_detail'),
+    # Page that shows all comments related to a feed
+    path('feeds/<int:feed_id>/comment', views.add_comment_feed, name='add_comment_feed'),
 
 ]

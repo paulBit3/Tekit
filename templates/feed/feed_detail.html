@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} | Welcome {% endblock %}
+
+
+{% block content %}
+ 
+   <div class="container">
+	    <section id="feedcomment" class="py-5">
+			<div class="container">
+				<div class="jumbotron">
+					<div class="row">
+						<div class="col-md-8 card mb-4 mt-3 left top">
+							  <h3 class="text-center mb-3">Feed comments</h3>
+						      <div class="card-body">
+						      	<h5>{% block title %} {{ topic }} {% endblock title %}</h5>
+						      	
+						        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
+								  
+					                <div class="card-img-top">
+					                	<img src="{{ feeds.image.url }}" alt="">
+					                </div>
+								  
+								   <h5 class="card-header text-muted">
+								   	  Post by {{ user.username }} | 
+								   	  <div class="date">
+								   	  	{{ feeds.date_added | date:'M d, Y H:i, a' }}
+								   	  </div>
+									</h5>
+										<p card-text>
+											<!-- Limited the words on the excerpts to 400 characters-->
+											{{ feeds.text|slice:":400" }}
+										</p>
+									</div>
+						
+						      </div>
+						 
+						</div>
+						{% block sidebar %} {% include 'partials/sidebar.html' %} {% endblock sidebar %}
+                        <div class="col-md-8 card mb-4 mt-3 ">
+                        	<div class="card-body">
+                        		<!-- comments -->
+                        		{% with comments.count as total_comment %}
+                        		<small>{{ total_comments }} comments</small>
+                        		<p>
+                        		  {% endwith %} {% for comment in comments %}
+                        		</p>
+                        		 
+                        	</div>
+                        </div>
+					</div>
+				  
+			    </div>
+			    
+			</div>
+	    </section>
+  </div>
+{% endblock %}

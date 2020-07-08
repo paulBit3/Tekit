@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Topic, Feed
+from .models import Topic, Feed, Comment
 
 class TopicForm(forms.ModelForm):
     def clean_topic_field(self):

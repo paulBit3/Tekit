@@ -34,7 +34,7 @@
 {% endblock page_header %}
 
 {% block content %}
-  {% include 'partials/sidebar.html' %} 
+  {% block sidebar %} {% include 'partials/sidebar.html' %} {% endblock sidebar %}
     <section id="feedlist" class="py-5">
 		<div class="container">
 			<div class="jumbotron">
@@ -53,14 +53,17 @@
 				                </div>
 							   {% endif %}
 							   <h5 class="card-header text-muted">
-							   	  Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}
+							   	  Post by {{ user.username }} | 
+							   	  <div class="date">
+							   	  	{{ feed.date_added | date:'M d, Y H:i, a' }}
+							   	  </div>
 								</h5>
 								<div class="card-body">
 									<p card-text>
 										<!-- Limited the words on the excerpts to 400 characters-->
 										{{ feed.text|slice:":400" }}
 									</p>
-									<a href="" class="btn btn-primary">Read More &rarr;</a>
+									<a href="{% url 'feed:feed_detail' feed_id=feed.feed_id  %}" class="btn btn-primary">Read More &rarr;</a>
 								</div>
 							</div>
 						   {% empty %}
