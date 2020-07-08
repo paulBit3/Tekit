@@ -176,6 +176,9 @@ body {
   opacity: 0.3;
 }
 
+.comment {
+  margin: 20px 0px 20px 20px;
+}
 
 /*#showcase {
   background: url(../images/showcase6.jpg) no-repeat top center;

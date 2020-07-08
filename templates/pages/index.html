@@ -61,9 +61,10 @@
 								<div class="card-body">
 									<p card-text>
 										<!-- Limited the words on the excerpts to 400 characters-->
-										{{ feed.text|slice:":400" }}
+										{{ feed.text|slice:":300" }}
 									</p>
-									<a href="{% url 'feed:feed_detail' feed_id=feed.feed_id  %}" class="btn btn-primary">Read More &rarr;</a>
+									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="text-muted"><small>Comments: {{ feed.comments.count }}</small></a>
+									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="btn btn-primary">Read More &rarr;</a>
 								</div>
 							</div>
 						   {% empty %}

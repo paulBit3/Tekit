@@ -29,6 +29,6 @@ class CommentForm(forms.ModelForm):
     """docstring for CommentFomr"""
     class Meta:
         model = Comment
-        fields = ('text')
+        fields = ['text']
             
         

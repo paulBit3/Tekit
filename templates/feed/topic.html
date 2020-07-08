@@ -15,7 +15,7 @@
          <h5 class="card-header">
            
              {{ feed.date_added | date:'M d, Y H:i a' }}<small>
-                <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></small>
+                <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit Feed</a></small>
           </h5>
          <div class="card-body">
               {{ feed.text|linebreaks }}
