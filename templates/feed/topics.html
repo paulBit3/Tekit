@@ -3,28 +3,29 @@
 {% block content %}
 
 <div class="container topic">
-   {% for topic in topics_list %}
-  <section id="showcase-inner">
+   {% for topic in topics %}
+    <section id="showcase-inner">
+      {% if topic.hot_topics %}
+        <div class="item-box hot_topics">
+      {% else %}
+          <div class="item-box">
+      {% endif %}
+            <div class="item-iamge">
+              <img src="{{ topic.image.url }}" alt="">
+            </div>
+               <div class='item-info'>
+                  <h3>{{ topic.text }}</h3>
+               </div>
+          </div>
 
-     <div class="card bg-light mb-3" style="max-width: 30rem;">
-       <div class="card-header">Feed</div>
-       <div class="card-body">
-        <ul>
-              {% for topic in topics %}
-                 <li><h3>
-                     <a class="nav-link" href="{% url 'feed:topic' topic.id %}">{{ topic }}</a> </h3>
-                 </li>
-              {% empty %}
-                 <li class="card-text"><h3>No feed has been added yet.</h3></li>
-              {% endfor %}
-        </ul>
-
-        <h3><a class="btn btn-primary" href="{% url 'feed:new_topic' %}">New Feed</a></h3>
-      </div>
-     </div>
-  
-   
-   </section>
+        </div>
+      
+       <h3><a class="btn btn-primary" href="{% url 'feed:new_topic' %}">New Feed</a></h3>
+      
+    </section>
+    {% endfor %}
  </div>
+
+ 
 
 {% endblock content %}

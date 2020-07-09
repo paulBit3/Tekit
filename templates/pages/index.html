@@ -40,9 +40,39 @@
 			<div class="jumbotron">
 				<div class="row">
 					<div class="col-md-6">
-						  <h3 class="text-center mb-3">Latest Posts</h3>
-					      {% include 'feed/topics.html' %} 
-					      <h5> {{ feed.topic }} </h5>
+						{% if hot_topics_list %}
+							<div class="panel panel-succes">
+								<div class="panel-heading">
+									<h2 class="panel-title">
+										<i class="circle-up fa fa-arrow-circle-up"
+										aria-hidden="true"></i> Hot topics
+									</h2>
+								</div>
+								<div class="panel-body">
+									{% include 'feed/topics.html' with topics_list=hot_topics_list hot_topics=False %}
+
+									{% if show_more_link_hot_topics %}
+									 <p>
+									 	<a href="/feed/hot_topics/">See more hot topics</a>
+									 </p>
+									{% endif %}
+								</div>
+							</div>
+                        {% endif %}
+                        {% if topics_list %}
+
+                         {% include 'feed/topics.html' with topics_list=topics_list hot_topics=False %}
+                         {% if show_more_link_topics %}
+                          <p>
+                          	<a href="feed/topics/">See all topics</a>
+                          </p>
+                         {% endif %}
+                        {% endif %}
+						 <h3 class="text-center mb-3">
+						 	<i class="circle-up-right fa fa-arrow-circle-right"
+										aria-hidden="true"></i>
+						 Latest Posts</h3>
+					      
 					   
 					    {% if feeds %}
 					      {% for feed in feeds %}

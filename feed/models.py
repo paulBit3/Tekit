@@ -39,7 +39,25 @@ class Topic(models.Model):
 
     # An instance of TopicManager class
     objects = TopicsManager()
-            
+    
+        # Resizing topic photo
+    def resize_image(self):
+        SQUARE_FIT_SIZE = 300
+        img = Image.open(self.image.path)
+        
+        # Check if image needs to be resized.
+        if img.width > SQUARE_FIT_SIZE or img.height > SQUARE_FIT_SIZE:
+            # Calculate the new width and height to resize to
+            if width > height:
+                height = int((SQUARE_FIT_SIZE / width) * height)
+                width = SQUARE_FIT_SIZE
+            else:
+                width = int((SQUARE_FIT_SIZE / height) * width)
+                height = SQUARE_FIT_SIZE
+
+            # Resize the image
+            img = img.resize(width, height)
+            img.save(self.iamge.path) 
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -61,11 +79,6 @@ class Feed(models.Model):
     class Meta:
         verbose_name_plural = 'feeds'
 
-    def __str__(self):
-        """Return a string representation of the model"""
-        # Showing the first 50 characters of text
-        return f"{self.text[:50]}..."
-    
     # to calculate likes
     @property
     def total_likes(self):
@@ -95,6 +108,11 @@ class Feed(models.Model):
             img.save(self.iamge.path)
 
 
+    def __str__(self):
+        """Return a string representation of the model"""
+        # Showing the first 50 characters of text
+        return f"{self.text[:50]}..."
+  
 # Comment class
 class Comment(models.Model):
     """Managing feeds or topic User comment about"""
