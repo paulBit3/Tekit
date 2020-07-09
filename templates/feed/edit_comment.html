@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block title %} | Welcome {% endblock %}
+
+{% block content %}
+ <div class="container">
+ 	<div class="row">
+ 		<div class="col-md-8 card mb-4 mt-3">
+ 			<div class="card-body">
+ 				{% if new_comment %}
+ 				<div class="alert alert-success" role="alert">
+ 					Your comment is pending approval.
+                </div>
+                {% else %}
+            </div>
+ 			<h5>Edit comment</h5>
+ 			<div class="card-body">
+ 				<form class="form-group" action="{% url 'feed:edit_comment' pk=comments.pk %}" method="post">
+ 					{% csrf_token %}
+ 					{{ form|crispy }}
+                    <input class="btn btn-secondary active btn-sm" type="submit" value="Cancel">
+ 					<input class="save btn btn-primary" type="submit" value="Update">
+ 				</form>
+ 				{% endif %}
+ 			</div>
+ 		</div>
+ 	</div>
+ </div>
+{% endblock %}

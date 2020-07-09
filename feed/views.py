@@ -217,7 +217,7 @@ def edit_comment(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Comment updated')
-            return redirect('feed:feed_detail', pk=comment.feed.id)
+            return redirect('feed:feed_detail', pk=comments.feed.pk)
 
     context = {'feed': feed, 'comments': comments, 'form': form}
     return render(request, 'feed/edit_comment.html', context)
