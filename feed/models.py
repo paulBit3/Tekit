@@ -27,6 +27,7 @@ class TopicsManager(models.Manager):
 class Topic(models.Model):
     """A topic the user is learning about."""
     text = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='topicphotos/%Y/%m/%d/' , blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)

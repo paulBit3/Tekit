@@ -15,10 +15,27 @@ from .forms import TopicForm, FeedForm,CommentForm
 
 def index(request):
     """The home page for our Learning app """
+    # We set how many hot topics and no hot topics to display
+    max_hot_topics = 3
+    max_topics_list = 5
+    
+    # hot topics
+    hot_topics_list = Topic.objects.get_hot_topics()
+
+    # not hot topics
+    topics_list = Topic.objects.get_not_hot_topics()
+
+    show_more_link_hot_topics = hot_topics_list.count() > max_hot_topics
+    show_more_link_topics = topics_list.count() > max_topics_list
+
     feeds = Feed.objects.order_by('-date_added').filter(is_published=True)[:3]
     # topic = Topic.objects.get(id=topic_id)
 
     context = {
+        'hot_topics_list': hot_topics_list[:max_hot_topics],
+        'topics_list': topics_list[:max_topics_list],
+        'show_more_link_topics': show_more_link_topics,
+        'show_more_link_hot_topics': show_more_link_hot_topics,
         'feeds': feeds,
     }
     return render(request, 'pages/index.html', context)

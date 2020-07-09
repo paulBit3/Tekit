@@ -180,6 +180,13 @@ body {
   margin: 20px 0px 20px 20px;
 }
 
+.container .topic {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 /*#showcase {
   background: url(../images/showcase6.jpg) no-repeat top center;
   position: relative;
