@@ -25,6 +25,8 @@ urlpatterns = [
     path('feeds/<int:pk>/', views.feed_detail, name='feed_detail'),
     # Page that shows all comments related to a feed
     path('feeds/<int:pk>/comment/', views.add_comment_feed, name='add_comment_feed'),
+    # Edit comment
+    path('comment/<int:pk>/edit/', views.edit_comment, name='edit_comment'),
     # Managing comment approved 
     path('comment/<int:pk>/approve/', views.comment_approved, name='comment_approved'),
     # Removing comment

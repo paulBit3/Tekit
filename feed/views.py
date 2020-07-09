@@ -94,6 +94,7 @@ def new_feed(request, topic_id):
     return render(request, 'feed/new_feed.html', context)
 
 
+# Edit a feed
 @login_required
 def edit_feed(request, feed_id):
     """Edit an existing feed"""
@@ -194,6 +195,33 @@ def comment_removed(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('feed:feed_detail', pk=comment.feed.pk)
+
+
+# Edit comment
+@login_required
+def edit_comment(request, pk):
+    """Edit an existing feed"""
+    feed = get_object_or_404(Feed, pk=pk)
+    comments = feed.comments.filter(approved=True).order_by('created_on')
+
+    # Protecting the edit feed page.
+    if comments.owner != request.user:
+        raise Http404
+
+    if request.method != 'POST':
+        # Initial request; pre-fill form with the current entry
+        form = CommentForm(instance=comments)
+    else:
+        # POST data submitted; process data
+        form = CommentForm(instance=comments, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Comment updated')
+            return redirect('feed:feed_detail', pk=comment.feed.id)
+
+    context = {'feed': feed, 'comments': comments, 'form': form}
+    return render(request, 'feed/edit_comment.html', context)
+
 
 
 # def feeds(request, topic_id):

@@ -30,8 +30,12 @@
 											<!-- Limited the words on the excerpts to 400 characters-->
 											{{ feed.text|slice:":300" }}
 										</p>
+										{% if user.is_authenticated %}
+				                           <a class="btn btn-primary btn-sm" 
+				                           href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
+		                        		{% endif %}
 									</div>
-						
+
 						      </div>
 						     <!-- comments -->
                         		
@@ -69,9 +73,7 @@
 	                        	   	<p>No comments here yet :(</p>
 	                        	   {% endfor %}
                         	</div> 
-		                        {% if user.is_authenticated %}
-		                           <a class="btn btn-primary btn-sm" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
-		                        {% endif %}
+		                       
 	                    </div>
 
 					</div>
