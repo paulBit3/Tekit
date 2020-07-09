@@ -7,7 +7,6 @@
  
    <div class="container">
 	    <section id="feedcomment" class="py-5">
-			<div class="container">
 				<div class="jumbotron">
 					<div class="row">
 						<div class="col-md-8 card mb-4 mt-3 left top">
@@ -24,29 +23,32 @@
 								   <h5 class="card-header text-muted">
 								   	  Post by {{ user.username }} | 
 								   	  <div class="date">
-								   	  	{{ feeds.date_added | date:'M d, Y H:i, a' }}
+								   	  	{{ feed.date_added | date:'M d, Y H:i, a' }}
 								   	  </div>
 									</h5>
 										<p card-text>
 											<!-- Limited the words on the excerpts to 400 characters-->
-											{{ feeds.text|slice:":300" }}
+											{{ feed.text|slice:":300" }}
 										</p>
 									</div>
 						
 						      </div>
-						 
+						     <!-- comments -->
+                        		
+                        		<small>{{ feed.comments.count}} comments</small>
 						</div>
+
 						{% block sidebar %} {% include 'partials/sidebar.html' %} {% endblock sidebar %}
+
                         <div class="col-md-8 card mb-4 mt-3 ">
                         	<div class="card-body">
-                        		<!-- comments -->
-                        		{% with comments.count as total_comment %}
-                        		<small>{{ total_comments }} comments</small>
+                        		
                         		<p>
-                        		  {% endwith %}
-                        		   <a class="btn btn-secondary active btn-sm" href="{% url 'feed:add_comment_feed' feed.id %}">Add Comment</a>
-                        		  {% for comment in comments %}
-                        		   {% if user.is_authenticated or comment.approved %}
+                        		 
+                        		   <a class="btn btn-secondary active btn-sm"
+                        		    href="{% url 'feed:add_comment_feed' feed.id %}">Add Comment</a>
+                        		  {% for comment in feed.comments.all %}
+                        		   
                         		</p>
 	                        		<div class="comments">
 	                        			<p class="font-weight-bold">
@@ -59,10 +61,10 @@
 
 	                        				{% endif %}
 	                        			</p>
-	                        			<strong>{{ user.username }}</strong>
+	                        			<strong>{{ user.username }}</strong><br>
 	                        			{{ comment.text|slice:":300" }}
 	                        		</div>
-	                        		{% endif %}
+	                        		
 	                        	   {% empty %}
 	                        	   	<p>No comments here yet :(</p>
 	                        	   {% endfor %}
@@ -71,12 +73,11 @@
 		                           <a class="btn btn-primary btn-sm" href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
 		                        {% endif %}
 	                    </div>
-                       
+
 					</div>
 				  
 			    </div>
-			    
-			</div>
+		
 	    </section>
   </div>
 {% endblock %}

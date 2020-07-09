@@ -142,13 +142,20 @@ def feeds(request):
 # Feed details
 def feed_detail(request, pk):
     feed = get_object_or_404(Feed, pk=pk)
-    return render(request, 'feed/feed_detail.html', {'feed': feed})
+    comments = feed.comments.filter(approved=True).order_by('created_on')
+
+    context = {
+         'feed': feed,
+         'comments': comments
+         }
+
+    return render(request, 'feed/feed_detail.html', context)
 
 
 # adding comment to feed
 def add_comment_feed(request, pk):
     feed = get_object_or_404(Feed, pk=pk)
-    comments = feed.comments.filter(approved=True)
+    comments = feed.comments.filter(approved=True).order_by('created_on')
     new_comment = None
 
     # Comment posted
@@ -158,18 +165,19 @@ def add_comment_feed(request, pk):
 
             # Create Comment object but don't save to database yet
             new_comment = form.save(commit=False)
-            new_comment.feed = feed
+            new_comment.feed = feed    # Assign the current feed to the comment
             new_comment.user = request.user
-            new_comment.save()
+            new_comment.save()  # Save comment to db
             return redirect('feed:feed_detail', pk=feed.pk)
 
     else:
         form = CommentForm()
+
     return render(request, 'feed/add_comment_feed.html', {'feed': feed,
                                                           'comments': comments,
                                                           'new_comment': new_comment,
                                                           'form': form
-                                                          })
+                                                          },)
 
 
 # Comment approved method, if user are logged in

@@ -5,22 +5,29 @@
 {% block content %}
 
     <div class="container">
+    	<div class="rows">
+    		<div class="col-md-8 card mb-4 mt-3 ">
+                <div class="card-body">
 
-		<section id="showcase-inner">
+                    <section id="showcase-inner">
 		   
-		     <div class="card bg-light mb-3" style="max-width: 30rem;">
-		       <div class="card-header">
-		       		 <p><a href="{% url 'feed:topic' topic.id %}">{{ topic }}</a></p>
-		       </div> 
-		       </div>
-	            
-		       	<form class="form-group" action="{% url 'feed:new_feed' topic.id %}" method="post" enctype="multipart/form-data">
-			        {% csrf_token %}
-			        {{ form|crispy}}
-			      <input class="btn btn-primary" type="submit" value="Post">  
-		       </form>
-		   
+				     <div class="card bg-light mb-3" style="max-width: 30rem;">
+				       <div class="card-header">
+				       	     <h5> Hello {{ user.username }} </h5>
+				       		 <p><a href="{% url 'feed:topic' topic.id %}">{{ topic }}</a></p>
+				       </div> 
+				       </div>
+			            
+				       	<form class="form-group" action="{% url 'feed:new_feed' topic.id %}" method="post" enctype="multipart/form-data">
+					        {% csrf_token %}
+					        {{ form|crispy}}
+					      <input class="btn btn-primary" type="submit" value="Post">  
+				       </form>
+				   
 
-		</section>
+					</section>
+                </div>
+            </div>
+    	</div>
 	</div>
 {% endblock content %}

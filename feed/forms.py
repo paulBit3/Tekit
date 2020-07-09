@@ -22,11 +22,15 @@ class FeedForm(forms.ModelForm):
         model = Feed
         fields = ['text', 'image',]
         labels = {'text': ''}
-        widgets = {'text': forms.Textarea(attrs={'cols': 80, 'rows': 4, 'placeholder': 'Tell your Tech history'})}
+        widgets = {'text': forms.Textarea(attrs={'cols': 50, 'rows': 4, 'placeholder': 'Tell your Tech history'})}
 
 
 class CommentForm(forms.ModelForm):
-    """docstring for CommentFomr"""
+    """docstring for CommentForm"""
+    def clean_comment_field(self):
+        fields = self.cleaned_data['fields']
+        return fields
+
     class Meta:
         model = Comment
         fields = ['text']
