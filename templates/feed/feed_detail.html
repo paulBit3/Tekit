@@ -32,7 +32,7 @@
 										</p>
 										{% if user.is_authenticated %}
 				                           <a class="btn btn-primary btn-sm" 
-				                           href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a></a>
+				                           href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a>
 		                        		{% endif %}
 									</div>
 
@@ -67,6 +67,13 @@
 	                        			</p>
 	                        			<strong>{{ user.username }}</strong><br>
 	                        			{{ comment.text|slice:":300" }}
+	                        			{% if user.is_authenticated %}
+
+	                        			 <!-- protect data from other users-->
+	                        			  {% if request.user == comment.user %}
+	                        			   <a class="btn btn-primary btn-sm"  href="{% url 'feed:edit_comment' pk=comment.pk %}">Edit</a>
+	                        			  {% endif %}
+	                        			{% endif %}
 	                        		</div>
 	                        		
 	                        	   {% empty %}

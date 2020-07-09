@@ -200,26 +200,26 @@ def comment_removed(request, pk):
 # Edit comment
 @login_required
 def edit_comment(request, pk):
-    """Edit an existing feed"""
-    feed = get_object_or_404(Feed, pk=pk)
-    comments = feed.comments.filter(approved=True).order_by('created_on')
-
+    """Edit an existing comment"""
+    comment = get_object_or_404(Comment, pk=pk)
+    feed = comment.feed
+    
     # Protecting the edit feed page.
-    if comments.owner != request.user:
+    if comment.user != request.user:
         raise Http404
 
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry
-        form = CommentForm(instance=comments)
+        form = CommentForm(instance=comment)
     else:
         # POST data submitted; process data
-        form = CommentForm(instance=comments, data=request.POST)
+        form = CommentForm(instance=comment, data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Comment updated')
-            return redirect('feed:feed_detail', pk=comments.feed.pk)
+            return redirect('feed:feed_detail', pk=feed.pk)
 
-    context = {'feed': feed, 'comments': comments, 'form': form}
+    context = {'feed': feed, 'comment': comment, 'form': form}
     return render(request, 'feed/edit_comment.html', context)
 
 
