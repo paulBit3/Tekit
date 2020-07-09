@@ -10,22 +10,20 @@
 				<div class="jumbotron">
 					<div class="row">
 						<div class="col-md-8 card mb-4 mt-3 left top">
-							  <h3 class="text-center mb-3">Feed comments</h3>
+							 <!--  <h3 class="text-center mb-3">Feed comments</h3> -->
 						      <div class="card-body">
-						      	<h5>{% block page_header %} {{ topic }} {% endblock page_header %}</h5>
+						      	<h5>{% block page_header %} {{ feed.topic }} {% endblock page_header %}</h5>
 						      	
 						        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
-								  
+								   {% if feed.image %}
 					                <div class="card-img-top">
-					                	<img src="{{ feeds.image.url }}" alt="">
+					                	<img src="{{ feed.image.url }}" alt="">
 					                </div>
-								  
-								   <h5 class="card-header text-muted">
-								   	  Post by {{ user.username }} | 
-								   	  <div class="date">
-								   	  	{{ feed.date_added | date:'M d, Y H:i, a' }}
-								   	  </div>
-									</h5>
+								    {% endif %}
+									   	<small class="card-header text-muted">
+									   	  Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}<br><br>
+									   	</small>
+									      
 										<p card-text>
 											<!-- Limited the words on the excerpts to 400 characters-->
 											{{ feed.text|slice:":300" }}

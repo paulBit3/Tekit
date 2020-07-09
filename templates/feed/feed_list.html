@@ -24,11 +24,10 @@
 	                            	<img src="{{ feedlist.image.url }}" alt="">
 	                            </div>
 							{% endif %} 
-                                <h5 class="card-header text-muted">
-                                	
-									Post by {{ user.username }} | {{ feedlist.date_added | date:'M d, Y H:i, a' }}
-								</h5>
-
+                                <small class="card-header text-muted">
+									Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}
+								</small> 
+                                  <br>
 								<div class="card-body">
 									<p card-text>
 										<!-- Limited the words on the excerpts to 400 characters-->

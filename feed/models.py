@@ -7,12 +7,38 @@ from PIL import Image
 
 # Create your models here.
 
+# A topic manager class as interface between Topic model and the db
+class TopicsManager(models.Manager):
+    """A topic manager class"""
+
+    # get all topics that has hot_topics set to True
+    def get_not_hot_topics(self):
+        return self.filter(hot_topics=True)
+
+    # get all topics that has hot_topics set to False
+    def get_hot_topics(self):
+        return self.filter(hot_topics=False)
+
+    # get all topics given a feed
+    def get_by_feed(self, is_published):
+        return self.filter(feed__is_published__iexact=feed)
+
 
 class Topic(models.Model):
     """A topic the user is learning about."""
     text = models.CharField(max_length=200)
     date_added = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    hot_topics = models.BooleanField(default=False)
+
+    # Adding meta information about the model
+    class Meta:
+        ordering = ['-hot_topics']
+
+    # An instance of TopicManager class
+    objects = TopicsManager()
+            
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -29,6 +55,7 @@ class Feed(models.Model):
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
     is_published = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name_plural = 'feeds'
@@ -40,7 +67,7 @@ class Feed(models.Model):
     
     # to calculate likes
     @property
-    def tottal_likes(self):
+    def total_likes(self):
         """
         Likes for a feed or a topic
         :return: Integer: Likes for a feed or a topic

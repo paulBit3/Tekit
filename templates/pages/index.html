@@ -41,9 +41,9 @@
 				<div class="row">
 					<div class="col-md-6">
 						  <h3 class="text-center mb-3">Latest Posts</h3>
-					    {% if topic %}
-					      <h5>{{ topic }}</h5>
-					    {% endif %}
+					    
+					      <h5> {{ feed.topic }} </h5>
+					   
 					    {% if feeds %}
 					      {% for feed in feeds %}
 					        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
@@ -52,18 +52,17 @@
 				                	<img src="{{ feed.image.url }}" alt="">
 				                </div>
 							   {% endif %}
-							   <h5 class="card-header text-muted">
-							   	  Post by {{ user.username }} | 
-							   	  <div class="date">
-							   	  	{{ feed.date_added | date:'M d, Y H:i, a' }}
-							   	  </div>
-								</h5>
+
+								<small class="card-header text-muted">
+								  Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}
+								</small>
+
 								<div class="card-body">
 									<p card-text>
 										<!-- Limited the words on the excerpts to 400 characters-->
 										{{ feed.text|slice:":300" }}
 									</p>
-									 <a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.approved_comments.count }}</small></a><br>
+									 <a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count}} comments</small></a><br>
 									 <a href="{% url 'feed:feed_detail' feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
 								</div>
 							</div>
