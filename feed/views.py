@@ -17,7 +17,7 @@ def index(request):
     """The home page for our Learning app """
     # We set how many hot topics and no hot topics to display
     max_hot_topics = 3
-    max_topics_list = 5
+    max_topics_list = 2
     
     # hot topics
     hot_topics_list = Topic.objects.get_hot_topics()
@@ -54,6 +54,18 @@ def topics(request):
 
 
 @login_required
+def show_all_topics(request):
+    """Show all topics"""
+    # topics = Topic.objects.order_by('date_added')
+
+    # Retrieve only the Topic whose owner attribute matches the current user
+    topics = Topic.objects.all()
+    context = {'topics': topics}
+    return render(request, 'feed/all_topics.html', context)
+
+
+
+@login_required
 def topic(request, topic_id):
     """Show a single topic and all its feeds"""
     topic = Topic.objects.get(id=topic_id)
@@ -78,6 +90,7 @@ def new_topic(request):
         # POST data submitted; process data
         form = TopicForm(data=request.POST)
         if form.is_valid():
+            obj = Topic(image = request.FILES['image'])
             obj = form.save(commit=False)
             obj.owner = request.user  # we add the owner to the model after the form has validated, but before saving it
             obj.save()
@@ -86,6 +99,16 @@ def new_topic(request):
     # Display a blank or invalid form
     context = {'form': form}
     return render(request, 'feed/new_topic.html', context)
+
+
+# Show hot topics
+def show_hot_topics(request):
+    topics = Topic.objects.get_hot_topics()
+
+    context = {'topics': topics}
+
+    return render(request, 'feed/hot_topics.html', context)
+
 
 @login_required
 def new_feed(request, topic_id):
@@ -102,6 +125,7 @@ def new_feed(request, topic_id):
             # nfeed = nfeed.rotate(18, expand=True)
             nfeed = form.save(commit=False)
             nfeed.topic = topic
+            nfeed.author = request.user
             nfeed.save()
             messages.success(request, 'Your post has been submitted')
             return redirect('feed:topic', topic_id=topic_id)
@@ -156,6 +180,7 @@ def feeds(request):
         }
 
     return render(request, 'feed/feed_list.html', context)
+
 
 # Feed details
 def feed_detail(request, pk):

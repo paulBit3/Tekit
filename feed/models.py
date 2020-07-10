@@ -8,29 +8,36 @@ from PIL import Image
 # Create your models here.
 
 # A topic manager class as interface between Topic model and the db
-class TopicsManager(models.Manager):
+
+
+class TopicManager(models.Manager):
     """A topic manager class"""
 
     # get all topics that has hot_topics set to True
-    def get_not_hot_topics(self):
-        return self.filter(hot_topics=True)
+    def get_hot_topics(self):
+        return super().get_queryset().filter(hot_topics=True)
 
     # get all topics that has hot_topics set to False
-    def get_hot_topics(self):
+    def get_not_hot_topics(self):
         return self.filter(hot_topics=False)
 
     # get all topics given a feed
     def get_by_feed(self, is_published):
-        return self.filter(feed__is_published__iexact=feed)
+        return super().get_queryset().filter(feed__is_published__iexact=feed)
 
 
 class Topic(models.Model):
     """A topic the user is learning about."""
     text = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='topicphotos/%Y/%m/%d/' , blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(
+        upload_to='topimages/',
+        default= 'images/topicholder.png',
+        max_length= 100
+        )
+
     hot_topics = models.BooleanField(default=False)
 
     # Adding meta information about the model
@@ -38,9 +45,10 @@ class Topic(models.Model):
         ordering = ['-hot_topics']
 
     # An instance of TopicManager class
-    objects = TopicsManager()
+    objects = TopicManager()
     
-        # Resizing topic photo
+
+    # Resizing topic photo
     def resize_image(self):
         SQUARE_FIT_SIZE = 300
         img = Image.open(self.image.path)
@@ -63,6 +71,14 @@ class Topic(models.Model):
         """Return a string representation of the model."""
         return '{} - {}'.format(self.text, self.owner.username)
 
+    # Handling image location
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+        else:
+            return "static/images/topic.jpg"
+
 
 # For user to record
 class Feed(models.Model):
@@ -70,7 +86,7 @@ class Feed(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='photos/%Y/%m/%d/' , blank=True)
+    image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
     likes = models.ManyToManyField(User, related_name='likes', blank=True)
     is_published = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now_add=True)

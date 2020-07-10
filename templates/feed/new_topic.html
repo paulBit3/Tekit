@@ -7,13 +7,14 @@
 
 	   <div class="container">
 	     <div class="card bg-light mb-3" style="max-width: 25rem;">
-	       <div class="card-header">Post a Feed</div> 
+	       <div class="card-header">Create your topic</div> 
 	      
 	       <div class="card-body">
-	       	<form class="form-inline" action="{% url 'feed:new_topic' %}" method="post">
+	       	<form class="form-group" action="{% url 'feed:new_topic' %}" method="post"
+	       	enctype="multipart/form-data">
 		        {% csrf_token %}
 		        {{ form|crispy }}
-		        <input class="btn btn-primary" type="submit" value="Post">
+		        <input class="btn btn-primary" type="submit" value="Save">
 	       </form>
 	      </div>
 	     </div>

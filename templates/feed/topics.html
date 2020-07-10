@@ -1,31 +1,44 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="container topic">
-   {% for topic in topics %}
-    <section id="showcase-inner">
-      {% if topic.hot_topics %}
-        <div class="item-box hot_topics">
-      {% else %}
-          <div class="item-box">
-      {% endif %}
-            <div class="item-iamge">
-              <img src="{{ topic.image.url }}" alt="">
-            </div>
-               <div class='item-info'>
-                  <h3>{{ topic.text }}</h3>
-               </div>
-          </div>
 
-        </div>
-      
-       <h3><a class="btn btn-primary" href="{% url 'feed:new_topic' %}">New Feed</a></h3>
-      
-    </section>
-    {% endfor %}
- </div>
 
- 
+       <div class="container"> 
+        <div class="row">
+        
+          {% for topic in topics_list %} 
+              <div class="card-deck">
+                 
 
-{% endblock content %}
+                  <div class="card">
+                        {% if topic.image %}
+                        <img class="card-img-top" src="{{ topic.image_url }}" alt=""> 
+                        {% endif %}
+                      <div class="card-block">
+                        <div class="card-body"> 
+                            <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' topic.id %}">{{ topic }}</a></h5> 
+                            <p class="card-text"> 
+                                Some quick example text to build on  
+                                the card title and make up the bulk  
+                                of the card's content. 
+                            </p> 
+                            <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-outline-primary btn-sm"> 
+                                New Feed 
+                            </a> 
+                            <a href="#" class="btn btn-outline-secondary btn-sm"> 
+                                <i class="far fa-heart"></i></a> 
+                        </div>
+                      </div>
+                  </div>
+                  
+              </div>
+           {% empty %}
+                <li class="card-text"><h3>No feed has been added yet.</h3></li>
+           {% endfor %}
+           
+        </div> 
+    </div> 
+
+{% endblock %}

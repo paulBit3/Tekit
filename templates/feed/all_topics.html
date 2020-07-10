@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+    
+           <div class="container"> 
+              <h3>All Topics</h3> 
+            {% for topic in topics %}
+            <div class="row"> 
+                    <div class="card-deck">
+                
+                        <div class="card">
+                              {% if topic.image %}
+                              <img class="card-img-top" src="{{ topic.image_url }}" alt=""> 
+                              {% endif %}
+                            <div class="card-block">
+                              <div class="card-body"> 
+                                  <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' topic.id %}">{{ topic }}</a></h5> 
+                                  <p class="card-text"> 
+                                      Some quick example text to build on  
+                                      the card title and make up the bulk  
+                                      of the card's content. 
+                                  </p> 
+                                  <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-outline-primary btn-sm"> 
+                                      New Feed 
+                                  </a> 
+                              </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                
+              
+               
+            </div>
+          {% empty %}
+            <li class="card-text"><h3>No feed has been added yet.</h3></li>
+          {% endfor %}
+        </div> 
+     
+    </div>
+  </div>
+</div>
+{% endblock %}

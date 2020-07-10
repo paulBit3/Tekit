@@ -5,9 +5,9 @@
  <h2>Hot topics</h2>
  <hr/>
 
-{% if topic %}
+{% if topics %}
   {% include 'feed/topics.html' with topics_list = 
-  topic hot_topics = False %} 
+  topics hot_topics = False %} 
 {% else %}
   <div class='empty-game-list'>
   <h3>There's no hot topics available at the moment</h3>
