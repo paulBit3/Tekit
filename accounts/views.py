@@ -79,7 +79,8 @@ def _login(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'You are now logged in !')
-            return redirect('feed:topics')
+            # return redirect('feed:topics')
+            return redirect('feed:index')
         else:
             messages.error(request, "Hmm, we don't recognize that credentials. Please try again.")
             return redirect('accounts:_login')

@@ -7,7 +7,7 @@
   {% block page_header %}
     <h5>{{ topic }}</h5>
   {% endblock page_header %}
-   <p><a class="btn btn-primary" href="{% url 'feed:new_feed' topic.id %}">New Feed</a></p>
+   <p><a class="btn btn-primary" href="{% url 'feed:new_feed' topic.id %}">New Feed<i class="fa fa-plus" aria-hidden="true"></i></a></p>
   <section id="showcase-inner">
     
       {% for feed in feeds %}
@@ -15,7 +15,7 @@
          <h5 class="card-header">
            
              {{ feed.date_added | date:'M d, Y H:i a' }}<small>
-                <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit Feed</a></small>
+                <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit Feed<i class="fas fa-pencil-alt"></i></a></small>
           </h5>
          <div class="card-body">
               {{ feed.text|linebreaks }}

@@ -196,9 +196,10 @@ def feed_detail(request, pk):
 
 
 # adding comment to feed
+@login_required
 def add_comment_feed(request, pk):
     feed = get_object_or_404(Feed, pk=pk)
-    comments = feed.comments.filter(approved=True).order_by('created_on')
+    comments = feed.comments.all().filter(approved=True).order_by('created_on')[:10]
     new_comment = None
 
     # Comment posted
@@ -233,6 +234,7 @@ def comment_approved(request, pk):
 
 
 # Comment remove method, if uder are logged in
+@login_required
 def comment_removed(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()

@@ -1,13 +1,3 @@
-
-
-/* Time out for messages */
-
-setTimeout(function() {
-  $('.message').fadeOut('slow');
-}, 2000);
-
- 
-
 /* 1. Proloder */
 
 (function ($)
@@ -22,4 +12,14 @@ setTimeout(function() {
     });
 
 })(jQuery);
+
+
+/* Time out for messages */
+
+setTimeout(function() {
+  $('.message').fadeOut('slow');
+}, 2000);
+
+ 
+
 

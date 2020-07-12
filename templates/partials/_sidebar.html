@@ -1,0 +1,50 @@
+
+
+{% block sidebar %}
+
+
+<div class="col-right">
+    <aside>
+      <section class="sidebar">
+        <div class="card my-4" style="max-width: 20rem;">
+          <h5 class="card-header">About</h5>
+          <div class="card-body card-widget">
+            <p class="card-text">
+              Tekit is a registered trademark social platform of Beam Inc.</p>
+            <a class="btn btn-danger" href="">Know more!</a>
+            <!-- Footer -->
+             {% include 'partials/_footer.html' %}
+          </div>    
+        </div>
+      </section>
+     <div class="clear"></div>
+
+      <div class="card my-4" style="max-width: 20rem;">
+          <h5 class="card-header">Languages</h5>
+          <div class="card-body card-widget">
+            <ul class="category">
+              <li>Python</li>
+              <li>Machine Learning</li>
+              <li>Deep Learning</li>
+              <li>JavaScript</li>
+              <li>Java</li>
+            </ul>
+          </div>    
+      </div>
+
+  
+     <h4>F A A N G:</h4>
+      <ul class="category">
+        <li>Facebook</li>
+        <li>Apple</li>
+        <li>Amazon</li>
+        <li>Netflix</li>
+        <li>Google</li>
+      </ul>
+    </aside>
+
+</div>
+
+
+
+{% endblock sidebar %}

@@ -29,8 +29,7 @@
 											{{ feed.text|slice:":300" }}
 										</p>
 										{% if user.is_authenticated %}
-				                           <a class="btn btn-primary btn-sm" 
-				                           href="{% url 'feed:edit_feed' feed.id %}">Edit Feed</a>
+				                           <a href="{% url 'feed:edit_feed' feed.id %}" class="btn btn-primary btn-sm">Edit Feed<i class="fas fa-pencil-alt"></i></a>
 		                        		{% endif %}
 									</div>
 
@@ -40,7 +39,7 @@
                         		<small>{{ feed.comments.count}} comments</small>
 						</div>
 
-						{% block sidebar %} {% include 'partials/sidebar.html' %} {% endblock sidebar %}
+						{% block sidebar %} {% include 'partials/_sidebar.html' %} {% endblock sidebar %}
 
                         <div class="col-md-8 card mb-4 mt-3 ">
                         	<div class="card-body">

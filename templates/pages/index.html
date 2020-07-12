@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} | Welcome {% endblock %}
 
@@ -6,20 +7,20 @@
 {% block page_header %}
   <section id="showcase">
     <header class="masthead">
-	    <div class="container">
+	    <div id="container">
 	    	<div class="row">
 	    		<div class="overlay py-5">
 		    		<div class="col-md-8 col-md-10 mx-auto">
 		    			<div class="site-heading">
 		                  {% if user.is_authenticated %}
 		  	    						<p class="lead">
-		  	    							<a class="logo-text" href="">Tekit</a> is a social platform for sharing your Technology history with others. How Technology change your life or your business. Share and learn track your feeds, for any topic from others.
+		  	    							<a class="logo-text" href="">Tekit</a> is a social Tech platform for sharing your  history related your Tech experience, life or business. Share and learn track your feeds or topics from friends or co-workers.
 		  	    						</p>
 
 		  	    					{% else %}
 		                     <p class="lead">
-		                      <a class="logo-text" href="">Tekit</a> is a social platform for sharing your Technology history with others. How Technology change your life or your business. Share and learn track your feeds, for any topic from others.
-		                      <a class="btn btn-primary" href="{% url 'accounts:register' %}">+Join &raquo;</a>
+		                      <a class="logo-text" href="">Tekit</a> is a social Tech platform for sharing your  history related your Tech experience, life or business. Share and learn track your feeds or topics from friends or co-workers.
+		                      <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'accounts:register' %}">+Join &raquo;</a>
 		                    </p>
 		                    
 		                  {% endif %}
@@ -29,15 +30,31 @@
 	    	</div>
 	    </div>
     </header>
- </section>
- <br>
+ </section> 
+ <div class="clear"></div>
+
 {% endblock page_header %}
 
 {% block content %}
-  {% block sidebar %} {% include 'partials/sidebar.html' %} {% endblock sidebar %}
+     <!-- Preloader Start -->
+      <div id="preloader-active">
+          <div class="preloader d-flex align-items-center justify-content-center">
+              <div class="preloader-inner position-relative">
+                  <div class="preloader-circle"></div>
+                  <div class="preloader-img pre-text">
+                    <img src="{% static 'images/social_discuss8.png' %}" alt="tekit-image">
+                    <h3 class="">BeaM Inc.</h3>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- End Preloader -->
+
+
+  {% block sidebar %} {% include 'partials/_sidebar.html' %} {% endblock sidebar %}
     <section id="feedlist" class="py-5">
-		<div class="container">
-			<div class="jumbotron">
+		<div class="top-feed-container">
+			<div id="container" class="jumbotron">
 				<div class="row">
 					<div class="col-md-6">
 						{% if hot_topics_list %}
@@ -63,7 +80,7 @@
 							</div>
                         {% endif %}
                 	</div>
-					  
+					 
                         <hr>
 	                        {% if topics_list %}
 	                         <div class="col-md-6">
@@ -81,7 +98,7 @@
 	                        </div>
 	                        {% endif %}  
 				</div>
-                        
+                        <hr>
 						 <h3 class="text-center mb-3">
 						 	<i class="circle-up-right fa fa-arrow-circle-right"
 										aria-hidden="true"></i>
@@ -118,11 +135,111 @@
 					          <li class="card-text"><h3>No feed has been added yet.</h3></li>
 					      {% endfor %}
 					      {% else %}
-					     <p><a class="btn btn-primary" href="">New Feed</a></p>
+					     <p><a class="btn btn-primary" href="">New Feed<i class="fa fa-plus" aria-hidden="true"></i></a></p>
 					    {% endif %}
 			  
 		    </div>
 		    
 		</div>
+		<!-- <button class="btn btn-primary " data-toggle="modal" data-target="#authModal">Make An Inquiry</button> -->
     </section>
+
+   <section class="py-5">
+   	 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#authModal">
+   +Join &raquo;
+  </button>
+   	 <!-- Auth Modal -->
+	<div class="modal fade" id="authModal" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">Authencation</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	       {% include 'accounts/login.html' %}
+	        <p></p>
+	   
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+   </section>
+   
+     <section class="py-5">
+   	 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalLRForm">
+   +Join &raquo;
+  </button>
+
+   <section class="py-5">
+		   	<!--Modal: Login / Register Form-->
+		<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog cascading-modal" role="document">
+		    <!--Content-->
+		    <div class="modal-content">
+
+		      <!--Modal cascading tabs-->
+		      <div class="modal-c-tabs">
+
+		        <!-- Nav tabs -->
+		        <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+		          <li class="nav-item">
+		            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
+		              Login</a>
+		          </li>
+		          <li class="nav-item">
+		            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
+		              Register</a>
+		          </li>
+		        </ul>
+
+		        <!-- Tab panels -->
+		        <div class="tab-content">
+		          <!--Panel 7-->
+		          <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+		            <!--Body-->
+		           {% include 'accounts/login.html' %}
+
+		          </div>
+		          <!--/.Panel 7-->
+
+		          <!--Panel 8-->
+		          <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+		            <!--Body-->
+		            <div class="modal-body">
+		              {% include 'accounts/register.html' %}
+
+		            </div>
+		            <!--Footer-->
+		            <div class="modal-footer">
+		              <div class="options text-right">
+		                <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>
+		              </div>
+		              <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+		            </div>
+		          </div>
+		          <!--/.Panel 8-->
+		        </div>
+
+		      </div>
+		    </div>
+		    <!--/.Content-->
+		  </div>
+		</div>
+		<!--Modal: Login / Register Form-->
+
+		<div class="text-center">
+		  <a href="" class="btn btn-default btn-rounded my-3" data-toggle="modal" data-target="#modalLRForm">Launch
+		    Modal LogIn/Register</a>
+		</div>
+   </section>
+
 {% endblock %}
