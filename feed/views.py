@@ -212,6 +212,7 @@ def add_comment_feed(request, pk):
             new_comment.feed = feed    # Assign the current feed to the comment
             new_comment.user = request.user
             new_comment.save()  # Save comment to db
+            messages.success(request, 'Comment posted')
             return redirect('feed:feed_detail', pk=feed.pk)
 
     else:

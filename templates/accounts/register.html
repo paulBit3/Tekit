@@ -3,42 +3,53 @@
 {% block title %} | Register Account {% endblock %}
 
 {% block content %}
-    <section id="register" class="bg-light py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 mx-auto">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h4>
-                                <i class="fas fa-user-plus"></i> Register</h4>
-                        </div>
-                        <div class="card-body">
-                            <!--Alert-->
-                            {% include 'partials/_alerts.html' %}
-                            <form action="{% url 'accounts:register' %}" method="POST">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="fullname">Fullname</label>
-                                    <input type="text" name="full_name" class="form-control form-rounded" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text" name="username" class="form-control form-rounded" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control form-rounded" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control form-rounded" required>
-                                </div>
-                                <input type="submit" value="Register" class="btn btn-primary btn-block rounded-pill">
-                            </form>
-                        </div>
-                    </div>
+
+
+
+<div class="login-container">
+    <div class="d-flex justify-content-center h100">
+      
+        <div id="form_right">
+            <div class="card register">
+                <div class="card-header bg-primary text-white">
+                 <h4><i class="fas fa-sign-in-alt"></i>Register</h4>
                 </div>
+                <div class="card-body">
+                      <!--Alert-->
+                    {% include 'partials/_alerts.html' %}
+                    <form action="{% url 'accounts:register' %}" method="POST">
+                            {% csrf_token %}
+                        <div class=" form-group">
+                           
+                            <input type="text" name="full_name" class="form-control form-rounded" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            
+                            <input type="text" name="username" class="form-control form-rounded" placeholder="Username" required>
+                        </div>
+                        <div class="form-group">
+                            
+                            <input type="email" name="email" class="form-control form-rounded" placeholder="Email" required>
+                        </div>
+                        <div class="form-group">
+                           
+                           <input type="password" name="password" class="form-control form-rounded" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                           <button type="submit" value="" class="btn btn-primary btn-block rounded-pill">SIGN UP</button>
+                       </div>
+                    </form>
+                     <br>
+
+                  <span id="login-help-text">Already have an account?
+                    <a class="" href="{% url 'accounts:_login' %}">Log In</a></span>
+
+                </div>
+
             </div>
         </div>
-    </section>
+    </div>
+</div>
+
+
 {% endblock %}

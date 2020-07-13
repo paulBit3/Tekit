@@ -7,47 +7,50 @@
 
 <div class="login-container">
     <div class="d-flex justify-content-center h100">
-        <div class="card login">
-            <div class="card-header bg-primary text-white">
-             <h4><i class="fas fa-sign-in-alt"></i>Login</h4>
+      
+        <div id="form_right">
+            <div class="card login">
+                <div class="card-header bg-primary text-white">
+                 <h4><i class="fas fa-sign-in-alt"></i>Login</h4>
 
-             <div class="d-flex justify-content-end social_icon">
-                    <span><a class="icon-button facebook" href=""><i class="fab fa-facebook-square"></i></a></span>
-                    <span><a class="icon-button google-plus" href=""><i class="fab fa-google-plus-square"></i></a></span>
-                    <span><a class="icon-button twitter" href=""><i class="fab fa-twitter-square"></i></a></span>
-                </div>
-            </div>
-            <div class="card-body">
-                <form action="{% url 'accounts:_login' %}" method="POST">
-                     {% csrf_token %}
-                    <div class="input-group form-group">
-                        <!-- <label for="username">Username:</label> -->
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input type="text" name="username" class="form-control form-rounded" placeholder="username" required></input>
+                 <div class="d-flex justify-content-end social_icon">
+                        <span><a class="icon-button facebook" href=""><i class="fab fa-facebook-square"></i></a></span>
+                        <span><a class="icon-button google-plus" href=""><i class="fab fa-google-plus-square"></i></a></span>
+                        <span><a class="icon-button twitter" href=""><i class="fab fa-twitter-square"></i></a></span>
                     </div>
-                    <div class="input-group form-group">
-                        <!-- <label for="password">Password:</label> -->
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'accounts:_login' %}" method="POST">
+                         {% csrf_token %}
+                        <div class="input-group form-group">
+                            <!-- <label for="username">Username:</label> -->
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" name="username" class="form-control form-rounded" placeholder="username" required></input>
                         </div>
-                        <input type="password" name="password" class="form-control form-rounded" placeholder="password" required></input>
-                   </div>
-                   <div class="form-group">
-                       <button type="submit" value="Login" class="btn btn-primary btn-block rounded-pill">LOGIN</button>
-                   </div>
-                </form>
-                 <br>
+                        <div class="input-group form-group">
+                            <!-- <label for="password">Password:</label> -->
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" name="password" class="form-control form-rounded" placeholder="password" required></input>
+                       </div>
+                       <div class="form-group">
+                           <button type="submit" value="" class="btn btn-primary btn-block rounded-pill">LOGIN</button>
+                       </div>
+                    </form>
+                     <br>
 
-              <span id="login-help-text">Forgot your
-                <a class="" href="{% url 'accounts:password_reset' %}">username / password?</a></span>
-              <span id="signup-text">
-                   Not a member?
-                <a class="" href="{% url 'accounts:register' %}">Sign Up</a>
-              </span>
+                  <span id="login-help-text">Forgot your
+                    <a class="" href="{% url 'accounts:password_reset' %}">username / password?</a></span>
+                  <span id="signup-text">
+                       Not a member?
+                    <a class="" href="{% url 'accounts:register' %}">Sign Up</a>
+                  </span>
+                </div>
+
             </div>
-
         </div>
     </div>
 </div>

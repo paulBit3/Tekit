@@ -14,12 +14,12 @@
         </button>
           <div class="collapse navbar-collapse" id="navbars">
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
+              <!-- <li class="nav-item active">
                 <a class="nav-link" href="/">
                   <i class="fas fa-home" aria-hidden="true"></i>HOME
                   <span class="sr-only">(current)</span>
                 </a>
-              </li>
+              </li> -->
               {% if user.is_authenticated %}
                <li class="nav-item mr-3">
                 <span class="navbar-text">Hello, {{ user.username }}.</span>
@@ -42,8 +42,10 @@
                 {% endif %}
                 >
                   <a class="nav-link" href="{% url 'accounts:register' %}">
+                    
                     <i class="fas fa-user-plus"></i> REGISTER</a>
                 </li>
+
                 <li
                 {% if 'login' in request.path %}
                   class="nav-item active mr-3"
@@ -55,7 +57,7 @@
                     <i class="fas fa-sign-in-alt"></i>
 
                     LOGIN
-                   
+
                   </a>
                 </li>
               {% endif %}

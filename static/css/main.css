@@ -112,6 +112,23 @@ body {
   background-color: rgba(255, 255, 255) !important;
 }
 
+.register {
+  height: 400px;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 400px;
+  background-color: rgba(255, 255, 255) !important;
+}
+
+
+#form_right {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  padding: 5% 5%;
+}
+
+
 /* Social button section */
 .social_icon span {
   font-size: 60px;
@@ -221,11 +238,16 @@ body {
 
 
 input[type="text"]:focus,
-[type="password"]:focus {
+[type="password"]:focus{
   border: 2px solid #862d59;
   outline: none;
   box-shadow: 0 0 0 0 !important;
 }
+
+input [type="email"] {
+  color:  #862d59;
+}
+
 input:focus {
   border: 2px solid red;
 }
@@ -282,10 +304,10 @@ input:focus {
   color: #5f4dee;
 }
 
-.modal-content button {
+/*.modal-content button {
   background-color: #5f4dee;
   color: #5f4dee;
-}
+}*/
 
 .modal-body {
   max-height: 800px;
@@ -548,7 +570,7 @@ tfoot, th, thead, time, tr, ul, var, video {
 
 .preloader .preloader-img {
   position:absolute;
-  top:50%;
+  top:40%;
   z-index:100;
   left:0;
   right:0;
@@ -558,7 +580,7 @@ tfoot, th, thead, time, tr, ul, var, video {
   -webkit-transform:translateY(-50%);
   -ms-transform:translateY(-50%);
   transform:translateY(-50%);
-  padding-top:6px;
+  padding-top:10px;
   -webkit-transition:.6s;
   -o-transition:.6s;
   transition:.6s;
@@ -567,6 +589,10 @@ tfoot, th, thead, time, tr, ul, var, video {
 .preloader .preloader-img img {
   width: 50px;
   height: 50px;
+}
+
+.preloader .preloader-img img {
+  max-width:55px
 }
 
 @-webkit-keyframes zoom {
@@ -596,13 +622,11 @@ tfoot, th, thead, time, tr, ul, var, video {
   }
 }
 
-.preloader .preloader-img img {
-  max-width:55px
-}
+
 
 .preloader .pre-text h3 {
   font-family: "Audiowide", cursive;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 

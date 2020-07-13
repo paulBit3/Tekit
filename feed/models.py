@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.validators import MinLengthValidator
 
 from PIL import Image
 
@@ -87,7 +88,9 @@ class Feed(models.Model):
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
-    likes = models.ManyToManyField(User, related_name='likes', blank=True)
+    # likes = models.ManyToManyField(User, related_name='likes', blank=True)
+    likes= models.IntegerField(default=0)
+    dislikes= models.IntegerField(default=0)
     is_published = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -132,16 +135,25 @@ class Feed(models.Model):
 # Comment class
 class Comment(models.Model):
     """Managing feeds or topic User comment about"""
-    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField()
+    feed = models.ForeignKey(Feed, related_name='feed', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    comment = models.TextField(validators=[MinLengthValidator(150)])
+    likes= models.IntegerField(default=0)
+    dislikes= models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)  # to prevent spam
 
     class meta:
         """A meta class"""
         ordering = ['created_on']
     
+    def get_total_likes(self):
+        return self.likes.users.count()
+
+    def get_total_dis_likes(self):
+        return self.dis_likes.users.count()
+
     # approve user comment before displaying
     def approve(self):
         self.approved = True
@@ -153,7 +165,7 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return 'Comment {} - by {}'.format(self.text, self.user.username)
+        return 'Comment {} - by {}'.format(self.comment, self.user.username)[:30]
 
 
 # Like class to like a topic or a feed
@@ -162,7 +174,19 @@ class Like(models.Model):
     """Class for Like"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='feeds')
-    created_on = models.DateTimeField(auto_now_add=True)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='topics')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comments')
+    value = models.IntegerField()
+    date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        app_label = 'feed'
+        unique_together = ['user','topic','feed','comment','value']
+            
+
+    # I use the __str__ function to show the user, feed, topic, comment, and value
+    def __str__(self):
+        return str(self.user) +':'+ str(self.comment) +':' + str(self.value)
 
 
 # A temp table

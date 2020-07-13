@@ -22,7 +22,7 @@ class FeedForm(forms.ModelForm):
         model = Feed
         fields = ['text', 'image',]
         labels = {'text': ''}
-        widgets = {'text': forms.Textarea(attrs={'cols': 50, 'rows': 4, 'placeholder': 'Tell your Tech history'})}
+        widgets = {'text': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'placeholder': 'Type your feed here'})}
 
 
 class CommentForm(forms.ModelForm):
@@ -33,6 +33,6 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ['comment']
         labels = {'comment': ''}
-        widgets = {'text': forms.Textarea(attrs={'cols': 50, 'rows': 4, 'placeholder': 'Type your comment'})}
+        widgets = {'comment': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'placeholder': 'Type your comment'})}

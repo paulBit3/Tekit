@@ -148,98 +148,11 @@
    	 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#authModal">
    +Join &raquo;
   </button>
-   	 <!-- Auth Modal -->
-	<div class="modal fade" id="authModal" role="dialog">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title">Authencation</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	       {% include 'accounts/login.html' %}
-	        <p></p>
-	   
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-primary">Save changes</button>
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-   </section>
-   
-     <section class="py-5">
-   	 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalLRForm">
+
+  <section class="py-5">
+   	 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#authModal">
    +Join &raquo;
   </button>
 
-   <section class="py-5">
-		   	<!--Modal: Login / Register Form-->
-		<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		  <div class="modal-dialog cascading-modal" role="document">
-		    <!--Content-->
-		    <div class="modal-content">
-
-		      <!--Modal cascading tabs-->
-		      <div class="modal-c-tabs">
-
-		        <!-- Nav tabs -->
-		        <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
-		          <li class="nav-item">
-		            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
-		              Login</a>
-		          </li>
-		          <li class="nav-item">
-		            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
-		              Register</a>
-		          </li>
-		        </ul>
-
-		        <!-- Tab panels -->
-		        <div class="tab-content">
-		          <!--Panel 7-->
-		          <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
-
-		            <!--Body-->
-		           {% include 'accounts/login.html' %}
-
-		          </div>
-		          <!--/.Panel 7-->
-
-		          <!--Panel 8-->
-		          <div class="tab-pane fade" id="panel8" role="tabpanel">
-
-		            <!--Body-->
-		            <div class="modal-body">
-		              {% include 'accounts/register.html' %}
-
-		            </div>
-		            <!--Footer-->
-		            <div class="modal-footer">
-		              <div class="options text-right">
-		                <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>
-		              </div>
-		              <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
-		            </div>
-		          </div>
-		          <!--/.Panel 8-->
-		        </div>
-
-		      </div>
-		    </div>
-		    <!--/.Content-->
-		  </div>
-		</div>
-		<!--Modal: Login / Register Form-->
-
-		<div class="text-center">
-		  <a href="" class="btn btn-default btn-rounded my-3" data-toggle="modal" data-target="#modalLRForm">Launch
-		    Modal LogIn/Register</a>
-		</div>
-   </section>
 
 {% endblock %}

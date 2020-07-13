@@ -22,12 +22,14 @@
 <body>
 
 
-    <!-- Auth -->
+    <!-- Navbar -->
     {% include 'partials/_navbar.html' %}
+    
 
     <main role="main" class="container">
         <div class="pb-2 mb-4 border-bottom">
             {% block page_header %}
+            <!-- Alerts -->
             {% include 'partials/_alerts.html' %}
             {% endblock page_header %}
         </div>

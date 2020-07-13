@@ -13,8 +13,8 @@ from PIL import Image
 # Profile class inherit form User abstract class
 class Profile(models.Model):
     """Store extract information relates to the user model"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=80)
+   
+    name = models.ForeignKey(User,on_delete=models.CASCADE, related_name="name")
     photo = models.ImageField(upload_to='photos/%Y/%m/%d/')
     phone = models.CharField(max_length=20)
     birthdate = models.DateField(null=True, blank=True)
