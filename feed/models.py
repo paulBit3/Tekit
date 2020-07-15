@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.contrib import messages
 from django.core.validators import MinLengthValidator
 
@@ -9,11 +10,12 @@ from PIL import Image
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
-# Create your models here.
+#  the fields content_type , object_id , GenericForeignKey , 
+# does not create additional database migrations.
+from django.contrib.contenttypes.fields import GenericRelation
+
 
 # A topic manager class as interface between Topic model and the db
-
-
 class TopicManager(models.Manager):
     """A topic manager class"""
 
@@ -41,8 +43,7 @@ class Topic(models.Model):
         default= 'images/topicholder.png',
         max_length= 100
         )
-    likes= models.IntegerField(default=0)
-    dislikes= models.IntegerField(default=0)
+    rates = GenericRelation(LikeDislike, related_name='topics')
     hot_topics = models.BooleanField(default=False)
 
     # Adding meta information about the model
@@ -96,9 +97,7 @@ class Feed(models.Model):
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d/')
-    # likes = models.ManyToManyField(User, related_name='likes', blank=True)
-    likes= models.IntegerField(default=0)
-    dislikes= models.IntegerField(default=0)
+    rates = GenericRelation(LikeDislike, related_name='feeds')
     status = models.IntegerField(choices = STATUS, default=1)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -150,9 +149,8 @@ class Comment(models.Model):
 
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
-    comment = models.TextField(validators=[MinLengthValidator(150)], blank=True)
-    likes= models.IntegerField(default=0)
-    dislikes= models.IntegerField(default=0)
+    comment = models.TextField(validators=[MinLengthValidator(50)], blank=True)
+    rates = GenericRelation(LikeDislike, related_name='comments')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)  # to prevent spam
@@ -176,15 +174,41 @@ class Comment(models.Model):
         return self.comments.filter(approve=True)
 
 
-
     def __str__(self):
         return 'Comment {} - by {}'.format(self.comment, self.user.username)[:30]
 
 
 
 # The LikeDislikeManager() model manager 
-class LikeDislikeManager:
+class LikeDislikeManager(models.Manager):
     """Like Dislike model manager"""
+    related_fields = True
+
+    def likes(self):
+        # taking record greater than 0
+        return self.get_queryset().filter(rate__gt=0)
+
+    def dislikes(self):
+        # taking record less than 0
+        return self.get_queryset().filter(rate__lt=0)
+
+    # total rating methods
+    def rating_sum(self):
+         return self.get_queryset().aggregate(Sum('rate')).get('rate__sum') or 0
+
+
+    """Implementing user behavior"""
+
+    def comments(self):
+        return self.get_queryset().filter(content_type__model='comment').order_by('-created_on')
+
+
+    def feeds(self):
+        return self.get_queryset().filter(content_type__model='feed').order_by('-date_added')
+
+
+    def topics(self):
+        return self.get_queryset().filter(content_type__model='topic').order_by('-date_added')
 
 
 
