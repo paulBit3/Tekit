@@ -5,6 +5,9 @@ from django.core.validators import MinLengthValidator
 
 from PIL import Image
 
+# Using ContentType and GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 # Create your models here.
 
@@ -38,7 +41,8 @@ class Topic(models.Model):
         default= 'images/topicholder.png',
         max_length= 100
         )
-
+    likes= models.IntegerField(default=0)
+    dislikes= models.IntegerField(default=0)
     hot_topics = models.BooleanField(default=False)
 
     # Adding meta information about the model
@@ -84,6 +88,7 @@ class Topic(models.Model):
 # For user to record
 class Feed(models.Model):
     """Something specific learned about a topic"""
+
     STATUS = (
         (1, 'new'), (2, 'verified'), (3, 'published')
         )
@@ -138,9 +143,11 @@ class Feed(models.Model):
         # Showing the first 50 characters of text
         return f"{self.text[:50]}..."
   
+
 # Comment class
 class Comment(models.Model):
     """Managing feeds or topic User comment about"""
+
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField(validators=[MinLengthValidator(150)], blank=True)
@@ -174,28 +181,42 @@ class Comment(models.Model):
         return 'Comment {} - by {}'.format(self.comment, self.user.username)[:30]
 
 
-# Like class to like a topic or a feed
-# Assuming that many users can like many feeds
-class Like(models.Model):
-    """Class for Like"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='feeds', null=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='topics', null=True)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comments', null=True)
-    value = models.IntegerField(default=0)
+
+# The LikeDislikeManager() model manager 
+class LikeDislikeManager:
+    """Like Dislike model manager"""
+
+
+
+
+"""Instead of creating several like and dislike methods,
+I will create only one class LikeDislike.
+The Like Dislike is based on the principle +1/-1"""
+
+class LikeDislike(models.Model):
+    """Like and Dislike class"""
+    Like = 1
+    Dislike = -1
+
+    STATUS = (
+        (Like, 'Like'), 
+        (Dislike, 'Dislike')
+        )
+
+    rate = models.SmallIntegerField(verbose_name = "rates", choices=STATUS)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
     date = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        app_label = 'feed'
-        unique_together = ['user','topic','feed','comment','value']
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
 
-    def get_user_like(self):
-        return  "User: ", self.user,  "comment:", self.salary, "value:", self.value
+    # primary key ID of the model instance for which the relationship is created
+    object_id = models.PositiveIntegerField()
 
+    # communication with any model
+    content_object = GenericForeignKey()
 
-    # I use the __str__ function to show the user, feed, topic, comment, and value
-    def __str__(self):
-        return str(self.user) +':'+ str(self.comment) +':' + str(self.value)
+    # An instance of LikeDislikeManager class
+    objects = LikeDislikeManager()
 
 
 # A temp table

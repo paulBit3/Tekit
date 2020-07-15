@@ -28,6 +28,14 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    # Method to manage relationship between user
+    def get_relationshipships(self):
+        relationships = Relationship.objects.filter(
+            models.Q(from_user=self.user) |
+            models.Q(to_user=self.user)
+            )
+        return relationships
+
 
     def clean_phone(self):
         phone = self.clean_data['phone']
@@ -55,3 +63,36 @@ class Profile(models.Model):
     		img = img.resize(width, height)
     		img.save(self.photo.path)
 
+
+class RelationshipType(models.Model):
+    """relationship type """
+
+    name = models.CharField(max_length=50)
+    def __str__(self):
+        return self.name
+        
+
+
+class Relationship(models.Model):
+    """Manage relationship between users"""
+
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='relationship_set1')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='relationship_set2')
+    relationship_type = models.ForeignKey(RelationshipType, on_delete=models.CASCADE)
+    created_at = models.DateTimeField('created_at', default=datetime.now())
+
+    def __str__(self):
+        return '%s, %s, %s' %(self.from_user.username,
+                              self.to_user.username,
+                              self.relationship_type.name)
+
+
+class RelationshipRequest(models.Model):
+
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='relationship_request_set1')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='relationship_request_set2')
+    message = models.CharField(max_length=200)
+    created_at = models.DateTimeField('created at', default=datetime.now())
+
+    def __str__(self):
+        return '%s, %s' % (self.from_user.username, self.to_user.username)

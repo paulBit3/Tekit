@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from PIL import Image
 
-from .models import Topic, Feed, Comment, Like
+from .models import Topic, Feed, Comment
 from .forms import TopicForm, FeedForm,CommentForm
 
 # Create your views here.
