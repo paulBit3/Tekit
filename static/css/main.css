@@ -398,9 +398,47 @@ input:focus {
   opacity: 0.3;
 }
 
+/** comment**/
+
 .comment {
   margin: 20px 0px 20px 20px;
 }
+
+
+.container-1 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.container-1-box {
+  flex-basis: 54%;
+}
+
+.right {
+  float: right;
+  padding: 5px;
+}
+
+.left {
+  float: left;
+}
+
+.round {
+  border-color:black;
+  border-style: solid;
+  border-width: 1px 1px 1px 1px;
+  border-radius: 50px;
+}
+
+.creator {
+  margin-top:-55px;
+  margin-left:95px;
+  font-size:2rem;
+}
+
+/**end comment**/
 
 .topic-container {
   margin-top: 10px;

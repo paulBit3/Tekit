@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from datetime import datetime
 
 from PIL import Image
 
@@ -14,13 +15,19 @@ from PIL import Image
 class Profile(models.Model):
     """Store extract information relates to the user model"""
    
-    name = models.ForeignKey(User,on_delete=models.CASCADE, related_name="name")
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d/')
-    phone = models.CharField(max_length=20)
-    birthdate = models.DateField(null=True, blank=True)
+    name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="name")
+    picture = models.ImageField(upload_to='images/profile_pic', blank=True, null=True)
+    phone_number = models.CharField(max_length=20)
+    birthdate = models.DateField(blank=True, null=True)
     city = models.CharField(max_length=30)
     state = models.CharField(max_length=50)
+    status = models.CharField(max_length=200, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.user.username
+
 
     def clean_phone(self):
         phone = self.clean_data['phone']
@@ -47,3 +54,4 @@ class Profile(models.Model):
     		# Resize the image
     		img = img.resize(width, height)
     		img.save(self.photo.path)
+

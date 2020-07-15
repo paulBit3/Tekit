@@ -14,7 +14,7 @@
 						      <div class="card-body">
 						      	<h5>{% block page_header %} {{ feed.topic }} {% endblock page_header %}</h5>
 						      	
-						        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
+						       
 								   {% if feed.image %}
 					                <div class="card-img-top">
 					                	<img src="{{ feed.image.url }}" alt="">
@@ -28,12 +28,14 @@
 											<!-- Limited the words on the excerpts to 400 characters-->
 											{{ feed.text|slice:":300" }}
 										</p>
-										{% if user.is_authenticated %}
-				                           <a href="{% url 'feed:edit_feed' feed.id %}" class="btn btn-primary btn-sm">Edit Feed<i class="fas fa-pencil-alt"></i></a>
-		                        		{% endif %}
-									</div>
-
+										
+				                          
+		                        		
+									
+									<a href="{% url 'feed:edit_feed' feed.id %}" class="btn btn-primary btn-sm rounded-pill">Edit Feed<i class="fas fa-pencil-alt"></i></a>
 						      </div>
+
+
 						     <!-- comments -->
                         		
                         		<small>{{ feed.comments.count}} comments</small>
@@ -46,8 +48,8 @@
                         		
                         		<p>
                         		 
-                        		   <a class="btn btn-secondary active btn-sm"
-                        		    href="{% url 'feed:add_comment_feed' feed.id %}">Add Comment</a>
+                        		   <a class="btn btn-secondary active btn-sm rounded-pill"
+                        		    href="{% url 'feed:add_comment_feed' feed.id %}">Post Comment</a>
                         		  {% for comment in feed.comments.all %}
                         		   
                         		</p>
@@ -64,6 +66,36 @@
 	                        			</p>
 	                        			<strong>{{ user.username }}</strong><br>
 	                        			{{ comment.text|slice:":300" }}
+
+	                        			<!--Likes & Dislikes-->
+	                        			  <div class="container-1-box ">
+											    <h3><span style='text-align: left;'>{{ topic.text }} </span> </h3>
+											    <hr style='width:1080px;'>
+											    <img src='{{ userprofile.picture.url }}' height=75 width=75 class='round'>
+
+											    </img>
+											    <p style='color:purple;' class='creator'><b>{{feed.user.username}}</b></p>
+											    <form method="POST">
+											      {% csrf_token %}
+
+											      <div class="ui labeled button right" tabindex="0" name='dislikeVideo' onclick="window.location='{% url 'feed:like' pk=comment.id %}';">
+											    </form>
+											    <div class="ui purple button"><i class="thumbs down icon"></i> Dislike</div><a class="ui basic purple left pointing label">{{comment.dislikes}}</a></div>
+
+											    <form method="POST">
+											      {% csrf_token %}
+
+											      <div class="ui labeled button right " tabindex="0" name='likeVideo' onclick="window.location='{% url 'feed:like' pk=comment.id %}';">
+
+											    </form>
+											    <div class="ui teal button"><i class="thumbs up icon"></i> Like</div>
+											    <a class="ui basic teal left pointing label">
+											      {{comment.likes}}
+											    </a>
+										  </div>
+
+                                          <!-- End Likes & Dislikes-->
+
 	                        			{% if user.is_authenticated %}
 
 	                        			 <!-- protect data from other users-->

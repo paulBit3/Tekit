@@ -21,7 +21,7 @@
 				       	<form class="form-group" action="{% url 'feed:new_feed' topic.id %}" method="post" enctype="multipart/form-data">
 					        {% csrf_token %}
 					        {{ form|crispy}}
-					      <input class="btn btn-primary" type="submit" value="Post">  
+					      <input class="btn btn-primary" type="submit" value="Post Feed">  
 				       </form>
 				   
 

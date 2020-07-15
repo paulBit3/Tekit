@@ -20,7 +20,7 @@ urlpatterns = [
     # Page for showing hot topics
     path('topics/hot_topics/', views.show_hot_topics, name='show_hot_topics'),
     # Page for adding a new entry
-    path('new_feed/<int:topic_id>/', views.new_feed, name='new_feed'),
+    path('new_feed/<int:pk>/', views.new_feed, name='new_feed'),
     # Page for editing a post
     path('edit_feed/<int:feed_id>/', views.edit_feed, name='edit_feed'),
     # Page that shows all of the feeds
@@ -35,5 +35,5 @@ urlpatterns = [
     path('comment/<int:pk>/approve/', views.comment_approved, name='comment_approved'),
     # Removing comment
     path('comment/<int:pk>/remove/', views.comment_removed, name='comment_removed'),
-
+ 
 ]

@@ -84,14 +84,17 @@ class Topic(models.Model):
 # For user to record
 class Feed(models.Model):
     """Something specific learned about a topic"""
+    STATUS = (
+        (1, 'new'), (2, 'verified'), (3, 'published')
+        )
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
+    image = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d/')
     # likes = models.ManyToManyField(User, related_name='likes', blank=True)
     likes= models.IntegerField(default=0)
     dislikes= models.IntegerField(default=0)
-    is_published = models.BooleanField(default=True)
+    status = models.IntegerField(choices = STATUS, default=1)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     
@@ -126,6 +129,9 @@ class Feed(models.Model):
             img = img.resize(width, height)
             img.save(self.iamge.path)
 
+    # avoid keeping all photo loaded by user in the same folder
+    def get_upload_path(instance, filename):
+        return os.path.join('feed/photos/', now().date().strftime("%Y/%m/%d"), filename)
 
     def __str__(self):
         """Return a string representation of the model"""
@@ -135,9 +141,9 @@ class Feed(models.Model):
 # Comment class
 class Comment(models.Model):
     """Managing feeds or topic User comment about"""
-    feed = models.ForeignKey(Feed, related_name='feed', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
-    comment = models.TextField(validators=[MinLengthValidator(150)])
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    comment = models.TextField(validators=[MinLengthValidator(150)], blank=True)
     likes= models.IntegerField(default=0)
     dislikes= models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -173,16 +179,19 @@ class Comment(models.Model):
 class Like(models.Model):
     """Class for Like"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='feeds')
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='topics')
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comments')
-    value = models.IntegerField()
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='feeds', null=True)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='topics', null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comments', null=True)
+    value = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now=True)
 
     class Meta:
         app_label = 'feed'
         unique_together = ['user','topic','feed','comment','value']
-            
+
+    def get_user_like(self):
+        return  "User: ", self.user,  "comment:", self.salary, "value:", self.value
+
 
     # I use the __str__ function to show the user, feed, topic, comment, and value
     def __str__(self):

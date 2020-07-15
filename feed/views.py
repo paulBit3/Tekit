@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from PIL import Image
 
-from .models import Topic, Feed, Comment
+from .models import Topic, Feed, Comment, Like
 from .forms import TopicForm, FeedForm,CommentForm
 
 # Create your views here.
@@ -28,7 +28,7 @@ def index(request):
     show_more_link_hot_topics = hot_topics_list.count() > max_hot_topics
     show_more_link_topics = topics_list.count() > max_topics_list
 
-    feeds = Feed.objects.order_by('-date_added').filter(is_published=True)[:3]
+    feeds = Feed.objects.order_by('-date_added').filter(status=1)[:3]
     # topic = Topic.objects.get(id=topic_id)
 
     context = {
@@ -111,9 +111,9 @@ def show_hot_topics(request):
 
 
 @login_required
-def new_feed(request, topic_id):
+def new_feed(request, pk):
     """Add a new feed for a particular topic"""
-    topic = Topic.objects.get(id=topic_id)
+    topic = Topic.objects.get(pk=pk)
 
     if request.method != 'POST':
         form = FeedForm()
@@ -128,7 +128,7 @@ def new_feed(request, topic_id):
             nfeed.author = request.user
             nfeed.save()
             messages.success(request, 'Your post has been submitted')
-            return redirect('feed:topic', topic_id=topic_id)
+            return redirect('feed:topic', pk=topic.id)
 
     # Display a blank or invalid form
     context = {'topic': topic, 'form': form}
@@ -189,7 +189,7 @@ def feed_detail(request, pk):
 
     context = {
          'feed': feed,
-         'comments': comments
+         'comment': comments
          }
 
     return render(request, 'feed/feed_detail.html', context)
@@ -228,7 +228,7 @@ def add_comment_feed(request, pk):
 # Comment approved method, if user are logged in
 @login_required
 def comment_approved(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
+    comment = get_object_or_404(Comment, pk=comment.pk)
     comment.approve()
     return redirect('feed:feed_detail', pk=comment.feed.pk)
 
@@ -237,7 +237,7 @@ def comment_approved(request, pk):
 # Comment remove method, if uder are logged in
 @login_required
 def comment_removed(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
+    comment = get_object_or_404(Comment, pk=comment.pk)
     comment.delete()
     return redirect('feed:feed_detail', pk=comment.feed.pk)
 
@@ -278,4 +278,6 @@ def edit_comment(request, pk):
 #         }
 
 #     return render(request, 'feed/feed_list.html', context)
+#-------------------------
 
+# Implenting like and dislike methods
