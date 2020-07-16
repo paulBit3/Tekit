@@ -16,7 +16,7 @@ class Profile(models.Model):
     """Store extract information relates to the user model"""
    
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="name")
-    picture = models.ImageField(upload_to='images/profile_pic', blank=True, null=True)
+    picture = models.ImageField(upload_to='uploads/pictures', blank=True, null=True)
     phone_number = models.CharField(max_length=20)
     birthdate = models.DateField(blank=True, null=True)
     city = models.CharField(max_length=30)

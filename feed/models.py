@@ -1,18 +1,86 @@
-from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.contrib import messages
 from django.core.validators import MinLengthValidator
 
+# the fields content_type , object_id , GenericForeignKey , 
+# does not create additional database migrations.
+from django.contrib.contenttypes.fields import GenericRelation
+
+from django.db import models
+
 from PIL import Image
 
 # Using ContentType and GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
-#  the fields content_type , object_id , GenericForeignKey , 
-# does not create additional database migrations.
-from django.contrib.contenttypes.fields import GenericRelation
+
+
+
+# The LikeDislikeManager() model manager 
+class LikeDislikeManager(models.Manager):
+    """Like Dislike model manager"""
+    related_fields = True
+
+    def likes(self):
+        # taking record greater than 0
+        return self.get_queryset().filter(rate__gt=0)
+
+    def dislikes(self):
+        # taking record less than 0
+        return self.get_queryset().filter(rate__lt=0)
+
+    # total rating methods
+    def rating_sum(self):
+         return self.get_queryset().aggregate(Sum('rate')).get('rate__sum') or 0
+
+
+    """Implementing user behavior"""
+
+    def comments(self):
+        return self.get_queryset().filter(content_type__model='Comment').order_by('-created_on')
+
+
+    def feeds(self):
+        return self.get_queryset().filter(content_type__model='Feed').order_by('-date_added')
+
+
+    def topics(self):
+        return self.get_queryset().filter(content_type__model='Topic').order_by('-date_added')
+
+
+
+
+"""Instead of creating several like and dislike methods,
+I will create only one class LikeDislike.
+The Like Dislike is based on the principle +1/-1"""
+
+class LikeDislike(models.Model):
+    """Like and Dislike class"""
+    Like = 1
+    Dislike = -1
+
+    STATUS = (
+        (Like, 'Like'), 
+        (Dislike, 'Dislike')
+        )
+
+    rate = models.SmallIntegerField(verbose_name = "rates", choices=STATUS)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
+    date = models.DateTimeField(auto_now=True)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+
+    # primary key ID of the model instance for which the relationship is created
+    object_id = models.PositiveIntegerField()
+
+    # communication with any model
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    # An instance of LikeDislikeManager class
+    objects = LikeDislikeManager()
+
 
 
 # A topic manager class as interface between Topic model and the db
@@ -43,7 +111,7 @@ class Topic(models.Model):
         default= 'images/topicholder.png',
         max_length= 100
         )
-    rates = GenericRelation(LikeDislike, related_name='topics')
+    rates = GenericRelation(LikeDislike, related_query_name ='topics')
     hot_topics = models.BooleanField(default=False)
 
     # Adding meta information about the model
@@ -97,7 +165,7 @@ class Feed(models.Model):
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d/')
-    rates = GenericRelation(LikeDislike, related_name='feeds')
+    rates = GenericRelation(LikeDislike, related_query_name ='feeds')
     status = models.IntegerField(choices = STATUS, default=1)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -150,7 +218,7 @@ class Comment(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField(validators=[MinLengthValidator(50)], blank=True)
-    rates = GenericRelation(LikeDislike, related_name='comments')
+    rates = GenericRelation(LikeDislike, related_query_name ='comments')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)  # to prevent spam
@@ -177,70 +245,6 @@ class Comment(models.Model):
     def __str__(self):
         return 'Comment {} - by {}'.format(self.comment, self.user.username)[:30]
 
-
-
-# The LikeDislikeManager() model manager 
-class LikeDislikeManager(models.Manager):
-    """Like Dislike model manager"""
-    related_fields = True
-
-    def likes(self):
-        # taking record greater than 0
-        return self.get_queryset().filter(rate__gt=0)
-
-    def dislikes(self):
-        # taking record less than 0
-        return self.get_queryset().filter(rate__lt=0)
-
-    # total rating methods
-    def rating_sum(self):
-         return self.get_queryset().aggregate(Sum('rate')).get('rate__sum') or 0
-
-
-    """Implementing user behavior"""
-
-    def comments(self):
-        return self.get_queryset().filter(content_type__model='comment').order_by('-created_on')
-
-
-    def feeds(self):
-        return self.get_queryset().filter(content_type__model='feed').order_by('-date_added')
-
-
-    def topics(self):
-        return self.get_queryset().filter(content_type__model='topic').order_by('-date_added')
-
-
-
-
-"""Instead of creating several like and dislike methods,
-I will create only one class LikeDislike.
-The Like Dislike is based on the principle +1/-1"""
-
-class LikeDislike(models.Model):
-    """Like and Dislike class"""
-    Like = 1
-    Dislike = -1
-
-    STATUS = (
-        (Like, 'Like'), 
-        (Dislike, 'Dislike')
-        )
-
-    rate = models.SmallIntegerField(verbose_name = "rates", choices=STATUS)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
-    date = models.DateTimeField(auto_now=True)
-
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-
-    # primary key ID of the model instance for which the relationship is created
-    object_id = models.PositiveIntegerField()
-
-    # communication with any model
-    content_object = GenericForeignKey()
-
-    # An instance of LikeDislikeManager class
-    objects = LikeDislikeManager()
 
 
 # A temp table

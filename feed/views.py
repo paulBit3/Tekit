@@ -1,14 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import  get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
+from django.views import View
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 
 from PIL import Image
+import json
 
-from .models import Topic, Feed, Comment
+from .models import Topic, Feed, Comment, LikeDislike
 from .forms import TopicForm, FeedForm,CommentForm
 
 # Create your views here.
@@ -280,4 +285,47 @@ def edit_comment(request, pk):
 #     return render(request, 'feed/feed_list.html', context)
 #-------------------------
 
-# Implenting like and dislike methods
+""" Implenting like and dislike methods 
+    We will consider a view that will add or remove a user's 
+    Like or Dislike from an topic, feed or comment 
+    The implementation of the rate will be made using AJAX requests."""
+
+class RateView(LoginRequiredMixin, View):
+    """A class view to manage user preference"""
+
+    model = None   # Data Model - Feed, Comment, Topic
+    rate_type = None  # Rate type Like/Dislike
+
+    def post(self, request, pk):
+        obj = self.model.objects.get(pk=pk)
+        
+        try:
+            likedislike = LikeDislike.objects.get(content_type=ContentType.objects.get_for_model(obj), 
+                                                  object_id=obj.id, user=request.user)
+            if likedislike.rate is not self.rate_type:
+                likedislike.rate = self.rate_type
+
+                # save and update the database
+                likedislike.save(update_fields=['rate'])
+                result = True
+            else:
+                likedislike.delete()
+                result = False
+        except LikeDislike.DoesNotExist:
+            obj.rates.create(user=request.user, rate=self.rate_type)
+            result = True
+
+        # return a Json object
+        return HttpResponse(
+            json.dumps({
+                'result': result,
+                'likes': obj.rates.likes().count(),
+                'dislikes': obj.rates.dislikes().count(),
+                'rating_sum': obj.rates.rating_sum()
+                }),
+            content_type = 'application/json'
+            )
+    
+
+    
+
