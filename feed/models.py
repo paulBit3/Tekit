@@ -103,6 +103,7 @@ class TopicManager(models.Manager):
 class Topic(models.Model):
     """A topic the user is learning about."""
     text = models.CharField(max_length=200)
+    read_time = models.IntegerField(default=0)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -167,20 +168,13 @@ class Feed(models.Model):
     image = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d/')
     rates = GenericRelation(LikeDislike, related_query_name ='feeds')
     status = models.IntegerField(choices = STATUS, default=1)
+    read_time = models.IntegerField(default=0)
     date_added = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name_plural = 'feeds'
 
-    # to calculate likes
-    @property
-    def total_likes(self):
-        """
-        Likes for a feed or a topic
-        :return: Integer: Likes for a feed or a topic
-        """
-        return self.likes.count()
 
       # Resizing the user profile photo
     def resize_image(self):
@@ -219,6 +213,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField(validators=[MinLengthValidator(50)], blank=True)
     rates = GenericRelation(LikeDislike, related_query_name ='comments')
+    read_time = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)  # to prevent spam
@@ -227,11 +222,11 @@ class Comment(models.Model):
         """A meta class"""
         ordering = ['created_on']
     
-    def get_total_likes(self):
-        return self.likes.users.count()
+    # def get_total_likes(self):
+    #     return self.likes.users.count()
 
-    def get_total_dis_likes(self):
-        return self.dis_likes.users.count()
+    # def get_total_dis_likes(self):
+    #     return self.dis_likes.users.count()
 
     # approve user comment before displaying
     def approve(self):
@@ -239,7 +234,7 @@ class Comment(models.Model):
         self.save()
 
     def approved_comments(self):
-        return self.comments.filter(approve=True)
+        return self.comment.filter(approve=True)
 
 
     def __str__(self):

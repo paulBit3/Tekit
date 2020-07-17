@@ -21,8 +21,8 @@
  				<form class="form-group" action="{% url 'feed:edit_comment' pk=comment.pk %}" method="post">
  					{% csrf_token %}
  					{{ form|crispy }}
-                    <input class="btn btn-secondary active btn-sm" type="submit" value="Cancel">
- 					<input class="save btn btn-primary" type="submit" value="Update">
+                    <input class="btn btn-secondary active btn-sm rounded-pill" type="submit" value="Cancel">
+ 					<input class="save btn btn-primary btn-sm rounded-pill" type="submit" value="Update">
  				</form>
  				{% endif %}
  			</div>

@@ -39,24 +39,28 @@
 
 						     <!-- comments -->
                         		
-                        		<small>{{ feed.comments.count}} comments</small>
+                        		<small>{{ feed.comments.count }} comments </small>
 						</div>
 
 						{% block sidebar %} {% include 'partials/_sidebar.html' %} {% endblock sidebar %}
 
                         <div class="col-md-8 card mb-4 mt-3 ">
+                        	<div class="form-group">
+                        	 <a class="btn btn-secondary active btn-sm rounded-pill"
+                        	    href="{% url 'feed:add_comment_feed' feed.id %}">Post Comment
+                        	</a>
+                        	</div>
                         	<div class="card-body">
                         		
                         		<p>
                         		 
-                        		   <a class="btn btn-secondary active btn-sm rounded-pill"
-                        		    href="{% url 'feed:add_comment_feed' feed.id %}">Post Comment</a>
-                        		  {% for comment in feed.comments.all %}
+                        		  
                         		   
                         		</p>
+                        		{% for comment in feed.comments.all %}
 	                        		<div class="comments">
 	                        			<p class="font-weight-bold">
-	                        				<div class="date text-muted">{{ comment.date_added }}</div>
+	                        				<div class="date text-muted">{{ comment.created_on}}</div>
 	                        				{% if not comment.approved %}
 
 	                        				 <a class="btn btn-secondary active btn-sm" href="{% url 'feed:comment_removed' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
@@ -66,41 +70,68 @@
 	                        				{% endif %}
 	                        			</p>
 	                        			<strong>{{ user.username }}</strong><br>
-	                        			{{ comment.text|slice:":300" }}
+	                        			
+	                        			<p>{{ comment.comment|slice:":300" }}</p>
 
 	                        			<!--Likes & Dislikes-->
-	                        			  <div class="container-1-box ">
-											    <h3><span style='text-align: left;'>{{ topic.text }} </span> </h3>
-											    <hr style='width:1027px;'>
-											    <img src='{{ userprofile.picture.url }}' height=75 width=75 class='round'>
-											    <p style='color:purple;' class='creator'><b>{{feed.user.username}}</b></p>
-											    <ul>
-											    	<li data-id="{{ like_obj.id }}" data-type="comment" data-action="like" title="Like">
-											    		<span class="glyphicon glyphicon-thumbs-up"></span>
-											    		<span data-count="like">{{ like_obj.rates.likes.count }}</span>
-											    	</li>
-											    	<li data-id="{{ like_obj.id }}" data-type="comment" data-action="dislike" title="Dislike">
-											    		<span class="glyphicon glyphicon-thumbs-down"></span>
-											    		<span data-count="dislike">{{ like_obj.rates.dislikes.count }}</span>
-											    	</li>
-											    </ul>
-											   
+
+										  <div class="text-left">
+										  	<span class="pointer">
+										  		{% if request.user in like_obj.likes.users.all %}
+										  		<!--Already liked-->
+										  		<a href={% url 'comnt_like' pk=like_obj.pk option='like' %}>
+										  			<i data-toggle="tooltip" data-placement="bottom" title="Unlike" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+										  				<span>{{ like_obj.rates.likes.counts }}</span>
+										  			</i></a>
+										  		{% else %}
+										  		<!--not liked-->
+										  		<a href={% url 'comnt_like' pk=like_obj.pk option='like' %}>
+										  			<i data-toggle="tooltip" data-placement="bottom" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+										  				<span>{% if like_obj.rates.likes.counts %}{{ like_obj.rates.likes.counts }} {% else %} 0 {% endif %}</span>
+										  			</i></a>
+										  		{% endif %}
+										  	</span>
+										  		<span class="pointer">
+										  		{% if request.user in like_obj.dislikes.users.all %}
+										  		<!--Already liked-->
+										  		<a href={% url 'comnt_dislike' pk=like_obj.pk option='dislike' %}>
+										  			<i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
+										  				<span>{{ like_obj.rates.dislikes.counts }}</span>
+										  			</i></a>
+										  		{% else %}
+										  		<!--not liked-->
+										  		<a href={% url 'comnt_dislike' pk=like_obj.pk option='dislike' %}>
+										  			<i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
+										  				<span>{% if like_obj.rates.dislikes.counts %}{{ like_obj.rates.dislikes.counts }} {% else %} 0 {% endif %}</span>
+										  			</i></a>
+										  		{% endif %}
+										  	</span>
 										  </div>
+
+
+
 
                                           <!-- End Likes & Dislikes-->
 
 	                        			{% if user.is_authenticated %}
 
 	                        			 <!-- protect data from other users-->
-	                        			  {% if request.user == comment.user %}
-	                        			   <a class="btn btn-primary btn-sm"  href="{% url 'feed:edit_comment' pk=comment.pk %}">Edit</a>
-	                        			  {% endif %}
+	                        			  
+	                        			   
+
+	                        			   <p class="text-right">{{like_obj.user.user_name}}.
+									         {% if like_obj.user == request.user  %}
+									         <span><a class="circle-card" href="{% url 'feed:edit_comment' pk=comment.pk' like_obj.id %}"><i class="fas fa-edit"></a></i></span>
+									         {% endif %}
+									      </p>
+	                        			  
 	                        			{% endif %}
+	                        			<hr style='width:600px;'>
 	                        		</div>
 	                        		
-	                        	   {% empty %}
+	                        	{% empty %}
 	                        	   	<p>No comments here yet :(</p>
-	                        	   {% endfor %}
+	                        	{% endfor %}
                         	</div> 
 		                       
 	                    </div>

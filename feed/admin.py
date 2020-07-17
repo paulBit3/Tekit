@@ -8,9 +8,11 @@ admin.site.register(Topic)
 admin.site.register(Feed)
 admin.site.register(Comment)
 
+
 class CommentAdmin(admin.ModelAdmin):
-	list_display = ('user', 'feed', 'text', 'created_on', 'active')
-	list_filter = ('active', 'created_on')
+	list_display = ('user', 'feed', 'created_on', 'active')
+	list_filter = ('active', 'created_on', 'updated_at')
+	search_fields = ('user', 'email', 'comment')
 	actions = ['approved_comment']
 
 	# updating the active boolean field

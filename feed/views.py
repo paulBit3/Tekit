@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import  get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
-from django.views import View
+from django.views.generic import RedirectView
+from django.views import View 
+from django.urls import reverse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
@@ -197,7 +199,8 @@ def feed_detail(request, pk):
          'comment': comments
          }
 
-    return render(request, 'feed/feed_detail.html', context)
+    #return render(request, 'feed/feed_detail.html', context)
+    return HttpResponseRedirect(reverse('comnt_like', kwargs={'pk':pk}))
 
 
 # adding comment to feed
@@ -290,7 +293,7 @@ def edit_comment(request, pk):
     Like or Dislike from an topic, feed or comment 
     The implementation of the rate will be made using AJAX requests."""
 
-class RateView(LoginRequiredMixin, View):
+class RateView(LoginRequiredMixin, RedirectView):
     """A class view to manage user preference"""
 
     model = None   # Data Model - Feed, Comment, Topic

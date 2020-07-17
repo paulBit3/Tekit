@@ -7,6 +7,7 @@ from . import views
 
 app_name = 'feed'
 
+
 urlpatterns = [
     # Home page
     path('', views.index, name='index'),
@@ -37,15 +38,15 @@ urlpatterns = [
     # Removing comment
     path('comment/<int:pk>/remove/', views.comment_removed, name='comment_removed'),
     # Like comment
-    path('comment/<int:pk>/like/', views.RateView.as_view(model=Comment, rate_type=LikeDislike.Like), name='comnt_like'),
+    path('<int:pk>/<str:option>/', views.RateView.as_view(model=Comment, rate_type=LikeDislike.Like), name='comnt_like'),
      # Dislike comment
-    path('comment/<int:pk>/disllike/', views.RateView.as_view(model=Comment, rate_type=LikeDislike.Dislike), name='comnt_dislike'),
+    path('<int:pk>/<str:option>/', views.RateView.as_view(model=Comment, rate_type=LikeDislike.Dislike), name='comnt_dislike'),
     # Like feed
-    path('feed/<int:pk>/like/', views.RateView.as_view(model=Feed, rate_type=LikeDislike.Like), name='feed_like'),
+    path('<int:pk>/<str:option>/', views.RateView.as_view(model=Feed, rate_type=LikeDislike.Like), name='feed_like'),
      # Dislike feed
-    path('fed/<int:pk>/dislike/', views.RateView.as_view(model=Feed, rate_type=LikeDislike.Dislike), name='feed_dislike'),
+    path('<int:pk>/<str:option>/', views.RateView.as_view(model=Feed, rate_type=LikeDislike.Dislike), name='feed_dislike'),
     # Like topic
-    path('topic/<int:pk>/like/', views.RateView.as_view(model=Topic, rate_type=LikeDislike.Like), name='topic_like'),
+    path('<int:pk>/<str:option>/', views.RateView.as_view(model=Topic, rate_type=LikeDislike.Like), name='topic_like'),
      # Dislike topic
-    path('topic/<int:pk>/dislike/', views.RateView.as_view(model=Topic, rate_type=LikeDislike.Dislike), name='topic_dislike'),
+    path('<int:pk>/<str:option>/', views.RateView.as_view(model=Topic, rate_type=LikeDislike.Dislike), name='topic_dislike'),
 ]
