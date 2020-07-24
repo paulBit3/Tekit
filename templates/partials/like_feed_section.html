@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+	   <!--Likes & Dislikes-->
+	    {{ total_likes }} Like{{ total_likes|pluralize }}
+	   <div class="text-left">
+	   	<span class="pointer">
+	   		{% if request.user.is_authenticated %}
+	   		<form action="{% url 'like_feed' %}" method="post">
+	   			{% csrf_token %}
+	   			{% if is_liked %}
+	   			<button type="submit" class="" href="" id="feedlike" name="feed_id" value="{{ feed.id }}" data-type="">
+		            <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+		               <!-- <span data-count="like"></span> -->
+		            </i>
+		         </button>
+	   			{% else %}
+	   			<button type="submit" class="" href="" id="feedlike" name="feed_id" value="{{ feed.id }}" data-type="">
+		            <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+		              <!--  <span data-count="like"></span> -->
+		            </i>
+		         </button>
+	   			{% endif %}
+	   		</form>
+	   		{% endif %}
+		</span>
+	   </div>
+	            <!-- End Likes & Dislikes-->
+	    <!-- protect data from other users-->
+		
+	   
+	 
+	 <hr style='width:300px;'>
+
+{% endblock %}

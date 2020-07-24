@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+	   <!--Likes & Dislikes-->
+	
+	   <span class="pointer">
+	   	 {% if request.user.is_authenticated %}
+		   {% if is_liked %}
+	         <!--Already liked-->
+	         <a class="" href="{% url 'like_comment' %}" id="like" name="comment_id" value="{{ comment.id }}">
+	            <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+	               <span data-count="like">{{ total_likes }} Like{{ total_likes|pluralize }}</span>
+	            </i>
+	         </a>
+	       {% else %}
+	       <!--not liked-->
+	       <a class="" href="{% url 'like_comment' %}" id="like" name="comment_id" value="{{ comment.id }}">
+	         <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+	         <span data-count="like">{% if result %}{{ total_likes }} {% else %} 0 {% endif %}</span>
+	          </i>
+	        </a>
+	       {% endif %}
+	     {% endif %}
+      </span>
+      
+	            <!-- End Likes & Dislikes-->
+	    <!-- protect data from other users-->
+		
+	   
+	 
+	 <hr style='width:600px;'>
+
+{% endblock %}

@@ -22,10 +22,16 @@
  					{% csrf_token %}
  					{{ form|crispy }}
 
- 					<input type="submit" value="Send" class="save btn btn-primary btn-lg">
+ 					<input type="submit" value="Send" class="save btn btn-primary rounded-pill">
  				</form>
  				{% endif %}
+ 				{% if approved %}
+	 				<p>
+	 					{% include 'partials/success.html' %}
+	 				</p>
+ 				{% endif %}
  			</div>
+
  		</div>
  	</div>
  </div>

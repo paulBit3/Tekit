@@ -63,3 +63,190 @@
                                 </div>
 
 <a class="btn btn-primary btn-sm rounded-pill"  href="{% url 'feed:edit_comment' pk=comment.pk %}">Edit</a>
+
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+ 
+ {% if user.is_authenticated %}
+     <strong>{{ user.username }}</strong><br>
+     <p>{{ comment.comment|slice:":300" }}</p>
+      <!--Likes & Dislikes-->
+      <div class="text-left">
+         <span class="pointer">
+          {% if request.user in like_obj.likes.users.all %}
+         <!--Already liked-->
+         <a class="like" href="{% url 'feed:comnt_like_toggle' pk=comment.pk %}" data-id="{{ comment.pk }}" data-type="comment">
+            <i data-toggle="tooltip" data-placement="bottom" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+               <span data-count="like">{{ like_obj.rates.likes.counts }}</span>
+            </i>
+         </a>
+       {% else %}
+       <!--not liked-->
+       <a class="like" href="{% url 'feed:comnt_like_toggle' pk=comment.pk %}" data-id="{{ comment.pk }}" data-type="comment">
+         <i data-toggle="tooltip" data-placement="bottom" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+         <span data-count="like">{% if like_obj.rates.likes.counts %}{{ like_obj.rates.likes.counts }} {% else %} 0 {% endif %}</span>
+          </i>
+        </a>
+       {% endif %}
+      </span>
+      <span class="pointer">
+       {% if request.user in like_obj.dislikes.users.all %}
+         <!--Already liked-->
+        <a class="dislike" href="{% url 'feed:comnt_dislike_toggle' pk=comment.pk %}" data-id="{{ comment.pk }}" data-type="comment">
+         <i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
+            <span data-count="dislike">{{ like_obj.rates.dislikes.counts }}</span>
+          </i>
+         </a>
+       {% else %}
+         <!--not liked-->
+         <a class="dislike" href="{% url 'feed:comnt_dislike_toggle' pk=comment.pk %}" data-id="{{ comment.pk }}" data-type="comment">
+            <i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
+             <span data-count="dislike">{% if like_obj.rates.dislikes.counts %}{{ like_obj.rates.dislikes.counts }} {% else %} 0 {% endif %}</span>
+            </i>
+         </a>
+       {% endif %}
+      </span>
+      </div>
+               <!-- End Likes & Dislikes-->
+       <!-- protect data from other users-->
+      <p>Read time: {% if instance.read_time <= 1 %} < 1 Minute {% else %}{{ instance.read_time }} minutes {% endif %}</p>
+       <p class="text-right">{{like_obj.user.user_name}}.
+        {% if like_obj.user == request.user  %}
+        <span><a class="circle-card" href="{% url 'feed:edit_comment' pk=comment.pk like_obj.id %}"><i class="fas fa-edit"></a></i></span>
+        {% endif %}
+      </p>
+    {% endif %}
+    <hr style='width:600px;'>
+
+{% endblock %}
+
+
+<div class="card-body">
+                              
+                              <p>
+                               
+                                
+                                 
+                              </p>
+                              {% for comment in feed.comments.all %}
+                                 <div class="comments">
+                                    <p class="font-weight-bold">
+                                       <div class="date text-muted">{{ comment.created_on}}</div>
+                                       {% if not comment.approved %}
+
+                                        <a class="" href="{% url 'feed:comment_removed' pk=comment.pk %}">
+                                     <i data-toggle="tooltip" data-placement="bottom" title="delete" class=" fas fa-trash-alt pr-2" aria-hidden="true"></i>
+                                 </a>
+                                        
+
+                                        <a class="" href="{% url 'feed:comment_approved' pk=comment.pk %}">
+                                          <i data-toggle="tooltip" data-placement="bottom" title="approve" class=" far fa-smile pr-2" aria-hidden="true"></i>
+                                        </a>
+                                             <p>{{ comment.content|slice:":300" }}</p>
+                                       {% endif %}
+                                    </p>
+                                  <!-- Like section -->
+                                 <div id="like-section">
+                                    {% include 'partials/like_section.html' %}
+                                 </div>
+                                 </div>
+                                 
+                              {% empty %}
+                                    <p>No comments here yet :(</p>
+                              {% endfor %}
+</div>
+
+    {% if result %}
+         <!--Already liked-->
+         <a class="" href="{% url 'like' %}" id="like-btn" value='{{ comment.pk }}' data-type='comment'>
+            <i data-toggle="tooltip" data-placement="bottom" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+               <span data-count="like">{{ get_total_likes }}</span>
+            </i>
+         </a>
+       {% else %}
+       <!--not liked-->
+       <a class="" href="{% url 'like' %}" id="like-btn" value='{{ comment.pk }}' data-type='comment'>
+         <i data-toggle="tooltip" data-placement="bottom" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+         <span data-count="like">{% if result %}{{ get_total_likes }} {% else %} 0 {% endif %}</span>
+          </i>
+        </a>
+       {% endif %}
+      </span>
+      <span class="pointer">
+       {% if result %}
+         <!--Already liked-->
+        <a class="" href="{% url 'like' %}" id="dislike-btn" value="{{ comment.pk }}" data-type="comment">
+         <i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
+            <span data-count="dislike">{{ get_total_likes }}</span>
+          </i>
+         </a>
+       {% else %}
+         <!--not liked-->
+         <a class="" href="{% url 'like' %}" id="dislike-btn" value="{{ comment.pk }}" data-type="comment">
+            <i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
+             <span data-count="dislike">{% if result %}{{ get_total_likes }} {% else %} 0 {% endif %}</span>
+            </i>
+         </a>
+       {% endif %}
+
+ <p class="text-right">{{request.user.user_name}}.
+        {% if user == request.user  %}
+        <span><a class="circle-card" href="{% url 'feed:edit_comment' pk=comment.id %}"><i class="fas fa-edit"></a></i></span>
+        {% endif %}
+      </p>
+
+
+    {{ total_likes }} Like{{ total_likes|pluralize }}
+      <div class="text-left">
+         <span class="pointer">
+            {% if request.user.is_authenticated %}
+            <form action="{% url 'like_comment' %}" method="post">
+               {% csrf_token %}
+               {% if is_liked %}
+               <button type="submit" class="" href="" id="like" name="comment_id" value="{{ comment.id }}" data-type="">
+                  <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+                     <!-- <span data-count="like"></span> -->
+                  </i>
+               </button>
+               {% else %}
+               <button type="submit" class="" href="" id="like" name="comment_id" value="{{ comment.id }}" data-type="">
+                  <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+                    <!--  <span data-count="like"></span> -->
+                  </i>
+               </button>
+               {% endif %}
+            </form>
+            {% endif %}
+      </span>
+      </div>
+
+
+/**
+Configuring AJAX to use the CSRF token
+**/
+// Getting a cookie by name
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+ 
+// Setup AJAX
+$(function () {
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": getCookie("csrftoken") }
+    });
+});

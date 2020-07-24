@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+ <div class="card-body">
+ 	{% for comment in feed.comments.all %}
+ 	 <div class="comments">
+ 	 	<p class="font-weight-bold">
+ 	 		<div class="date text-muted">{{ comment.created_on}}</div>
+	         {% if not comment.approved %}
+		         <a class="" href="{% url 'feed:comment_removed' pk=comment.pk %}">
+		         	<i data-toggle="tooltip" data-placement="bottom" title="delete" class=" fas fa-trash-alt pr-2" aria-hidden="true"></i>
+				 </a>
+				 <a class="" href="{% url 'feed:comment_approved' pk=comment.pk %}">
+				 	<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" far fa-smile pr-2" aria-hidden="true"></i>
+		         </a>
+             {% endif %}
+        </p>
+         <strong>{{ user.username|capfirst }}</strong><br>
+	  	 <p>{{ comment.content|slice:":300" }}</p>
+	  	 <p>Read time: {% if comment.read_time <= 1 %} < 1 Minute {% else %}{{ comment.read_time }} minutes {% endif %}</p><button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm ml-2">Reply</button>
+
+        <!-- Like section -->
+        <div id="like-section">
+        	{% include 'partials/like_section.html' %}
+	    </div>
+	  </div>
+	{% empty %}
+	<p>No comments here yet :(</p>
+	{% endfor %}
+ </div>
+{% endblock %}

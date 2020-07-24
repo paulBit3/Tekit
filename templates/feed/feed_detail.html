@@ -40,6 +40,7 @@
 						     <!-- comments -->
                         		
                         		<small>{{ feed.comments.count }} comments </small>
+
 						</div>
 
 						{% block sidebar %} {% include 'partials/_sidebar.html' %} {% endblock sidebar %}
@@ -47,93 +48,12 @@
                         <div class="col-md-8 card mb-4 mt-3 ">
                         	<div class="form-group">
                         	 <a class="btn btn-secondary active btn-sm rounded-pill"
-                        	    href="{% url 'feed:add_comment_feed' feed.id %}">Post Comment
+                        	    href="{% url 'feed:add_comment_feed' feed.id %}"><i class="far fa-comment-dots"></i>Post Comment
                         	</a>
                         	</div>
-                        	<div class="card-body">
-                        		
-                        		<p>
-                        		 
-                        		  
-                        		   
-                        		</p>
-                        		{% for comment in feed.comments.all %}
-	                        		<div class="comments">
-	                        			<p class="font-weight-bold">
-	                        				<div class="date text-muted">{{ comment.created_on}}</div>
-	                        				{% if not comment.approved %}
-
-	                        				 <a class="btn btn-secondary active btn-sm" href="{% url 'feed:comment_removed' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
-
-	                        				 <a class="btn btn-secondary active btn-sm" href="{% url 'feed:comment_approved' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
-
-	                        				{% endif %}
-	                        			</p>
-	                        			<strong>{{ user.username }}</strong><br>
-	                        			
-	                        			<p>{{ comment.comment|slice:":300" }}</p>
-
-	                        			<!--Likes & Dislikes-->
-
-										  <div class="text-left">
-										  	<span class="pointer">
-										  		{% if request.user in like_obj.likes.users.all %}
-										  		<!--Already liked-->
-										  		<a href={% url 'comnt_like' pk=like_obj.pk option='like' %}>
-										  			<i data-toggle="tooltip" data-placement="bottom" title="Unlike" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
-										  				<span>{{ like_obj.rates.likes.counts }}</span>
-										  			</i></a>
-										  		{% else %}
-										  		<!--not liked-->
-										  		<a href={% url 'comnt_like' pk=like_obj.pk option='like' %}>
-										  			<i data-toggle="tooltip" data-placement="bottom" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
-										  				<span>{% if like_obj.rates.likes.counts %}{{ like_obj.rates.likes.counts }} {% else %} 0 {% endif %}</span>
-										  			</i></a>
-										  		{% endif %}
-										  	</span>
-										  		<span class="pointer">
-										  		{% if request.user in like_obj.dislikes.users.all %}
-										  		<!--Already liked-->
-										  		<a href={% url 'comnt_dislike' pk=like_obj.pk option='dislike' %}>
-										  			<i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
-										  				<span>{{ like_obj.rates.dislikes.counts }}</span>
-										  			</i></a>
-										  		{% else %}
-										  		<!--not liked-->
-										  		<a href={% url 'comnt_dislike' pk=like_obj.pk option='dislike' %}>
-										  			<i data-toggle="tooltip" data-placement="bottom" title="i dislike this" class="dislike fas fa-thumbs-down pr-2" aria-hidden="true">
-										  				<span>{% if like_obj.rates.dislikes.counts %}{{ like_obj.rates.dislikes.counts }} {% else %} 0 {% endif %}</span>
-										  			</i></a>
-										  		{% endif %}
-										  	</span>
-										  </div>
-
-
-
-
-                                          <!-- End Likes & Dislikes-->
-
-	                        			{% if user.is_authenticated %}
-
-	                        			 <!-- protect data from other users-->
-	                        			  
-	                        			   
-
-	                        			   <p class="text-right">{{like_obj.user.user_name}}.
-									         {% if like_obj.user == request.user  %}
-									         <span><a class="circle-card" href="{% url 'feed:edit_comment' pk=comment.pk' like_obj.id %}"><i class="fas fa-edit"></a></i></span>
-									         {% endif %}
-									      </p>
-	                        			  
-	                        			{% endif %}
-	                        			<hr style='width:600px;'>
-	                        		</div>
-	                        		
-	                        	{% empty %}
-	                        	   	<p>No comments here yet :(</p>
-	                        	{% endfor %}
-                        	</div> 
-		                       
+                        	<!-- comments -->
+                        	{% include 'feed/comments.html' %}
+		                    <!-- end comments -->   
 	                    </div>
 
 					</div>
@@ -143,3 +63,4 @@
 	    </section>
   </div>
 {% endblock %}
+ {% include 'base/js.html' %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+ <div class="form-box well">
+ 	{% if account %}
+ 	  <p>
+ 	  Your account has been successfully activated!
+ 	  </p>
+ 	  <p>
+ 	  	Please<a href="{% url 'accounts:_login' %}">Login</a>to continue.
+ 	  </p>
+ 	{% else %}
+ 	 <p>
+ 	  Account activation failed. Pleae try again.
+ 	</p>
+ 	{% endif %}
+ </div>
+
+{% endblock %}

@@ -17,6 +17,21 @@ from .forms import UserForm, UserProfileInfoForm
 
 
 # Create your views here.
+@login_required
+def profile_detail(request, user_id):
+    """Method for user profile detail"""
+
+    user = get_object_or_404(User, pk=user_id)
+    # Calling method from built-in User model
+    try:
+        user_profile = user.get_profile()
+    except:
+        # Creating a new profile
+        uprofile = UserProfile(user=user)
+        uprofile.save()
+        user_profile = user.get_profile()
+    user_relationships = user_profile
+
 
 # We will not authenticate the user, instead we will sent an activation link
 def register(request):

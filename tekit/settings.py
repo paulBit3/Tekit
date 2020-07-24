@@ -122,7 +122,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-# AUTH_USER_MODEL = 'accounts.Profile'  # new
+
+# Set this to False, Django will make some optimizations so as not
+# to load the internationalization machinery.
+USE_I18N = True
+
+# Set this to False, Django will not format dates, numbers and
+# calendars according to the current locale
+USE_L10N = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -136,6 +144,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
 
+AUTH_USER_MODEL = 'accounts.UserProfile'  # new
 
 
 LOGIN_URL = 'accounts:_login'

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Topic, Feed, Comment
+from .models import TopicAction, Feed, Comment
 
 class TopicForm(forms.ModelForm):
     def clean_topic_field(self):
@@ -8,9 +8,9 @@ class TopicForm(forms.ModelForm):
         return fields
 
     class Meta:
-        model = Topic
-        fields = ['text', 'image',]
-        labels = {'text': ''}
+        model = TopicAction
+        fields = ['name', 'image',]
+        labels = {'name': ''}
 
 
 class FeedForm(forms.ModelForm):
@@ -31,8 +31,20 @@ class CommentForm(forms.ModelForm):
         fields = self.cleaned_data['fields']
         return fields
 
+    # this function will be used for the validation
+    # def clean(self):
+    #     #data from the form is fetched using super function 
+    #     super(CommentForm, self).clean()
+    #     fields = self.cleaned_data['fields']
+
+    #     if len(fields) < 25:
+    #         self._errors['fields'] = self.error_class([
+    #             'Comment should contain a minimum of 25 characters'])
+    #     #return any errors if found 
+    #     return self.cleaned_data 
+
     class Meta:
         model = Comment
-        fields = ['comment']
+        fields = ['content']
         labels = {'comment': ''}
-        widgets = {'comment': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'placeholder': 'Type your comment'})}
+        widgets = {'comment': forms.Textarea(attrs={'rows': 2, 'cols': 25, 'placeholder': 'Type your comment'})}
