@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} | Welcome {% endblock %}
+{% block title %} Tekit | Welcome {% endblock %}
 
 
 {% block page_header %}
@@ -20,7 +20,7 @@
 		  	    					{% else %}
 		                     <p class="lead">
 		                      <a class="logo-text" href="">Tekit</a> is a social Tech platform for sharing your  history related your Tech experience, life or business. Share and learn track your feeds or topics from friends or co-workers.
-		                      <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'accounts:register' %}">+Join &raquo;</a>
+		                      <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">+Join &raquo;</a>
 		                    </p>
 		                    
 		                  {% endif %}

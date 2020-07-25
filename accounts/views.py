@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
 from django.utils.encoding import force_bytes, force_text
@@ -22,15 +23,42 @@ def profile_detail(request, user_id):
     """Method for user profile detail"""
 
     user = get_object_or_404(User, pk=user_id)
-    # Calling method from built-in User model
+    
     try:
-        user_profile = user.get_profile()
+        user_profile = user.get_profile()  # retrieve the profile object method from User model
     except:
         # Creating a new profile
         uprofile = UserProfile(user=user)
         uprofile.save()
         user_profile = user.get_profile()
-    user_relationships = user_profile
+
+    user_relationships = user_profile.get_relationships()
+    user_request = user_profile.get_friend_request()
+
+    context = {
+         'user': user,
+         'user_profile': user_profile,
+         'user_relationships': user_relationships,
+         'user_request': user_request
+    }
+
+    return render(request, 'accounts/userprofile.html', context)
+
+
+def userprofile(request):
+    uprofile_url = '/user/%d' % request.user.id
+    return HttpResponseRedirect(uprofile_url)
+
+
+@login_required
+def edit_profile(request):
+    try:
+        profile = request.user.get_profile()
+    except:
+        uprofile = UserProfile(user=request.user)
+        uprofile.save()
+        profile = request.user.get_profile()
+
 
 
 # We will not authenticate the user, instead we will sent an activation link

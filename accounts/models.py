@@ -1,10 +1,11 @@
 from django.db import models
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from datetime import datetime
-from django.template.RequestContext
+# from django.template.RequestContext
 
 from PIL import Image
 
@@ -15,11 +16,10 @@ from PIL import Image
 # Profile class inherit form User abstract class
 class UserProfile(models.Model):
     """Store extract information relates to the user model"""
-   
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     name = models.CharField(max_length=100)
     about_me = models.TextField(max_length=150)
-    picture = models.ImageField(upload_to='images/pictures', blank=True, null=True)
+    picture = models.ImageField(upload_to='images/pictures', default='images/pictures/user_default.png', blank=True, null=True)
     phone_no = models.CharField(max_length=15)
     birthdate = models.DateField(auto_now= False, auto_now_add=False, blank=True, null=True)
     city = models.CharField(max_length=30)
@@ -29,7 +29,7 @@ class UserProfile(models.Model):
 
 
     def __str__(self):
-        return self.user.username
+        return f'{self.user.username} Profil'
 
     # Methods to manage relationship between user
     def get_relationships(self):

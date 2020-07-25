@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tekit | Welcome <b>{{ user.username }}</b> {% endblock %}
+
+{% block sidebar %}
+  <div id="sidebar" class="span2">
+  	{% if user_profile.picture %}
+  	 <img src="{{ user_profile.picture.url }}" class="rounded-circle account-img" alt="profile pic" id="profile-pic">
+  	{% else %}
+  	 <img src="{% static user_profile.picture.url %}" class="rounded-circle account-img" alt="profile pic" id="profile-pic">
+  	{% endif %}
+  	<div id="side-menu">
+  		{% if user == request.user %}
+  		 <a href="{% url 'accounts:edit_profile' %}" class="btn btn-block btn-primary btn-sm rounded-pill">Edit Profile</a>
+  		  {% if not topic %}
+  		   <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'feed:new_topic' %}">+Topic</a>
+  		  {% else %}
+  		   <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'feed:new_feed' topic.id %}">+Feed</a>
+  		  {% endif %}
+  		{% else %}
+  		    {% if request.user.is_authenticated %}
+  		      {% if user|has_relationship:request.user %}
+  		       <p class="alert alert-success">Friend</p>
+  		      {% else %}
+  		        {% if user|has_request:request.user == 'no request' %}
+  		          {% if user != request.user %}
+  		          	<a href="javascript:void(0);" id="send_request_from{{ request.user.id }}_to{{ user.id }}" class="js-sendRequest btn btn-block btn-primary btn-sm rounded-pill">+Add Friend</a>
+  		          {% endif %}
+  		        {% else %}
+  		           {% if user|has_request:request.user 'sent request' %}
+  		            <p class="alert alert-success">Request sent</p>
+  		           {% else %}
+                    <p class="alert">Received request</p>
+  		           {% endif %}
+  		        {% endif %}
+  		      {% endif %}
+  		    {% endif %}
+  		{% endif %}
+  	</div>
+  </div>
+{% endblock %}

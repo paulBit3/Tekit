@@ -7,6 +7,11 @@ from . import views
 app_name = 'accounts'
 
 urlpatterns = [
+    # user profile
+    path('profile/', views.userprofile, name='user_profile'),
+    path('editprofile/', views.edit_profile, name='edit_profile'),
+    
+    # authentication and authorization
     path('login', views._login, name='_login'),
     path('register', views.register, name='register'),
     path('sent/',  views.activation_sent, name='activation_sent'),
