@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.urls import reverse
 
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode
@@ -14,7 +15,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 
-from .forms import UserForm, UserProfileInfoForm
+from .forms import UserForm, UserProfileInfoForm, SettingForm
 
 
 # Create your views here.
@@ -164,6 +165,21 @@ def activate(request, uidb64, token):
         # return render(request, 'accounts/login.html')
     else:
         return HttpResponse('Activation link is inactive!')
+
+
+# Setting view
+@login_required
+def settings(request):
+    user = get_object_or_404(User, pk=request.user.id)
+    if request.method == 'POST':
+        setform = SettingForm(request.POST, instance=user.profile)
+        if setform.is_valid():
+            setform.save()
+            messages.add_message(request, messages.INFO, 'Setings Saved.')
+            return redirect(reverse('accounts:settings'))
+    else:
+        setform = SettingForm(instance=user.profile)
+    return render(request, 'feed/settings.html', {'form':setform})
 
 
 # Update user profile

@@ -37,6 +37,30 @@
   		      {% endif %}
   		    {% endif %}
   		{% endif %}
+
+  		{% if user == request.user %}
+  		 {% if user_request %}
+  		  <a href="#js-friendRequestModal" class="js-sendRequest btn btn-block btn-succes btn-sm rounded-pill">Friend request({{ user_request.count })</a>
+  		  <div id="js-sendRequestModal" class="modal hide fade">
+  		  	<div class="modal-header">
+  		  		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+  		  		<h3>Friend request</h3>
+  		  	</div>
+  		  	<div class="modal-body">
+  		  		{% for request in user_request %}
+  		  		  <div class="fr-request">
+  		  		 	<p>{{ request.from_user }}</p>
+  		  		 	<p>{{ request.message }}</p>
+  		  		 	<a href="javascript:void(0);" class="js-acceptRequest btn btn-success btn-sm rounded-pill" id="accept_request_from{{ request.from_user.id }}_to{{ user.id }}">Accept</a>
+  		  		 </div>
+  		  		{% endfor %}
+  		  	</div>
+  		  	<div class="modal-footer">
+  		  		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  		  	</div>
+  		  </div>
+  		 {% endif %}
+  		{% endif %}
   	</div>
   </div>
 {% endblock %}
