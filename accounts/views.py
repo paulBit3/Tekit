@@ -15,7 +15,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 
-from .forms import UserForm, UserProfileInfoForm, SettingForm
+from .forms import *
+
 
 
 # Create your views here.
@@ -46,9 +47,13 @@ def profile_detail(request, user_id):
     return render(request, 'accounts/userprofile.html', context)
 
 
-def userprofile(request):
-    uprofile_url = '/user/%d' % request.user.id
-    return HttpResponseRedirect(uprofile_url)
+def user_profile(request, username):
+    user = get_object_or_404(User, username=request.user)
+    context = {'user': user}
+    return render(request, 'accounts/userprofile.html', context)
+
+    # uprofile_url = '/user/%d' % request.user.id
+    # return HttpResponseRedirect(uprofile_url)
 
 
 @login_required
@@ -59,6 +64,19 @@ def edit_profile(request):
         uprofile = UserProfile(user=request.user)
         uprofile.save()
         profile = request.user.get_profile()
+
+    if request.method == 'POST':
+        form = UserProfileInfoForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/user/profile/')
+        else:
+            form = UserProfileInfoForm(instance=profile)
+        context = {
+             'form': form,
+             'profile': profile
+        }
+        return render(request, 'accounts/edit_profile.html', context)
 
 
 

@@ -26,19 +26,19 @@ class UserProfileInfoForm(forms.ModelForm):
 		fields = ('name', 'picture', 'phone_no', 'birthdate', 'city', 'state')
 		exclude = ('user',)
 
-class SettingForm(forms.ModelForm):
-	"""A class for  Setting form"""
+# class SettingForm(forms.ModelForm):
+# 	"""A class for  Setting form"""
 
-	class Meta:
-		model = UserProfile
-		fields = ('default_language', 'default_expiration' , 'default_exposure' , 'private')
-		widgets = {
-            'default_language': forms.Select(attrs={'class': 'selectpicker foo form-control',
-                                                    'data-live-search': 'true',
-                                                    'data-size': '5'}),
-            'default_expiration': forms.Select(attrs={'class': 'selectpicker form-control'}),
-            'default_exposure': forms.Select(attrs={'class': 'selectpicker form-control'})
+# 	class Meta:
+# 		model = UserProfile
+# 		fields = ('default_language', 'default_expiration' , 'default_exposure' , 'private')
+# 		widgets = {
+#             'default_language': forms.Select(attrs={'class': 'selectpicker foo form-control',
+#                                                     'data-live-search': 'true',
+#                                                     'data-size': '5'}),
+#             'default_expiration': forms.Select(attrs={'class': 'selectpicker form-control'}),
+#             'default_exposure': forms.Select(attrs={'class': 'selectpicker form-control'})
 
-        }
+#         }
 			
 		

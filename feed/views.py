@@ -19,8 +19,8 @@ from PIL import Image
 import json
 from urllib.parse import quote_plus
 
-from .models import Topic, Feed, Comment, LikeDislike
-from .forms import TopicForm, FeedForm, CommentForm
+from .models import *
+from .forms import *
 
 # Create your views here.
 

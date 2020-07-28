@@ -38,7 +38,7 @@ setTimeout(function() {
                 request_type: 'send',
                 from_user_id: fromId,
                 to_user_id: toId,
-                message: 'Hi, may you add me to your friend list?'
+                message: 'Hi, sent you an invitation'
             },
             success: function (resp) {
                 if (resp.result === 'Sent successfully') {

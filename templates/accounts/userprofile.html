@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load accounts_extra %}
 
 {% block title %}Tekit | Welcome <b>{{ user.username }}</b> {% endblock %}
 
@@ -12,35 +13,35 @@
   	{% endif %}
   	<div id="side-menu">
   		{% if user == request.user %}
-  		 <a href="{% url 'accounts:edit_profile' %}" class="btn btn-block btn-primary btn-sm rounded-pill">Edit Profile</a>
-  		  {% if not topic %}
-  		   <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'feed:new_topic' %}">+Topic</a>
-  		  {% else %}
-  		   <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'feed:new_feed' topic.id %}">+Feed</a>
-  		  {% endif %}
+	  		 <a href="{% url 'accounts:edit_profile' %}" class="btn btn-block btn-primary btn-sm rounded-pill">Edit Profile</a>
+	  		  {% if not topic %}
+	  		   <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'feed:new_topic' %}">+Topic</a>
+	  		  {% else %}
+	  		   <a class="btn btn-primary btn-sm rounded-pill" href="{% url 'feed:new_feed' topic.id %}">+Feed</a>
+	  		  {% endif %}
   		{% else %}
-  		    {% if request.user.is_authenticated %}
-  		      {% if user|has_relationship:request.user %}
-  		       <p class="alert alert-success">Friend</p>
-  		      {% else %}
-  		        {% if user|has_request:request.user == 'no request' %}
-  		          {% if user != request.user %}
-  		          	<a href="javascript:void(0);" id="send_request_from{{ request.user.id }}_to{{ user.id }}" class="js-sendRequest btn btn-block btn-primary btn-sm rounded-pill">+Add Friend</a>
-  		          {% endif %}
-  		        {% else %}
-  		           {% if user|has_request:request.user 'sent request' %}
-  		            <p class="alert alert-success">Request sent</p>
-  		           {% else %}
-                    <p class="alert">Received request</p>
-  		           {% endif %}
-  		        {% endif %}
-  		      {% endif %}
+  		    {% if user.is_authenticated %}
+	  		   {% if request.user|has_relationship:user %}
+	  		   <p class="alert alert-success">Friend</p>
+	  		   {% else %}
+	  		    {% if request.user|has_request:user and 'no request' %}
+		  		   	{% if request.user != user %}
+		  		      <a href="javascript:void(0);" id="send_request_from{{ user.id }}_to{{ owner.id }}" class="js-sendRequest btn btn-block btn-sm rounded-pill">+Friend</a>
+		  		   	{% endif %}
+		  		{% else %}
+		  		    {% if request.user|has_request:user and 'sent request' %}
+		  		      <p class="alert alert-success">Request already sent!</p>
+		  		    {% else %}
+		  		      <p class="alert">Received request.</p>
+		  		    {% endif %}
+	  		    {% endif %}
+	  		   {% endif %}
   		    {% endif %}
   		{% endif %}
 
   		{% if user == request.user %}
   		 {% if user_request %}
-  		  <a href="#js-friendRequestModal" class="js-sendRequest btn btn-block btn-succes btn-sm rounded-pill">Friend request({{ user_request.count })</a>
+  		  <a href="#js-friendRequestModal" class="js-sendRequest btn btn-block btn-succes btn-sm rounded-pill">Friend request({{ user_request.count }})</a>
   		  <div id="js-sendRequestModal" class="modal hide fade">
   		  	<div class="modal-header">
   		  		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>

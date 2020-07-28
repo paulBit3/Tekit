@@ -54,6 +54,7 @@ class UserProfile(models.Model):
         frequest = RelationshipRequest.objects.filter(to_user=self.user)
         return frequest
 
+    
     def has_request(self, visitor):
         """check if a user has sent a request"""
         has_sent_req = RelationshipRequest.objects.filter(from_user=visitor, to_user=self.user)

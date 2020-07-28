@@ -13,26 +13,30 @@
            <span class="navbar-toggler-awesome fas fa-times"></span>
         </button>
           <div class="collapse navbar-collapse" id="navbars">
-            <ul class="navbar-nav ml-auto">
-              <!-- <li class="nav-item active">
+            <ul class="navbar-nav navbar-right ml-auto">
+              <li class="nav-item active">
                 <a class="nav-link" href="/">
                   <i class="fas fa-home" aria-hidden="true"></i>HOME
                   <span class="sr-only">(current)</span>
                 </a>
-              </li> -->
+              </li>
               {% if user.is_authenticated %}
-               <li class="nav-item mr-3">
-                <span class="navbar-text">Hello, {{ user.username }}.</span>
-               </li>
-               <li class="nav-item mr-3">
-                  <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
+                <ul class="dropdown-menu">
+                  <li class="nav-item mr-3"><span class="navbar-text">Hello, {{ user.username }}.</span></li>
+                  <li><a href="{% url 'accounts:user_profile' request.user.username %}">My Profil</a></li>
+                  <li><a href="{% url 'accounts:profile_detail' %}">Account Details</a></li>
+                  <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li class="nav-item mr-3">
+                    <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
                     <i class="fas fa-sign-out-alt"></i> LOGOUT
-                  </a>
-                  <form action="{% url 'accounts:logout' %}" method="POST" id="logout">
-                    {% csrf_token %}
-                    <input type="hidden">
-                  </form>
-               </li>
+                    </a>
+                    <form action="{% url 'accounts:logout' %}" method="POST" id="logout">
+                     {% csrf_token %}
+                     <input type="hidden">
+                    </form>
+                  </li>
+                </ul>
               {% else %}
                 <li
                 {% if 'register' in request.path %}
