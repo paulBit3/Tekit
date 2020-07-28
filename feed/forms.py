@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import TopicAction, Feed, Comment
+from .models import *
 
 class TopicForm(forms.ModelForm):
     def clean_topic_field(self):
@@ -48,3 +48,16 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
         labels = {'comment': ''}
         widgets = {'comment': forms.Textarea(attrs={'rows': 2, 'cols': 25, 'placeholder': 'Type your comment'})}
+
+
+class SettingForm(forms.ModelForm):
+    """docstring for SettingForm"""
+    def __init__(self, arg):
+        super(SettingForm, self).__init__()
+        self.arg = arg
+
+    class Meta:
+        model = UserProfile
+        fields = ['name', 'about_me', 'picture', 'phone_no', 'birthdate', 'city', 'state', 'status']
+        widgets = {'class': ' form-control'}
+        

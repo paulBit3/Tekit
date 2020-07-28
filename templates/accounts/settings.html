@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Tekit | Account Settings - <b>{{ block.super }}</b> {% endblock %}
+
+{% block content %}
+ <div class="row">
+ 	<div class="col-lg-6 col-md-6 col-sm-6">
+ 		<h4>Change Account Preferences</h4> <hr>
+
+ 		{% if messages %}
+ 		 {% for message in messages %}
+ 		  <p class="alert alert-info">{{ message }}</p>
+ 		 {% endfor %}
+ 		{% endif %}
+
+ 		<form action="" method="post" class="form-horizontal">
+ 			{% csrf_token %}
+ 			<table class="table">
+ 				{{ form.as_table }}
+ 				<tr>
+ 					<td>&nbsp;</td>
+ 					<td><button type="submit" class="btn btn-primary btn-sm rounded-pill"></button></td>
+ 				</tr>
+ 			</table>
+ 		</form>
+ 	</div>
+ 	<div class="col-lg-6 col-md-6 col-sm-6">
+ 		<h4></h4>
+ 		<p>
+ 			<a href="{% url 'accounts:user_profile' request.user.username %}">My Profile</a>
+ 			<a href="{% url 'accounts:profile_detail' request.user.id %}">Account Details</a>
+ 			<a href="{% url 'accounts:password_change' request.user.id %}">Change Password</a>
+ 		</p>
+ 	</div>
+ </div>
+{% endblock %}

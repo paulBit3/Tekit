@@ -44,7 +44,7 @@ def profile_detail(request, user_id):
          'user_request': user_request
     }
 
-    return render(request, 'accounts/userprofile.html', context)
+    return render(request, 'accounts/profile_detail.html', context)
 
 
 def user_profile(request, username):
@@ -193,11 +193,11 @@ def settings(request):
         setform = SettingForm(request.POST, instance=user.profile)
         if setform.is_valid():
             setform.save()
-            messages.add_message(request, messages.INFO, 'Setings Saved.')
+            messages.add_message(request, messages.INFO, 'Settings Saved.')
             return redirect(reverse('accounts:settings'))
     else:
         setform = SettingForm(instance=user.profile)
-    return render(request, 'feed/settings.html', {'form':setform})
+    return render(request, 'accounts/settings.html', {'form':setform})
 
 
 # Update user profile
