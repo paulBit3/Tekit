@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %}Tekit | Account Activation - <b>{{ block.super }}</b> {% endblock %}
+
+{% block content %}
+   <div class="container p-5">
+       <h2 class="font-weight-bold mt-3">Account activation completed</h2>
+       <hr>
+       <div class="form-box well">
+		 	{% if activate %}
+		 	  <p>
+		 	  Your account has been successfully activated!
+		 	  </p>
+		 	  <p>
+		 	  	<!-- Please<a href="{#% url 'accounts:_login' %}">Login</a>to continue. -->
+		 	  	Please<a href="{% url 'accounts:_login' %}" class="btn btn-primary btn-sm rounded-pill">Login</a> to continue.
+		 	  </p>
+		 	{% else %}
+		 	 <p>
+		 	  Account activation failed. Pleae try again.
+		 	</p>
+		 	{% endif %}
+	   </div>
+   </div>
+{% endblock %}

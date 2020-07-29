@@ -21,13 +21,14 @@
                 </a>
               </li>
               {% if user.is_authenticated %}
+              <li class="nav-item mr-3"><span class="navbar-text">Hello, {{ user.username }}.</span></li>
                 <ul class="dropdown-menu">
-                  <li class="nav-item mr-3"><span class="navbar-text">Hello, {{ user.username }}.</span></li>
                   <li><a href="{% url 'accounts:user_profile' request.user.username %}">My Profile</a></li>
                   <li><a href="{% url 'accounts:profile_detail' request.user.id %}">Account Details</a></li>
-                  <li><a href="{% url 'accounts:settings' %}">Settings</a></li>
+                  <li><a href="{% url 'accounts:account_settings' %}">Settings</a></li>
                   <li role="separator" class="divider"></li>
-                  <li class="nav-item mr-3">
+                </ul>
+                <li class="nav-item mr-3">
                     <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
                     <i class="fas fa-sign-out-alt"></i> LOGOUT
                     </a>
@@ -35,8 +36,7 @@
                      {% csrf_token %}
                      <input type="hidden">
                     </form>
-                  </li>
-                </ul>
+                </li>
               {% else %}
                 <li
                 {% if 'register' in request.path %}

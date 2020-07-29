@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from .email_info import *
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -160,13 +162,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Email Config
 
-EMAIL_HOST = 'smtp.live.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'paulbrou1@outlook.com'
-EMAIL_HOST_PASSWORD = 'Password'
+EMAIL_HOST = EMAIL_HOST
+EMAIL_PORT = EMAIL_PORT
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+EMAIL_USE_TLS = EMAIL_USE_TLS
+EMAIL_USE_SSL = EMAIL_USE_SSL
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # this will go to console

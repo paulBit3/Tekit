@@ -21,25 +21,22 @@ from .forms import *
 
 # Create your views here.
 @login_required
-def profile_detail(request, user_id):
+def profile_detail(request, pk):
     """Method for user profile detail"""
 
-    user = get_object_or_404(User, pk=user_id)
-    
-    try:
-        user_profile = user.get_profile()  # retrieve the profile object method from User model
-    except:
-        # Creating a new profile
-        uprofile = UserProfile(user=user)
-        uprofile.save()
-        user_profile = user.get_profile()
+    user = get_object_or_404(User, pk=request.user.id)
+    # user_profile = user.get_profile()  # retrieve the profile object method from User model
+    # Creating a new profile
+    uprofile = UserProfile(user=user)
+    # uprofile.save()
+    # user_profile = user.get_profile()
 
-    user_relationships = user_profile.get_relationships()
-    user_request = user_profile.get_friend_request()
+    user_relationships = uprofile.get_relationships()
+    user_request = uprofile.get_friend_request()
 
     context = {
          'user': user,
-         'user_profile': user_profile,
+         'uprofile': uprofile,
          'user_relationships': user_relationships,
          'user_request': user_request
     }
@@ -82,6 +79,9 @@ def edit_profile(request):
 
 # We will not authenticate the user, instead we will sent an activation link
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('accounts:userprofile', username=request.user.username)
+
     if request.method == 'POST':
         first_name = request.POST['full_name']
         username = request.POST['username']
@@ -122,7 +122,7 @@ def register(request):
                 subject = ''.join(subject.splitlines())
                 email = render_to_string(email_temp_name, context)
                 html_message = email
-                user.email_user(subject,  html_message, email_from)
+                user.email_user(subject,  html_message, email_from, fail_silently=True)
                 return render(request, 'accounts/account_activation_sent.html')
 
                 # Log the user in and redirect to home page
@@ -178,16 +178,17 @@ def activate(request, uidb64, token):
         # Log the user in and redirect to home page
         login(request, user)
         # return redirect('index')
-        messages.success(request,  'Your account has been activated successfully.')
-        return redirect('feed:index')
+        # messages.success(request,  'Your account has been activated successfully.')
+        # return redirect('feed:index')
+        return redirect('accounts:activation_complete')
         # return render(request, 'accounts/login.html')
     else:
-        return HttpResponse('Activation link is inactive!')
+        return HttpResponse('Link Expired!')
 
 
 # Setting view
 @login_required
-def settings(request):
+def account_settings(request):
     user = get_object_or_404(User, pk=request.user.id)
     if request.method == 'POST':
         setform = SettingForm(request.POST, instance=user.profile)
