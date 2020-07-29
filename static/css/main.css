@@ -589,6 +589,13 @@ tfoot, th, thead, time, tr, ul, var, video {
     float: left;
 }
 
+@media (min-width: 576px) {
+  .jumbotron {
+    padding-bottom: 0; 
+}
+}
+
+
 /*END S I D E B A R*/
 
 /*P r e l o a d e r*/
