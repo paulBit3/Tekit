@@ -104,7 +104,7 @@ def new_topic(request):
             if form.is_multipart():
                 # getting the image object if exist
                 pic = request.FILES.get('image')
-                obj = Feed(pic)
+                obj = TopicAction(pic)
             # obj = Topic(image = request.FILES['image'])
             obj = form.save(commit=False)
             obj.owner = request.user  # we add the owner to the model after the form has validated, but before saving it
@@ -114,13 +114,6 @@ def new_topic(request):
     # Display a blank or invalid form
     context = {'form': form}
     return render(request, 'feed/new_topic.html', context)
-
-
-# Update topics
-def update_topic(self, action_id , owner):
-    action = TopicAction.objects(id=action_id)
-    self = Topic(owner=owner, action=action, is_read=False, date_added=datetime.now())
-    self.save()
 
 
 # Show hot topics

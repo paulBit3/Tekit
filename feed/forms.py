@@ -11,6 +11,9 @@ class TopicForm(forms.ModelForm):
         model = TopicAction
         fields = ['name', 'image',]
         labels = {'name': ''}
+        widgets = {'name': forms.TextInput(
+            attrs={'rows': 4, 'cols': 40, 'placeholder': 'Type your topic here'})}
+
 
 
 class FeedForm(forms.ModelForm):

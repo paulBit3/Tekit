@@ -105,6 +105,14 @@ class Topic(models.Model):
     def get_total_likes(self):
         return self.likes.count()
 
+    
+    # Update topics
+    def update_topic(self, from_user, action_id, to_user=None):
+        action = TopicAction.objects(id=action_id)
+        self = Topic(from_user=from_user, action=action, is_read=False)
+        self.save()
+
+
 
     def __str__(self):
         """Return a string representation of the model."""

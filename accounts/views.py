@@ -16,7 +16,7 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 
 from .forms import *
-
+from feed.model import *
 
 
 # Create your views here.
@@ -254,4 +254,48 @@ def password_reset_request(request):
     else:
         return render(request, 'accounts/password_reset.html')
 
+# Relationship request method
+@login_required
+def relationship_request(request):
+    results = {'result': 'Fail'}
+    if request.method == 'GET':
+        obj = request.GET
+        if 'request_type' in obj:
+            if obj['request_type'] == 'send':
+                # save user request to database
+                from_user = User.objects.get(id=int(obj['from_user_id']))
+                to_user = User.objects.get(id=int(obj['to_user_id']))
+                message = obj['message']
+                request = RelationshipRequest(from_user=from_user,
+                                              to_user=to_user,
+                                              message=message)
+                request.save()
 
+                # jeson response
+                results = {'result': 'Request sent successfully'}
+
+                # update
+                t = Topic()
+                t.update_topic(from_user, 1, to_user)
+
+            elif obj['request_type'] == 'accept':
+                
+                from_user = User.objects.get(id=int(obj['from_user_id']))
+                to_user = User.objects.get(id=int(obj['to_user_id']))
+                relation_type = RelationshipType.objects.get(name='Friend')
+                relationship = Relationship(from_user=from_user,
+                                            to_user=to_user,
+                                            relation_type=relation_type)
+                # save data in relationship table
+                relationship.save()
+
+                # getting relationship and accept
+                request = RelationshipRequest.objects.get(from_user=from_user, to_user=to_user)
+                request.delete()
+
+                # json response
+                results = {'result': 'Accept successfully'}
+
+                # update topic
+                t = Topic()
+                t.update_topic(to_user, 2, to_user)

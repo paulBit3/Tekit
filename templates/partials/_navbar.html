@@ -7,36 +7,53 @@
         <div class="container-fluid">
           <img src="{% static 'images/social_discuss7.png' %}">
         <a class="navbar-brand logo-text" href="/">Tekit</a>
-
+        <!--  For mobile menu toggle button -->
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbars"aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-awesome fas fa-bars"></span>
            <span class="navbar-toggler-awesome fas fa-times"></span>
         </button>
+         <!-- End mobile menu toggle button -->
           <div class="collapse navbar-collapse" id="navbars">
+
+            <form class="form-search" action="" method="GET">
+              <div class="input-group">
+                <input class="form-control py-2 rounded-pill mr-1 pr-5" type="search" 
+                 placeholder="Search" name="q" id="search">
+                <span class="input-group-append">
+                  <button class="btn rounded-pill border-0 ml-n5" type="button">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </form>
+        
             <ul class="navbar-nav navbar-right ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="/">
-                  <i class="fas fa-home" aria-hidden="true"></i>HOME
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
               {% if user.is_authenticated %}
-              <li class="nav-item mr-3"><span class="navbar-text">Hello, {{ user.username }}.</span></li>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url 'accounts:user_profile' request.user.username %}">My Profile</a></li>
-                  <li><a href="{% url 'accounts:profile_detail' request.user.id %}">Account Details</a></li>
-                  <li><a href="{% url 'accounts:account_settings' %}">Settings</a></li>
-                  <li role="separator" class="divider"></li>
-                </ul>
-                <li class="nav-item mr-3">
-                    <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
-                    <i class="fas fa-sign-out-alt"></i> LOGOUT
-                    </a>
-                    <form action="{% url 'accounts:logout' %}" method="POST" id="logout">
-                     {% csrf_token %}
-                     <input type="hidden">
-                    </form>
+              <!-- <li class="nav-item mr-3"><span class="navbar-text">Hello, {{ user.username }}.</span></li> -->
+                 <li class="nav-item active">
+                  <a class="nav-link" href="/">
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                    <span class="sr-only">(current)</span>
+                  </a>
                 </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class=""> {{ user.username|title }}.</span></a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-items-divide-hr"></div>
+                    <a class="dropdown-item" href="{% url 'accounts:user_profile' request.user.username %}"><span class="item-text"></span>My Profile</a>
+                    <a class="dropdown-item" href="{% url 'accounts:profile_detail' request.user.id %}"><span class="item-text"></span>Account Details</a>
+                    <a class="dropdown-item" href="{% url 'accounts:account_settings' %}"><span class="item-text"></span>Settings</a>
+                    <div class="dropdown-items-divide-hr"></div>
+                    <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">
+                      <i class="fas fa-sign-out-alt"></i> Logout
+                      <form action="{% url 'accounts:logout' %}" method="POST" id="logout">
+                       {% csrf_token %}
+                       <input type="hidden">
+                      </form>
+                    </a>
+                  </div>
+                </li>
+
               {% else %}
                 <li
                 {% if 'register' in request.path %}
