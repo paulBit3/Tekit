@@ -49,7 +49,7 @@ class TopicAction(models.Model):
         max_length= 100
         )
 
-        # Resizing topic photo
+    # Resizing topic photo
     def resize_image(self):
         SQUARE_FIT_SIZE = 300
         self.image = Image.open(self.image.path)
@@ -109,7 +109,7 @@ class Topic(models.Model):
     # Update topics
     def update_topic(self, from_user, action_id, to_user=None):
         action = TopicAction.objects(id=action_id)
-        self = Topic(from_user=from_user, action=action, is_read=False)
+        self = Topic(from_user=from_user, action=action, is_read=False, date_added=datetime.now())
         self.save()
 
 

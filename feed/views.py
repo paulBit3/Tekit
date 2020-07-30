@@ -94,27 +94,16 @@ def topic(request, topic_id):
 def new_topic(request):
     """Add a new topic"""
     # Test to determine whether the request is GET or POST
-    if request.method != 'POST':
-        # No data submitted, it will create a blank form
-        form = TopicForm()
+    if request.method == 'POST':
+        topic_name = request.POST['topic_name']
+        topicfile = request.FILES['topicfile']
+
+        topic_action = TopicAction.objects.get_or_create(name=topic_name, image=topicfile)
+        messages.add_message(request, messages.INFO, 'Topic successfully created!')
+        return redirect('feed:topics')
+
     else:
-        # POST data submitted; process data
-        form = TopicForm(data=request.POST)
-        if form.is_valid():
-            if form.is_multipart():
-                # getting the image object if exist
-                pic = request.FILES.get('image')
-                obj = TopicAction(pic)
-            # obj = Topic(image = request.FILES['image'])
-            obj = form.save(commit=False)
-            obj.owner = request.user  # we add the owner to the model after the form has validated, but before saving it
-            obj.save()
-            return redirect('feed:topics')
-
-    # Display a blank or invalid form
-    context = {'form': form}
-    return render(request, 'feed/new_topic.html', context)
-
+        return render(request, 'feed/new_topic.html')
 
 # Show hot topics
 def show_hot_topics(request):

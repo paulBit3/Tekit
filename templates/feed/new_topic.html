@@ -4,19 +4,43 @@
 {% block content %}
 
 	<div class="container p-5">
-		<div class="col-lg-6 col-md-6 col-sm-6">
-	      	<div class="card bg-light mb-3" style="max-width: 25rem;">
-	      		<div class="card-header">Create your topic</div> 
-	      		<div class="card-body">
-			    	<form class="form-group" action="{% url 'feed:new_topic' %}" method="post"
-			    	enctype="multipart/form-data">
-				        {% csrf_token %}
-				        {{ form|crispy }}
-				        <input class="btn btn-primary btn-block rounded-pill" type="submit" value="Submit">
-			        </form>
+		<div class="row">x
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				 {% if messages %}
+	              {% for message in messages %}
+	                <p class="alert alert-info">{{ message }}</p>
+	              {% endfor %}
+	          	 {% endif %}
+	           <br>
+		      	<div class="card bg-light mb-3" style="max-width: 25rem;">
+		      		<div class="card-header">Create your topic</div> 
+		      		<div class="card-body">
+				    	<form class="form-group" action="{% url 'feed:new_topic' %}" method="post"
+				    	enctype="multipart/form-data">
+					        {% csrf_token %}
+					        <!-- {{ form|crispy }} -->
+					        <input type="text" name="topic_name" class="form-control" placeholder="Type your new topic here" required><br>
+
+					        <div class="input-group input-file" name="topfile">
+						    	<div class="custom-file">
+					                <input type="file" name="topicfile" class="custom-file-input" id="inputfile"/>
+					                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+					            </div>
+					           <!--  <div class="input-group-append mb-0">
+					        		<span class="btn btn-primary input-file-btn">
+					        			<input type="file" name="image" hidden>Browse...</span>
+						    	</div> -->
+							</div>
+							<small id="fileHelp" class="form-text text-muted">Choose a topic image</small>
+							<br>
+					        <input class="btn btn-primary btn-block rounded-pill" type="submit" value="Submit">
+				        </form>
+
+				    </div>
 			    </div>
 		    </div>
 	    </div>
    </div>
+ 
 
 {% endblock content %}

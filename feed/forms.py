@@ -2,17 +2,17 @@ from django import forms
 
 from .models import *
 
-class TopicForm(forms.ModelForm):
-    def clean_topic_field(self):
-        fields = self.cleaned_data['fields']
-        return fields
+# class TopicForm(forms.ModelForm):
+#     def clean_topic_field(self):
+#         fields = self.cleaned_data['fields']
+#         return fields
 
-    class Meta:
-        model = TopicAction
-        fields = ['name', 'image',]
-        labels = {'name': ''}
-        widgets = {'name': forms.TextInput(
-            attrs={'rows': 4, 'cols': 40, 'placeholder': 'Type your topic here'})}
+#     class Meta:
+#         model = TopicAction
+#         fields = ['name', 'image',]
+#         labels = {'name': ''}
+#         widgets = {'name': forms.TextInput(
+#             attrs={'rows': 4, 'cols': 40, 'placeholder': 'Type your topic here'})}
 
 
 

@@ -297,6 +297,13 @@ body {
 }
 /* End social*/
 
+.input-file-dummy, .input-file-btn {
+  cursor: pointer;
+}
+.input-file-dummy[readonly] {
+  background-color: white;
+}
+
 .input-group-prepend span {
   width: 50px;
  /* background-color: #FFC312;*/
