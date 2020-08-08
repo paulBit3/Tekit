@@ -16,7 +16,7 @@ urlpatterns = [
     # Page to display  all topics
     path('topics/all/', views.show_all_topics, name='show_all_topics'),
     # Detail page for a single topic
-    path('topics/<int:topic_id>/', views.topic, name='topic'),
+    path('topic/<int:pk>/', views.topic, name='topic'),
     # Page for adding a new topic
     path('new_topic/', views.new_topic, name='new_topic'),
     # Page for showing hot topics

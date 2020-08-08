@@ -1,32 +1,71 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
+{% load markdown_deux_tags %}
 
 {% block content %}
- <div class="card-body">
- 	{% for comment in feed.comments.all %}
- 	 <div class="comments">
- 	 	<p class="font-weight-bold">
- 	 		<div class="date text-muted">{{ comment.created_on}}</div>
-	         {% if not comment.approved %}
-		         <a class="" href="{% url 'feed:comment_removed' pk=comment.pk %}">
-		         	<i data-toggle="tooltip" data-placement="bottom" title="delete" class=" fas fa-trash-alt pr-2" aria-hidden="true"></i>
-				 </a>
-				 <a class="" href="{% url 'feed:comment_approved' pk=comment.pk %}">
-				 	<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" far fa-smile pr-2" aria-hidden="true"></i>
-		         </a>
-             {% endif %}
-        </p>
-         <strong>{{ user.username|capfirst }}</strong><br>
-	  	 <p>{{ comment.content|slice:":300" }}</p>
-	  	 <p>Read time: {% if comment.read_time <= 1 %} < 1 Minute {% else %}{{ comment.read_time }} minutes {% endif %}</p><button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm ml-2">Reply</button>
 
-        <!-- Like section -->
-        <div id="like-section">
-        	{% include 'partials/like_section.html' %}
-	    </div>
-	  </div>
-	{% empty %}
-	<p>No comments here yet :(</p>
-	{% endfor %}
- </div>
+  <div id="container">
+	<div class="container p-5">
+		<div class="rows">
+			<div class="col-lg-6 col-md-6 col-sm-6">
+			  <div class="d-flex bd-highlight">
+				<!-- {% if messages %}
+	                {% for message in messages %}
+	                  <p class="alert alert-info">{{ message }}</p>
+	                {% endfor %}
+	            {% endif %} -->
+	              <br>
+				<div class="card-body">
+				 	{% for comment in feed.comments.all %}
+				 	 <!-- <div class="comments"> -->
+				 	 	<p class="font-weight-bold">
+				 	 		<div class="date text-muted"><small>{{ comment.date_added}}</small></div>
+					         {% if not comment.approved %}
+						         <a href="{% url 'feed:comment_removed' pk=comment.pk %}">
+						         	<i data-toggle="tooltip" data-placement="bottom" title="delete" class=" fas fa-times pr-2" aria-hidden="true"></i>
+								 </a>
+								 <a href="{% url 'feed:comment_approved' pk=comment.pk %}">
+								 	<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-check pr-2" aria-hidden="true"></i>
+						         </a>
+				             {% endif %}
+
+				             {% if user.is_authenticated and comment.approved %}
+							   <a href="{% url 'feed:comment_removed' pk=comment.pk %}">
+							   <i class="fa fa-trash"></i>
+							   </a>
+						     {% endif %}
+				        </p>
+				        <blockquote>
+				         <strong>{{ user.username|capfirst }}</strong><br>
+					  	<!--  <p card-text>#{{ comment.content|slice:":300" }}</p> -->
+					  	 <p class="lead"><small>{{ comment.content|markdown }}</small></p>
+					  	 	<div class="panel-footer clearfix">
+								<a href="" class="btn "><i class="fa fa-window-close" aria-hidden="true"></i>Cancel</a>
+
+								<button class="reply btn " type="button" data-id="{{ comment.pk }}"><i class="fa fa-reply-all"></i>Reply</button>
+							</div>
+
+					  	 <p><small>Read time: {% if comment.read_time <= 1 %} < 1 Minute</small> {% else %}{{ comment.read_time }} minutes {% endif %}</p>
+					  	 <div class="comments-replied container mt-2">
+					  	 	{% for reply in comment.replies.all %}
+					  	 	<p class="mb-0"><small>{{ reply.content }}</small></p>
+					  	 	<small>by {{ reply.user.username|capfirst }}</small>
+					  		{% endfor %}
+					  	 </div>
+						</blockquote>
+				        <!-- Like section -->
+				        <div id="like-section">
+				        	{% include 'partials/like_section.html' %}
+					    </div>
+					     
+					 <!-- </div> -->
+					{% empty %}
+					<p>No comments here yet :(</p>
+					{% endfor %}
+				</div>
+			</div>
+		  </div>
+		</div>
+	</div>
+</div>
 {% endblock %}

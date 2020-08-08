@@ -1,66 +1,107 @@
 {% extends 'base.html' %}
-
+{% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
 
 {% block title %} | Welcome {% endblock %}
 
 
 {% block content %}
  
-   <div class="container">
-	    <section id="feedcomment" class="py-5">
-				<div class="jumbotron">
-					<div class="row">
-						<div class="col-md-8 card mb-4 mt-3 left top">
-							 <!--  <h3 class="text-center mb-3">Feed comments</h3> -->
-						      <div class="card-body">
-						      	<h5>{% block page_header %} {{ feed.topic }} {% endblock page_header %}</h5>
-						      	
-						       
-								   {% if feed.image %}
-					                <div class="card-img-top">
-					                	<img src="{{ feed.image.url }}" alt="">
-					                </div>
-								    {% endif %}
-									   	<small class="card-header text-muted">
-									   	  Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}<br><br>
-									   	</small>
-									      
-										<p card-text>
-											<!-- Limited the words on the excerpts to 400 characters-->
-											{{ feed.text|slice:":300" }}
-										</p>
-										
-				                          
-		                        		
-									
-									<a href="{% url 'feed:edit_feed' feed.id %}" class="btn btn-primary btn-sm rounded-pill">Edit Feed<i class="fas fa-pencil-alt"></i></a>
-						      </div>
+<div id="container">
+	<!-- start header -->
+	<div id="header">
+		<div id="menu">
+	      <ul>
+	        <li class="current_page_item"><a href="/">Home</a></li>
+	        <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
+	        <li><a href="{% url 'accounts:user_profile' request.user.username %}">Profile</a></li>
+	        <li><a href="% url 'accounts:profile_detail' request.user.id %">Account</a></li>
+	        <li class="last"><a href="#">Contact</a></li>
+	      </ul>
+	    </div>
+    </div>
+    <!-- end header -->
 
+    <div class="clear"></div>
+  
+    <!-- start sidebar -->
+	<div id="sidebar">
+	      {% include 'partials/_sidebar.html' %}
+	</div>
+  <!-- end sidebar -->
 
-						     <!-- comments -->
-                        		
-                        		<small>{{ feed.comments.count }} comments </small>
+	<div id="container">
+		<div class="container">
+			<section id="feedcomment" class="py-5">
+				<div class="row">
+					
+					<div class="col-md-8 card mb-4 mt-3 left top">
+						<!--  <h3 class="text-center mb-3">Feed comments</h3> -->
+						<div class="card-body">
+							{% if feed.image %}
+							  <div class="card-img-top">
+								<img src="{{ feed.image.url }}" alt="">
+							  </div>
+							{% endif %}
+							<small class="card-header text-muted">
+								Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}<br><br>
+							</small>
+							<p card-text>
+								<!-- Limited the words on the excerpts to 400 characters-->
+							 {{ feed.text|slice:":300" }}
+							 <!-- #{{ feed.text|markdown }} -->
+							</p>
+							<div class="panel-footer clearfix">
+								<a href="{% url 'feed:edit_feed' feed.id %}" class="btn "><i data-toggle="tooltip" data-placement="bottom" title="Edit" class="fas fa-pencil-alt"></i>Edit</a>
 
+							
+							
+								<button class="cmt-btn btn " type="button" data-id="24"><i data-toggle="tooltip" data-placement="bottom" title="comment" class="far fa-comment-dots"></i>Comment</button>
+
+								<a href="">
+								 	<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share
+						        </a>
+							</div>
 						</div>
+						<!-- comments -->
+				        <small>{{ feed.comments.count }} comments </small>
 
-						{% block sidebar %} {% include 'partials/_sidebar.html' %} {% endblock sidebar %}
+				          <div id="form-template" style="display: none;">
+					 	    <form name="cmntForm" action="{% url 'feed:add_comment_feed' feed.id %}" onsubmit="return validateForm()" method="POST">
+						 	  	<input id="id-input" type="hidden" name="id" value="">
+						 	  	<div class="form-group">
+						 	  		{% csrf_token %}
+						 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Type your comment"></textarea>
+                            		<!-- {{ form|crispy }} -->
+						 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
+						 	  	</div>
+						 	  	<input type="submit" class="btn btn-default pull-right" value="Post">
+						    </form>
+					      </div>
 
-                        <div class="col-md-8 card mb-4 mt-3 ">
-                        	<div class="form-group">
-                        	 <a class="btn btn-secondary active btn-sm rounded-pill"
-                        	    href="{% url 'feed:add_comment_feed' feed.id %}"><i class="far fa-comment-dots"></i>Post Comment
-                        	</a>
-                        	</div>
-                        	<!-- comments -->
-                        	{% include 'feed/comments.html' %}
-		                    <!-- end comments -->   
-	                    </div>
+			        </div>
 
-					</div>
-				  
-			    </div>
-		
-	    </section>
-  </div>
+			        <div class="col-md-8 card mb-4 mt-3 ">
+			        	<ul class="messages">
+				 		 {% if messages %}
+					       {% for message in messages %}
+					        <li class="{{ message.tags }}">
+					        	<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>{{ message }}
+					        </li>
+					        <!-- <p class="alert alert-info"></p> -->
+					        {% endfor %}
+					      {% endif %}
+				 		</ul>
+			        	
+			            <!-- comments -->
+			            {% include 'feed/comments.html' %}
+					    <!-- end comments -->
+				    </div>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+
 {% endblock %}
  {% include 'base/js.html' %}

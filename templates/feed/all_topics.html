@@ -14,18 +14,18 @@
                     <div class="card-deck">
                 
                         <div class="card">
-                              {% if topic.image %}
-                              <img class="card-img-top" src="{{ topic.image_url }}" alt=""> 
+                              {% if topic.action.image %}
+                              <img class="card-img-top" src="{{ topic.image.image_url }}" alt=""> 
                               {% endif %}
                             <div class="card-block">
                               <div class="card-body"> 
-                                  <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' topic.id %}">{{ topic }}</a></h5> 
+                                  <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' topic.id %}">{{ topic.action.name }}</a></h5> 
                                   <p class="card-text"> 
                                       Some quick example text to build on  
                                       the card title and make up the bulk  
                                       of the card's content. 
                                   </p> 
-                                  <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-outline-primary btn-sm"> 
+                                  <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-outline-primary btn-sm rounded-pill"> 
                                       New Feed 
                                   </a> 
                               </div>

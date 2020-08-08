@@ -11,6 +11,7 @@ from django.views.generic.base import RedirectView
 from django.views import View 
 from django.urls import reverse
 
+from django.db.models import Q
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
@@ -34,8 +35,8 @@ def index(request):
     hot_topics_list = Topic.topic.get_hot_topics()
 
     # not hot topics
-    topics_list = Topic.topic.get_not_hot_topics()
-
+    # topics_list = Topic.topic.get_not_hot_topics()
+    topics_list = Topic.topic.get_latest_topic()
     show_more_link_hot_topics = hot_topics_list.count() > max_hot_topics
     show_more_link_topics = topics_list.count() > max_topics_list
 
@@ -59,7 +60,7 @@ def topics(request):
     # topics = Topic.objects.order_by('date_added')
 
     # Retrieve only the Topic whose owner attribute matches the current user
-    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+    topics = Topic.objects.filter(from_user=request.user).order_by('date_added')
     context = {'topics': topics}
     return render(request, 'feed/topics.html', context)
 
@@ -69,23 +70,26 @@ def show_all_topics(request):
     """Show all topics"""
     # topics = Topic.objects.order_by('date_added')
 
-    # Retrieve only the Topic whose owner attribute matches the current user
-    topics = Topic.objects.all()
+     # getting Topic Action id
+    # t_action_id = TopicAction.objects.all().values('id')[0]['id']
+    topics = Topic.objects.filter().select_related('action')[:100]
+    #topics = Topic.objects.all()
     context = {'topics': topics}
     return render(request, 'feed/all_topics.html', context)
 
 
 
 @login_required
-def topic(request, topic_id):
+def topic(request, pk):
     """Show a single topic and all its feeds"""
-    topic = Topic.objects.get(id=topic_id)
+    topic = Topic.objects.get(id=pk)
+
 
     # Make sure the topic belongs to the current user
-    if topic.owner != request.user:
-        raise Http404
-
-    feeds = topic.feed_set.order_by('-date_posted')
+    # if topic.from_user != request.user:
+    #     raise Http404
+    feeds = Feed.objects.filter().select_related('topic')[:100]
+    # feeds = topic.feed_set.order_by('-date_posted')
     context = {'topic': topic, 'feeds': feeds}
     return render(request, 'feed/topic.html', context)
 
@@ -96,9 +100,17 @@ def new_topic(request):
     # Test to determine whether the request is GET or POST
     if request.method == 'POST':
         topic_name = request.POST['topic_name']
-        topicfile = request.FILES['topicfile']
-
+        topicfile = request.FILES.get('topicfile')  # Avoiding duplicated dict keys.
+        # topicfile = request.FILES.get['topicfile'] # This gives duplicated dict key
+        from_user = User.objects.get(id=request.user.id)
+        print(from_user)
         topic_action = TopicAction.objects.get_or_create(name=topic_name, image=topicfile)
+        t_action_id = TopicAction.objects.all().order_by('-id').distinct('id')[:1]
+        print(t_action_id)
+        # update topic table
+        t = Topic()
+        t.update_topic(from_user, t_action_id, None)
+
         messages.add_message(request, messages.INFO, 'Topic successfully created!')
         return redirect('feed:topics')
 
@@ -118,7 +130,9 @@ def show_hot_topics(request):
 def new_feed(request, pk):
     """Add a new feed for a particular topic"""
     topic = Topic.objects.get(pk=pk)
-
+    user_profile = request.user.userprofile
+    view_by = user_profile
+    # print(user_profile)
     if request.method != 'POST':
         form = FeedForm()
     else:
@@ -133,9 +147,11 @@ def new_feed(request, pk):
             # nfeed = nfeed.rotate(18, expand=True)
             nfeed = form.save(commit=False)
             nfeed.topic = topic
-            nfeed.author = request.user
+            nfeed.author = user_profile
+            nfeed.view_by = view_by
             nfeed.save()
-            messages.success(request, 'Your post has been submitted')
+            # messages.success(request, '')
+            messages.add_message(request, messages.INFO, 'Post submitted!')
             return redirect('feed:topic', pk=topic.id)
 
     # Display a blank or invalid form
@@ -151,7 +167,7 @@ def edit_feed(request, feed_id):
     topic = feed.topic
 
     # Protecting the edit feed page.
-    if topic.owner != request.user:
+    if topic.from_user != request.user:
         raise Http404
 
     if request.method != 'POST':
@@ -162,8 +178,8 @@ def edit_feed(request, feed_id):
         form = FeedForm(instance=feed, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Feed successfully updated')
-            return redirect('feed:topic', topic_id=topic.id)
+            messages.add_message(request, messages.INFO, 'Feed successfully updated')
+            return redirect('feed:topic', pk=topic.id)
 
     context = {'feed': feed, 'topic': topic, 'form': form}
     return render(request, 'feed/edit_feed.html', context)
@@ -179,7 +195,7 @@ def feeds(request):
         # topic = Topic.objects.get(pk=topic_id)
         #output = ''.join([q.text for q in feed])
     except Feed.DoesNotExist:
-        raise messages.error('Feed not found!')
+        raise messages.add_message(request, messages.ERROR, 'Feed not found')
 
 
     context = {
@@ -209,26 +225,35 @@ def feed_detail(request, pk):
     if feed.likes.filter(id=request.user.pk).exists():
         is_liked = True
 
-    # getting comment reply
-    if request.method == 'POSt':
-        comment_form = CommentForm(request.POST or None)
-        if comment_form.is_valid():
-            content = request.POST.get('content')
-            reply_id = request.POST.get('comment_id')
-            comment_qs = None
-            if reply_id:
-                comment_qs = Comment.objects.get(pk=reply_id)
-                comment = Comment.objects.create(feed=feed, user=request.user, content=content, reply=comment_qs)
-                comment.save()
-    else:
-        comment_form = CommentForm()
+    form = CommentForm(request.POST or None)
+    user = request.user.userprofile
 
+    # getting comment reply
+    if form.is_valid():
+        content = request.POST.get('content')
+        cmnt_object = None
+        try:
+            reply_id = int(request.POST.get('comment_id'))
+        except:
+            reply_id = None
+            
+            if reply_id:
+                if comment_qs.exists() and comment_qs.count() == 1:
+                    cmnt_object = comment_qs.first()
+
+            new_comment, created = Comment.objects.get_or_create(
+                                                   user = user,
+                                                   reply = cmnt_object,
+                                                   )
+            return HttpResponseRedirect(reverse('feed:feed_detail', kwargs={ "pk":feed.pk }))
+   
+    # comments = instance.comments
     context = {
          'feed': feed,
          'is_liked': is_liked,
          'total_likes': feed.get_total_likes(),
          'comments': comments,
-         'comment_form': comment_form
+         # 'comment_form': comment_form
          }
     if request.is_ajax():
         html = render_to_string('feed/comments.html', context, request=request)
@@ -245,23 +270,30 @@ def add_comment_feed(request, pk):
     comments = feed.comments.all().filter(approved=True).order_by('date_added')[:10]
     new_comment = None
     com_submitted = False
+    user_profile = request.user.userprofile
+    commented_by = user_profile
+    view_by = user_profile
 
     # Comment posted
     if request.method == 'POST':
-        form = CommentForm(request.POST or None)
-        if form.is_valid():
+        content = request.POST.get('content')
+        new_comment, created = Comment.objects.get_or_create(
+                                                   user = user_profile.user,
+                                                   content = content,
+                                                   feed_id = feed.pk,
+                                                   commented_by = commented_by,
+                                                   view_by = view_by
+                                                   )
 
-            # Create Comment object but don't save to database yet
-            new_comment = form.save(commit=False)
-            new_comment.feed = feed    # Assign the current feed to the comment
-            new_comment.user = request.user
-            new_comment.save()  # Save comment to db
-            # messages.success(request, 'Comment posted')
-            return HttpResponseRedirect('/feed_detail?com_submitted=True', pk=feed.pk)
-    else:
-        form = CommentForm()
+        messages.add_message(request, messages.SUCCESS, 'Comment posted!')
+        # return redirect('feed:feed_detail', pk=feed.pk)
+        return HttpResponseRedirect(reverse('feed:feed_detail', kwargs={ "pk":feed.pk }))
+        
+       
+      
         if 'com_submitted' in request.GET:
             com_submitted = True
+  
     context = {
          'feed': feed, 
          'comments': comments, 
@@ -270,8 +302,8 @@ def add_comment_feed(request, pk):
          'com_submitted': com_submitted
     }   
 
-
     return render(request, 'feed/add_comment_feed.html', context)
+    # return render(request, 'feed/feed_detail.html', context)
 
 
 
@@ -340,7 +372,7 @@ def edit_comment(request, pk):
         form = CommentForm(instance=comment, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Comment updated')
+            messages.add_message(request, messages.SUCCESS, 'Comment updated')
             return redirect('feed:feed_detail', pk=feed.pk)
 
     context = {'feed': feed, 'comment': comment, 'form': form}
@@ -361,7 +393,8 @@ def edit_comment(request, pk):
 
 
 def like_comment(request):
-    user = request.user
+    # user = request.user
+    user_profile = request.user.userprofile
 
 
     if request.method == 'POST':
@@ -372,12 +405,12 @@ def like_comment(request):
 
         is_liked = False
      
-        if comment_obj.likes.filter(id=user.id).exists():
-            comment_obj.likes.remove(user)
+        if comment_obj.likes.filter(id=user_profile.id).exists():
+            comment_obj.likes.remove(user_profile)
             is_liked = False
         else:
-            comment_obj.likes.add(user)
-            like, created = LikeDislike.objects.get_or_create(user=user, comment_id=comment_id)
+            comment_obj.likes.add(user_profile)
+            like, created = LikeDislike.objects.get_or_create(liked_by=user_profile, comment_id=comment_id)
             if not created:
                 if like.value == 1:
                     like.value -= 1;
@@ -385,14 +418,14 @@ def like_comment(request):
                     like.value += 1
             like.save()
             is_liked = True  
-            print(like)
+            # print(like)
         context = {
              'post': comment_obj,
              'is_liked': is_liked,
              'total_likes': comment_obj.get_total_likes(),
         }
         print(comment_obj)
-        print(valueobj)
+        # print(valueobj)
         print(comment_obj.get_total_likes())
         if request.is_ajax():
             html = render_to_string('partials/like_section.html', context, request=request)

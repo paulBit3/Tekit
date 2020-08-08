@@ -2,32 +2,68 @@
 
 
 {% block content %}
+<div id="container">
+  <!-- start header -->
+  <div id="header">
 
-<div class="container">
-  {% block page_header %}
-    <h5>{{ topic }}</h5>
-  {% endblock page_header %}
-   <p><a class="btn btn-primary" href="{% url 'feed:new_feed' topic.id %}">New Feed<i class="fa fa-plus" aria-hidden="true"></i></a></p>
-  <section id="showcase-inner">
-    
-      {% for feed in feeds %}
-       <div class="card bg-light mb-3"style="max-width: 50rem;">
-         <h5 class="card-header">
-           
-             {{ feed.date_added | date:'M d, Y H:i a' }}<small>
-                <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit Feed<i class="fas fa-pencil-alt"></i></a></small>
-          </h5>
-         <div class="card-body">
-              {{ feed.text|linebreaks }}
-        </div>
-       </div>
-       {% empty %}
-         <p class="card-text">There are no feeds for this topic yet.</p>
-       {% endfor %}
-    
+    <div id="menu">
+      <ul>
+        <li class="current_page_item"><a href="/">Home</a></li>
+        <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
+        <li><a href="{% url 'accounts:user_profile' request.user.username %}">Profile</a></li>
+        <li><a href="% url 'accounts:profile_detail' request.user.id %">Account</a></li>
+        <li class="last"><a href="#">Contact</a></li>
+      </ul>
+    </div>
 
-   </section>
- </div>
+  </div>
+  <!-- end header -->
 
+  <div class="clear"></div>
+  
+  <!-- start sidebar -->
+  <div id="sidebar">
+      {% include 'partials/_sidebar.html' %}
+  </div>
+  <!-- end sidebar -->
+
+  <div id="container">
+      <div class="container p-5">
+
+        <h5>{{ topic.action.name }}</h5>
+       
+          <div class="rows">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+
+              {% if messages %}
+                {% for message in messages %}
+                  <p class="alert alert-info">{{ message }}</p>
+                {% endfor %}
+              {% endif %}
+              <br>
+
+               <p><a class="btn btn-primary btn-sm rounded-pill" href="{% url 'feed:new_feed' pk=topic.id %}">
+                <i class="fa fa-plus" aria-hidden="true"></i>New Feed</a></p>
+                
+                  {% for feed in feeds %}
+                   <div class="card bg-light mb-3"style="max-width: 50rem;">
+                     <h5 class="card-header">
+                       
+                         {{ feed.date_added | date:'M d, Y H:i a' }}<small>
+                            <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit Feed<i class="fas fa-pencil-alt"></i></a></small>
+                      </h5>
+                     <div class="card-body">
+                          {{ feed.text|linebreaks }}
+                    </div>
+                   </div>
+                   {% empty %}
+                     <p class="card-text">There are no feeds for this topic yet.</p>
+                   {% endfor %}
+            </div>
+          </div>
+        
+      </div>
+  </div>
+</div>
   
 {% endblock %}

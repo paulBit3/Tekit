@@ -301,3 +301,132 @@ $(function () {
                     </form>
 </li>
  <li role="separator" class="divider"></li>
+
+ <div class="col-right">
+      <aside>
+        <section class="sidebar">
+          <div class="card my-4" style="max-width: 20rem;">
+            <h5 class="card-header">About</h5>
+            <div class="card-body card-widget">
+              <p class="card-text">
+                Tekit is a registered trademark social platform of Beam Inc.</p>
+              <a class="btn btn-danger" href="">Know more!</a>
+              <!-- Footer -->
+               {% include 'partials/_footer.html' %}
+            </div>    
+          </div>
+        </section>
+       <div class="clear"></div>
+
+        <div class="card my-4" style="max-width: 20rem;">
+            <h5 class="card-header">Languages</h5>
+            <div class="card-body card-widget">
+              <ul class="category">
+                <li>Python</li>
+                <li>Machine Learning</li>
+                <li>Deep Learning</li>
+                <li>JavaScript</li>
+                <li>Java</li>
+              </ul>
+            </div>    
+        </div>
+
+    
+       <h4>F A A N G:</h4>
+        <ul class="category">
+          <li>Facebook</li>
+          <li>Apple</li>
+          <li>Amazon</li>
+          <li>Netflix</li>
+          <li>Google</li>
+        </ul>
+      </aside>
+
+  </div>
+
+{% if topic.image %}
+<img class="card-img-top" src="{{ topic.action.image_url }}" alt=""> 
+{% endif %}
+ <!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+
+     <dl class="dl-horizontal">
+            
+              <dt>Name</dt>
+              <dd>{{ request.user.name }}</dd>
+
+              <dt>Username</dt>
+              <dd>{{ request.user.username }}</dd>
+
+              <dt>Email</dt>
+              <dd>{{ request.user.email }}</dd>
+
+              <dt>Phone</dt>
+              <dd>{{ request.user.phone_no }}</dd>
+
+              <dt>Date Joined</dt>
+              <dd>{{ request.user.dated_added }}</dd>
+
+              <dt>About me</dt>
+              <dd>{{ request.user.about_me }}</dd>
+
+              <dt>City</dt>
+              <dd>{{ request.user.city }}</dd>
+           
+            </dl>
+
+<form method="post" action="{% url 'feed:add_comment_feed' feed.id %}">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                            <button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm ml-2"><a href="">Reply</a></button>
+                         </form>
+
+<div id="myDiv">
+                            <a class="btn btn-secondary active btn-sm rounded-pill" href="{% url 'feed:add_comment_feed' feed.id %}"><i class="far fa-comment-dots"></i>Comment</a>
+                            </div>
+
+<input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                                <button type="button" name="button" class="reply-btn btn btn-outline-dark btn-sm ml-2"><a href="">Reply</a></button>
+
+<a class="btn btn-secondary active btn-sm rounded-pill"><i data-toggle="tooltip" data-placement="bottom" title="comment" class="far fa-comment-dots"></i></a>
+
+  <form name="cmntForm" action="{% url 'feed:add_comment_feed' feed.id %}" onsubmit="return validateForm()" method="POST">
+                  <input id="id-input" type="hidden" name="id" value="">
+                  <div class="form-group">
+                    {% csrf_token %}
+                    <textarea class="form-control form-rounded" type="text" name="content" placeholder="Your comment here"></textarea>
+                                <!-- {{ form|crispy }} -->
+                    <!-- <textarea class="form-control" type="text" name="text"></textarea> -->
+                  </div>
+                  <input type="submit" class="btn btn-default pull-right" value="Post">
+                </form>
+
+
+
+              <div class="container">
+                <div class="list-group">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Comment title</h3>
+                    </div>
+                    <div class="panel-body">
+                      Comment content
+                    </div>
+                    <div class="panel-footer clearfix">
+                      <button class="reply btn btn-default pull-right" type="button" data-id="24">Reply</button>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Comment title</h3>
+                    </div>
+                    <div class="panel-body">
+                      Comment content
+                    </div>
+                    <div class="panel-footer clearfix">
+                      <button class="reply btn btn-default pull-right" type="button" data-id="25">Reply</button>
+                    </div>
+                  </div>
+                </div>
+              </div>

@@ -3,44 +3,54 @@
 {% block title %}Tekit | Profile Details - <b>{{ block.super }}</b> {% endblock %}
 
 {% block content %}
- <div class="row">
- 	<div class="col-lg-6 col-md-6 col-sm-6">
- 		<h4>Profil Details</h4>
- 		<hr>
- 	{% if user %}
- 		<dl class="dl-horizontal">
- 		
- 			<dt>Name</dt>
- 			<dd>{{ request.user.name }}</dd>
 
- 			<dt>Username</dt>
- 			<dd>{{ request.user.username }}</dd>
+<div id="container">
+	<!-- start header -->
+	<div id="header">
 
- 			<dt>Email</dt>
- 			<dd>{{ request.user.email }}</dd>
+	  <div id="menu">
+	    <ul>
+	    	<li class="current_page_item"><a href="/">Home</a></li>
+	 		<li class="current_page_item">
+	 			<a href="{% url 'accounts:user_profile' request.user.username %}">Profile</a></li>
+	 		<li><a href="{% url 'accounts:profile_detail' request.user.id %}">Account Details</a></li>
+	 		<li><a href="{#% url 'accounts:password_change' request.user.id %}">Change Password</a></li>
+	 	</ul>
+	  </div>
 
- 			<dt>Phone</dt>
- 			<dd>{{ request.user.phone_no }}</dd>
+	</div>
+	<!-- end header -->
 
- 			<dt>Date Joined</dt>
- 			<dd>{{ request.user.dated_added }}</dd>
+	<div class="clear"></div>
+	 <!-- start sidebar -->
+    <div id="sidebar">
+    	 {% include 'partials/_sidebar.html' %}
+    </div>
+    <!-- end sidebar -->
 
- 			<dt>About me</dt>
- 			<dd>{{ request.user.about_me }}</dd>
-
- 			<dt>City</dt>
- 			<dd>{{ request.user.city }}</dd>
-   
- 		</dl>
- 	{% endif %}
- 	</div>
- 	<div class="col-lg-6 col-md-6 col-sm-6">
- 		<h4></h4>
- 		<p>
- 			<a href="{% url 'accounts:user_profile' request.user.username %}">My Profile</a>
- 			<a href="{% url 'accounts:profile_detail' request.user.id %}">Account Details</a>
- 			<a href="{#% url 'accounts:password_change' request.user.id %}">Change Password</a>
- 		</p>
- 	</div>
- </div>
+    <div id="container">
+    	<div class="row-fluid">
+    		<div class="col-lg-6 col-md-6 col-sm-6">
+    			<div class="card bg-light mb-3" style="max-width: 35rem;">
+		      		<div class="card-header"><h4><b>{{request.user.userprofile.name}}</b></h4></div>
+		      		  {% if user.userprofile.picture %}
+                        <img class="img-responsive rounded-circle profil-img" src="{{ request.user.userprofile.picture.url }}" alt=""> 
+                        {% endif %}
+			      		<div class="card-body">
+			      			
+			      			<p>UserName: <b>{{request.user.username}}</b></p>
+			      			<p>Email: <b>{{ request.user.email }}</b></p>
+			      			<p>Phone: <b>{{ request.user.userprofile.phone_no }}</b></p>
+			      			<p>Birthdate: <b>{{ request.user.userprofile.birthdate }}</b></p>
+			      			<p>City: <b>{{ request.user.userprofile.city }}</b></p>
+			      			<p>State: <b>{{ request.user.userprofile.state }}</b></p>
+			      			<p>Status: <b>{{ request.user.userprofile.status }}</b></p>
+			      			<p>Date Joined: <b>{{ request.user.userprofile.date_added }}</b></p>
+					    </div>
+					  
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

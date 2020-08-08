@@ -3,39 +3,36 @@
 
 {% block content %}
 
-
-
-       <div class="container"> 
+    <div class="container"> 
         <div class="row">
         
           {% for topic in topics_list %} 
               <div class="card-deck">
                  
-
+                {% if topic.action.image %}
                   <div class="card">
-                        {% if topic.image %}
-                        <img class="card-img-top" src="{{ topic.image_url }}" alt=""> 
-                        {% endif %}
+                        
+                        <img class="card-img-top" src="{{ topic.action.image.url }}" alt=""> 
+                {% endif %}
                       <div class="card-block">
                         <div class="card-body"> 
-                            <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' topic.id %}">{{ topic }}</a></h5> 
+                            <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' pk=topic.id %}">{{ topic.action.name }}</a></h5> 
                             <p class="card-text"> 
-                                Some quick example text to build on  
-                                the card title and make up the bulk  
-                                of the card's content. 
+                               
                             </p> 
-                            <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-outline-primary btn-sm"> 
-                                New Feed <i class="fa fa-plus" aria-hidden="true"></i>
+                            <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-primary btn-sm rounded-pill"> 
+                                <i class="fa fa-plus" aria-hidden="true"></i>New Feed 
                             </a> 
-                            <a href="#" class="btn btn-outline-secondary btn-sm"> 
-                                <i class="far fa-heart"></i></a> 
+                           <!--  <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill"> 
+                                <i class="far fa-heart"></i>check check</a>  -->
                         </div>
                       </div>
                   </div>
                   
               </div>
            {% empty %}
-                <li class="card-text"><h3>No feed has been added yet.</h3></li>
+                <div class="card-text"><h3>No feed has been added yet.</h3></div>
+                
            {% endfor %}
            
         </div> 

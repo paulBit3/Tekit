@@ -16,7 +16,7 @@ from PIL import Image
 # Profile class inherit form User abstract class
 class UserProfile(models.Model):
     """Store extract information relates to the user model"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
     name = models.CharField(max_length=100)
     about_me = models.TextField(max_length=150)
     picture = models.ImageField(upload_to='images/pictures', default='images/pictures/user_default.png', blank=True, null=True)
@@ -72,21 +72,21 @@ class UserProfile(models.Model):
 
 
     def clean_phone(self):
-        phone = self.clean_data['phone_no']
-        stripped_phone = strip_non_numbers(phone)
+        phone_no = self.clean_data['phone_no']
+        stripped_phone = strip_non_numbers(phone_no)
         if len(stripped_phone) < 10:
            raise messages.error(request, 'Enter a valid phone number. e.g.555-555-5555')
         # return self.clean_data['phone']
-        return phone
+        return phone_no
 
 
     # Resizing the user profile photo
     def resize_image(self):
         SQUARE_FIT_SIZE = 300
-        self.pictures = Image.open(self.pictures.path)
+        self.picture = Image.open(self.picture.path)
         
         # Check if image needs to be resized.
-        if self.pictures.width > SQUARE_FIT_SIZE or self.pictures.height > SQUARE_FIT_SIZE:
+        if self.picture.width > SQUARE_FIT_SIZE or self.picture.height > SQUARE_FIT_SIZE:
             # Calculate the new width and height to resize to
             if width > height:
                 height = int((SQUARE_FIT_SIZE / width) * height)
@@ -96,8 +96,8 @@ class UserProfile(models.Model):
                 height = SQUARE_FIT_SIZE
 
             # Resize the image
-            self.pictures = self.pictures.resize(width, height)
-            self.pictures.save(self.pictures.path)
+            self.picture = self.picture.resize(width, height)
+            self.picture.save(self.picture.path)
 
 
 class RelationshipType(models.Model):

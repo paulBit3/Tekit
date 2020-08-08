@@ -3,8 +3,34 @@
 
 {% block content %}
 
+ <div id="container">
+  <!-- start header -->
+  <div id="header">
+
+    <div id="menu">
+      <ul>
+        <li class="current_page_item"><a href="/">Home</a></li>
+        <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
+        <li><a href="{% url 'accounts:user_profile' request.user.username %}">Profile</a></li>
+        <li><a href="% url 'accounts:profile_detail' request.user.id %">Account</a></li>
+        <li class="last"><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+   </div>
+  <!-- end header -->
+
+  <div class="clear"></div>
+  
+   <!-- start sidebar -->
+    <div id="sidebar">
+    	 {% include 'partials/_sidebar.html' %}
+    </div>
+    <!-- end sidebar -->
+
+  <div id="container">
 	<div class="container p-5">
-		<div class="row">x
+		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-6">
 				 {% if messages %}
 	              {% for message in messages %}
@@ -35,12 +61,11 @@
 							<br>
 					        <input class="btn btn-primary btn-block rounded-pill" type="submit" value="Submit">
 				        </form>
-
 				    </div>
 			    </div>
 		    </div>
 	    </div>
-   </div>
- 
-
+    </div>
+  </div>
+</div>
 {% endblock content %}

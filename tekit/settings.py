@@ -43,8 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # third party aaps
     'six',
     'crispy_forms',
+    'markdown_deux',
 ]
 
 MIDDLEWARE = [
@@ -136,10 +138,12 @@ USE_L10N = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'tekit/static')
+    ]
+
 
 #Media Folder Settings
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
@@ -147,7 +151,7 @@ MEDIA_URL = '/media/'
 
 
 # AUTH_USER_MODEL = 'accounts.UserProfile'  # new
-
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 LOGIN_URL = 'accounts:_login'
 

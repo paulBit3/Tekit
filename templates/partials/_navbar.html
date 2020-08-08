@@ -40,7 +40,7 @@
                   <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class=""> {{ user.username|title }}.</span></a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <div class="dropdown-items-divide-hr"></div>
-                    <a class="dropdown-item" href="{% url 'accounts:user_profile' request.user.username %}"><span class="item-text"></span>My Profile</a>
+                    <a class="dropdown-item" href="{% url 'accounts:user_profile' request.user.username %}"><span class="item-text"></span>See your Profile</a>
                     <a class="dropdown-item" href="{% url 'accounts:profile_detail' request.user.id %}"><span class="item-text"></span>Account Details</a>
                     <a class="dropdown-item" href="{% url 'accounts:account_settings' %}"><span class="item-text"></span>Settings</a>
                     <div class="dropdown-items-divide-hr"></div>

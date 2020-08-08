@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+ <div id="form-template" style="display: none;">
+ 	  <form action="" method="POST" enctype="multipart/form-data">
+ 	  	<input id="id-input" type="hidden" name="id" value="">
+ 	  	<div class="form-group">
+ 	  		<label for="reply">Reply:</label>
+ 	  		<textarea class="form-control" type="text" name="text"></textarea>
+ 	  	</div>
+ 	  	<input type="submit" class="btn btn-default pull-right" value="submit">
+	  </form>
+  </div>
+							<div class="container">
+							  <div class="list-group">
+							    <div class="panel panel-default">
+							      <div class="panel-heading">
+							        <h3 class="panel-title">Comment title</h3>
+							      </div>
+							      <div class="panel-body">
+							        Comment content
+							      </div>
+							      <div class="panel-footer clearfix">
+							        <button class="reply btn btn-default pull-right" type="button" data-id="24">Reply</button>
+							      </div>
+							    </div>
+							    <div class="panel panel-default">
+							      <div class="panel-heading">
+							        <h3 class="panel-title">Comment title</h3>
+							      </div>
+							      <div class="panel-body">
+							        Comment content
+							      </div>
+							      <div class="panel-footer clearfix">
+							        <button class="reply btn btn-default pull-right" type="button" data-id="25">Reply</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+</body>
+<script type="text/javascript">
+	var formTemplate = document.querySelector('#form-template form');
+	var idInput = document.getElementById('id-input');
+
+	function toggleReply(e) {
+	  if (!formTemplate) return;
+
+	  e.target.parentNode.insertBefore(formTemplate, e.target);
+	  idInput.value = e.target.getAttribute('data-id');
+	};
+
+	Array.from(document.querySelectorAll('button.reply'))
+	  .forEach(btn => btn.onclick = toggleReply)
+</script>
+</html>

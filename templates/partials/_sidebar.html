@@ -1,50 +1,43 @@
+{% extends 'base.html' %}
 
 
-{% block sidebar %}
+{% block content %}
+ <!-- start sidebar -->
+  <!-- <div id="sidebar"> -->
+    <ul>
+      <li id="categories">
+        <h4>F A A N G</h4>
+        
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Apple</a></li>
+          <li><a href="#">Amazon</a></li>
+          <li><a href="#">Netflix</a></li>
+          <li><a href="#">Google</a></li>
+     
+      </li>
 
+       <h4>IT Learning</h4>
+       <ul>
+         <li><a href="#">Google IT Certificate</a></li>
+         <li><a href="#">Coursera</a></li>
+         <li><a href="#">MIT</a></li>
+         <li><a href="#">Microsoft</a></li>
+         <li><a href="#"></a></li>
+       </ul>
 
-<div class="col-right">
-    <aside>
-      <section class="sidebar">
-        <div class="card my-4" style="max-width: 20rem;">
-          <h5 class="card-header">About</h5>
-          <div class="card-body card-widget">
-            <p class="card-text">
-              Tekit is a registered trademark social platform of Beam Inc.</p>
-            <a class="btn btn-danger" href="">Know more!</a>
-            <!-- Footer -->
-             {% include 'partials/_footer.html' %}
-          </div>    
-        </div>
-      </section>
-     <div class="clear"></div>
+       <h4>Programming</h4>
+       <ul>
+          <li id="categories">
+            <li><a href="#">Python</a></li>
+            <li><a href="#">Machine Learning</a></li>
+            <li><a href="#">Deep Learning</a></li>
+            <li><a href="#">JavaScript</a></li>
+            <li><a href="#">Java</a></li>
+          </li>
+        </ul>
+    </ul>
+ <!--  </div> -->
+    <div class="clear"></div>
 
-      <div class="card my-4" style="max-width: 20rem;">
-          <h5 class="card-header">Languages</h5>
-          <div class="card-body card-widget">
-            <ul class="category">
-              <li>Python</li>
-              <li>Machine Learning</li>
-              <li>Deep Learning</li>
-              <li>JavaScript</li>
-              <li>Java</li>
-            </ul>
-          </div>    
-      </div>
-
-  
-     <h4>F A A N G:</h4>
-      <ul class="category">
-        <li>Facebook</li>
-        <li>Apple</li>
-        <li>Amazon</li>
-        <li>Netflix</li>
-        <li>Google</li>
-      </ul>
-    </aside>
-
-</div>
-
-
-
-{% endblock sidebar %}
+<!-- end sidebar -->
+{% endblock %}

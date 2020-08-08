@@ -9,29 +9,42 @@
  <div class="container">
  	<div class="row">
  		<div class="col-md-8 card mb-4 mt-3">
+ 			<ul class="messages">
+	 		 {% if messages %}
+		       {% for message in messages %}
+		        <li class="{{ message.tags }}">
+		        	<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>{{ message }}
+		        </li>
+		        <!-- <p class="alert alert-info"></p> -->
+		        {% endfor %}
+		      {% endif %}
+	 		</ul>
  			<div class="card-body">
  				{% if new_comment %}
+	 				
+	              <br>
  				<div class="alert alert-success" role="alert">
  					Your comment is pending approval.
                 </div>
                 {% else %}
             </div>
  			<h5>Leave a comment</h5>
- 			<div class="card-body">
+ 			
  				<form class="form-group" method="post">
  					{% csrf_token %}
+ 					<!-- <input type="hidden" name="comment_id" value="{{ comment.pk }}"> -->
  					{{ form|crispy }}
 
- 					<input type="submit" value="Send" class="save btn btn-primary rounded-pill">
+ 					<input type="submit" value="Post" class="save btn btn-primary btn-sm rounded-pill">
  				</form>
+
  				{% endif %}
  				{% if approved %}
 	 				<p>
 	 					{% include 'partials/success.html' %}
 	 				</p>
  				{% endif %}
- 			</div>
-
+ 			
  		</div>
  	</div>
  </div>

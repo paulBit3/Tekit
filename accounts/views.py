@@ -17,7 +17,7 @@ from django.contrib.auth.models import User
 
 from .forms import *
 from feed.models import *
-
+from accounts.models import *
 
 # Create your views here.
 @login_required
@@ -89,11 +89,11 @@ def register(request):
         password = request.POST['password']
         # Check username
         if User.objects.filter(username=username).exists():
-            messages.error(request, 'That username is taken. Please try another')
+            messages.add_message(request, messages.ERROR,'That username is taken. Please try another!')
             return redirect('accounts:register')
         else:
             if User.objects.filter(email=email).exists():
-                messages.error(request, 'That email is already in use')
+                messages.add_message(request, messages.ERROR,'That email is already in use!')
                 return redirect('accounts:register')
             else:
                 # Looks good
@@ -138,13 +138,14 @@ def _login(request):
         password = request.POST['password']
 
         user = auth.authenticate(username=username, password=password)
+        
         if user is not None:
             auth.login(request, user)
-            messages.success(request, 'You are now logged in !')
+            #messages.success(request, 'You are now logged in !')
             # return redirect('feed:topics')
             return redirect('feed:index')
         else:
-            messages.error(request, "Hmm, we don't recognize that credentials. Please try again.")
+            messages.add_message(request, messages.INFO, "Hmm, wrong username or password. Please try again.")
             return redirect('accounts:_login')
     else:
         return render(request, 'accounts/login.html')
@@ -153,7 +154,7 @@ def _login(request):
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
-        messages.success(request, 'You are logged out.')
+        messages.add_message(request, messages.INFO, 'You are logged out!')
     return redirect('feed:index')
 
 
@@ -254,6 +255,7 @@ def password_reset_request(request):
     else:
         return render(request, 'accounts/password_reset.html')
 
+
 # Relationship request method
 @login_required
 def relationship_request(request):
@@ -274,7 +276,7 @@ def relationship_request(request):
                 # jeson response
                 results = {'result': 'Request sent successfully'}
 
-                # update
+                # update topic table
                 t = Topic()
                 t.update_topic(from_user, 1, to_user)
 
@@ -294,7 +296,7 @@ def relationship_request(request):
                 request.delete()
 
                 # json response
-                results = {'result': 'Accept successfully'}
+                results = {'result': 'Accepted!'}
 
                 # update topic
                 t = Topic()

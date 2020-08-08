@@ -2,12 +2,30 @@
 
 {% block content %}
 
+<div id="container">
+	<!-- start header -->
+	<div id="header">
+		<div id="menu">
+		  <ul>
+	        <li class="current_page_item"><a href="/">Home</a></li>
+	        <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
+	        <li><a href="{% url 'accounts:user_profile' request.user.username %}">Profile</a></li>
+	        <li><a href="% url 'accounts:profile_detail' request.user.id %">Account</a></li>
+	        <li class="last"><a href="#">Contact</a></li>
+	      </ul>
+	    </div>
+
+	</div>
+	<!-- end header -->
+	<div class="clear"></div>
+	<!-- start sidebar -->
+    <div id="sidebar">
+    	 {% include 'partials/_sidebar.html' %}
+    </div>
+    <!-- end sidebar -->
 	<div class="container py-2">
 
 		{% include 'partials/_topnote.html' %} 
-
-		<br>
-		
 		<!-- Feeds column -->
 	    <div class="row">
 	      	<div class="col-md-8 mt3 left">
@@ -45,4 +63,5 @@
 	      	</div>
 		 </div>
 	</div>
+</div>
 {% endblock %}
