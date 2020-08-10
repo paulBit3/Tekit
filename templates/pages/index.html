@@ -134,11 +134,17 @@
 											{{ feed.text|slice:":300" }}
 										</p>
 										 <a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count}} comments</small></a><br>
+										 <!-- Check for user authorization-->
+										 {% if not user.is_authenticated %}
+										 <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;</a>
+										 {% else %}
 										 <a href="{% url 'feed:feed_detail' pk=feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
 										    <!-- Like section -->
 									        <!-- <div id="like-feed-section">
 									        	
 										    </div> -->
+										 {% endif %}
+										 
 									</div>
 								</div>
 							 </div>

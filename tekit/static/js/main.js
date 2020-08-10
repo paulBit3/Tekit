@@ -96,13 +96,22 @@ function showForm() {
 
 
 // validate comment and reply form
-function validateForm() {
-    var form = document.forms['cmntForm']['content'].value;
-    if (form == '') {
-        alert('Required: Type a comment before submit!');
-        return false;
-    }
-}
+// function validateForm() {
+//     var form = document.forms['cmntForm']['content'].value;
+//     var form = document.forms['replyForm']['content'].value;
+//     if (form == '') {
+//         alert('Required: Type a comment before submit!');
+//         return false;
+//     }
+// }
+
+// function required() {
+//     var empt = document.forms['replyForm'].content.value;
+//     if (empt === '') {
+//         alert('Required: Type a reply before submit!')
+//         return false
+//     }
+// }
 
 
 
@@ -111,18 +120,31 @@ function validateForm() {
 var formTemplate = document.querySelector('#form-template form');
 var idInput = document.getElementById('id-input');
 
-function toggleReply(e) {
+function toggleComment(e) {
   if (!formTemplate) return;
 
   e.target.parentNode.insertBefore(formTemplate, e.target);
   idInput.value = e.target.getAttribute('data-id');
 };
 
+Array.from(document.querySelectorAll('button.cmt-btn'))
+  .forEach(btn => btn.onclick = toggleComment)
+
+
+// reply form handling
+var replyformTemplate = document.querySelector('#replyform-template form');
+var idInput = document.getElementById('id-input');
+
+function toggleReply(e) {
+  if (!replyformTemplate) return;
+
+  e.target.parentNode.insertBefore(replyformTemplate, e.target);
+  idInput.value = e.target.getAttribute('data-id');
+};
+
 Array.from(document.querySelectorAll('button.reply'))
   .forEach(btn => btn.onclick = toggleReply)
 
-Array.from(document.querySelectorAll('button.cmt-btn'))
-  .forEach(btn => btn.onclick = toggleReply)
 
  // Reply to comment
  // $('.reply-btn').click(function() {
@@ -130,97 +152,19 @@ Array.from(document.querySelectorAll('button.cmt-btn'))
  // });
 
 
-(function($) {
-  
-  "use strict";  
+// Back to top page
+var btn = $('.back-to-top');
 
-  $(window).on('load', function() {
+$(window).scroll(function() {
+  if ($(window).scrollTop() > 300) {
+    btn.addClass('show');
+  } else {
+    btn.removeClass('show');
+  }
+});
 
-    /* 
-   MixitUp
-   ========================================================================== */
-  $('#portfolio').mixItUp();
+btn.on('click', function(e) {
+  e.preventDefault();
+  $('html, body').animate({scrollTop:0}, '300');
+});
 
-  /* 
-   One Page Navigation & wow js
-   ========================================================================== */
-    var OnePNav = $('.onepage-nev');
-    var top_offset = OnePNav.height() - -0;
-    OnePNav.onePageNav({
-      currentClass: 'active',
-      scrollOffset: top_offset,
-    });
-  
-  /*Page Loader active
-    ========================================================*/
-    $('#preloader').fadeOut();
-
-  // Sticky Nav
-    $(window).on('scroll', function() {
-        if ($(window).scrollTop() > 200) {
-            $('.scrolling-navbar').addClass('top-nav-collapse');
-        } else {
-            $('.scrolling-navbar').removeClass('top-nav-collapse');
-        }
-    });
-
-    /* slicknav mobile menu active  */
-    $('.mobile-menu').slicknav({
-        prependTo: '.navbar-header',
-        parentTag: 'liner',
-        allowParentLinks: true,
-        duplicate: true,
-        label: '',
-        closedSymbol: '<i class="icon-arrow-right"></i>',
-        openedSymbol: '<i class="icon-arrow-down"></i>',
-      });
-
-      /* WOW Scroll Spy
-    ========================================================*/
-     var wow = new WOW({
-      //disabled for mobile
-        mobile: false
-    });
-
-    wow.init();
-
-    /* Nivo Lightbox 
-    ========================================================*/
-    $('.lightbox').nivoLightbox({
-        effect: 'fadeScale',
-        keyboardNav: true,
-      });
-
-    /* Counter
-    ========================================================*/
-    $('.counterUp').counterUp({
-     delay: 10,
-     time: 1000
-    });
-
-
-    /* Back Top Link active
-    ========================================================*/
-      var offset = 200;
-      var duration = 500;
-      $(window).scroll(function() {
-        if ($(this).scrollTop() > offset) {
-          $('.back-to-top').fadeIn(400);
-        } else {
-          $('.back-to-top').fadeOut(400);
-        }
-      });
-
-      $('.back-to-top').on('click',function(event) {
-        event.preventDefault();
-        $('html, body').animate({
-          scrollTop: 0
-        }, 600);
-        return false;
-      });
-
-
-
-  });      
-
-}(jQuery));

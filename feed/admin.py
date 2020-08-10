@@ -12,9 +12,9 @@ class CommentAdmin(admin.ModelAdmin):
 	search_fields = ('user', 'likes', 'content', 'reply')
 	actions = ['approved_comment']
 
-	# updating the active boolean field
+	# updating the active boolean field to true
 	def approved_comment(self, request, queryset):
-		queryset.updated(active=True)
+		queryset.updated(approved=True)
 
 class FollowUserAdmin(admin.ModelAdmin):
 	list_display = ['profile', 'followed_by']

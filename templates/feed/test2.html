@@ -40,6 +40,21 @@
 							    </div>
 							  </div>
 							</div>
+
+
+    <div id="form-template" style="display: none;">
+					 	    <form name="cmntForm" action="{% url 'feed:add_comment_feed' feed.id %}" onsubmit="return validateForm()" method="POST">
+						 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ feed.comment.pk }}">
+						 	  	<div class="form-group">
+						 	  		{% csrf_token %}
+						 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Type your comment"></textarea>
+                            		<!-- {{ form|crispy }} -->
+						 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
+						 	  	</div>
+						 	  	<input type="submit" class="btn btn-default pull-right" value="Post" name="cmtForm">
+						    </form>
+					      </div>
+
 </body>
 <script type="text/javascript">
 	var formTemplate = document.querySelector('#form-template form');

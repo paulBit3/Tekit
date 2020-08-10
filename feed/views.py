@@ -218,34 +218,49 @@ def get_latest_feed(self, limit=100):
 def feed_detail(request, pk):
    
     feed = get_object_or_404(Feed, pk=pk)
-    comments = Comment.objects.filter(feed=feed, reply=None, approved=True).order_by('-pk')
-    #comments = feed.comments.filter(approved=True).order_by('-created_on')
+    comments = Comment.objects.filter(feed=feed, parent=None, approved=True).order_by('-pk')
+    # comments = feed.comments.filter(approved=True).order_by('-created_on')
     is_liked = False
+    new_comment = None
+    user_profile = request.user.userprofile
+    commented_by = user_profile
+    view_by = user_profile
+
     #user in obj.likes.all()
     if feed.likes.filter(id=request.user.pk).exists():
         is_liked = True
+    if request.method == 'POST':
+        if 'replyForm' in request.POST:
+            content = request.POST.get('content')
+            parent_id = request.POST.get('parent_id')
+            print(content)
+            print(parent_id)
+            parent_obj = None
+            # get parent comment id from hidden input
+            try:
+                parent_id = int(request.POST.get('parent_id'))
+            except:
+                parent_id = None
+                # check if reply_id has been submitted, get parent_obj id
+                if parent_id:
+                    parent_qs = Comment.objects.filter(id=parent_id)
+                    if parent_qs.exists() and parent_qs.count() == 1:
+                        parent_obj = parent_qs.first()
 
-    form = CommentForm(request.POST or None)
-    user = request.user.userprofile
-
-    # getting comment reply
-    if form.is_valid():
-        content = request.POST.get('content')
-        cmnt_object = None
-        try:
-            reply_id = int(request.POST.get('comment_id'))
-        except:
-            reply_id = None
-            
-            if reply_id:
-                if comment_qs.exists() and comment_qs.count() == 1:
-                    cmnt_object = comment_qs.first()
-
-            new_comment, created = Comment.objects.get_or_create(
-                                                   user = user,
-                                                   reply = cmnt_object,
+                comment, created = Comment.objects.get_or_create(
+                                                   user = user_profile.user,
+                                                   content = content,
+                                                   feed = feed.pk,
+                                                   commented_by = commented_by,
+                                                   view_by = view_by,
+                                                   parent= parent_obj,
                                                    )
+            messages.add_message(request, messages.SUCCESS, 'Reply sent!')
+            # return redirect('feed:feed_detail', pk=feed.pk)
             return HttpResponseRedirect(reverse('feed:feed_detail', kwargs={ "pk":feed.pk }))
+
+        else:
+            print("replyForm form not found!")
    
     # comments = instance.comments
     context = {

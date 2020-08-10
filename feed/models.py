@@ -234,15 +234,15 @@ class Comment(models.Model):
     likes = models.ManyToManyField(UserProfile, blank=True, related_name='likes')
     content = models.TextField(max_length=160, blank=False, null=False)
     commented_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='commented')
-    reply = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='replies')
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='replies') # reply comment
     is_read = models.BooleanField(blank=True, default=False)
     read_time = models.PositiveSmallIntegerField(verbose_name='Read Time', default=0)
     date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     views = models.IntegerField(default=0)
     view_by = models.ForeignKey(UserProfile, verbose_name='View', on_delete=models.CASCADE, related_name='viewed')
-    approved = models.BooleanField(default=False)  # to prevent spam
-
+    approved = models.BooleanField(default=True)   # manually deactivate inappropriate comments from admin site
+    # approved = models.BooleanField(default=True)  # to prevent spam
     # objects= CommentManager()
 
     class meta:
@@ -281,6 +281,9 @@ class Comment(models.Model):
         content = self.content
         markdown_text = markdown(content)
         return mark_safe(markdown_text)
+
+    def comment_reply(self):   # replies
+        return Comment.objects.filter(parent=self)
 
 
     @property

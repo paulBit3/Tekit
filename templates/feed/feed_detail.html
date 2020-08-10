@@ -52,33 +52,32 @@
 							 <!-- #{{ feed.text|markdown }} -->
 							</p>
 							<div class="panel-footer clearfix">
-								<a href="{% url 'feed:edit_feed' feed.id %}" class="btn "><i data-toggle="tooltip" data-placement="bottom" title="Edit" class="fas fa-pencil-alt"></i>Edit</a>
+								<a href="{% url 'feed:edit_feed' feed.id %}" class="btn "><i class="fas fa-pencil-alt"></i>Edit</a>
 
-							
-							
-								<button class="cmt-btn btn " type="button" data-id="24"><i data-toggle="tooltip" data-placement="bottom" title="comment" class="far fa-comment-dots"></i>Comment</button>
+								<button class="cmt-btn btn " type="button" data-id="{{ feed.id }}"><i class="far fa-comment-dots"></i>Comment</button>
 
-								<a href="">
-								 	<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share
-						        </a>
+								<a class="share" href="">
+									<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share
+								</a>
 							</div>
 						</div>
 						<!-- comments -->
 				        <small>{{ feed.comments.count }} comments </small>
 
 				          <div id="form-template" style="display: none;">
-					 	    <form name="cmntForm" action="{% url 'feed:add_comment_feed' feed.id %}" onsubmit="return validateForm()" method="POST">
-						 	  	<input id="id-input" type="hidden" name="id" value="">
+					 	    <form name="cmntForm" action="{% url 'feed:add_comment_feed' feed.id %}" method="POST">
+						 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ feed.id }}">
 						 	  	<div class="form-group">
 						 	  		{% csrf_token %}
-						 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Type your comment"></textarea>
+						 	  		<div class="modal-body">
+						 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Say something..." required></textarea></div>
                             		<!-- {{ form|crispy }} -->
 						 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
 						 	  	</div>
-						 	  	<input type="submit" class="btn btn-default pull-right" value="Post">
+						 	  	<input type="submit" class="btn btn-default pull-right" value="Post" name="cmtForm">
 						    </form>
 					      </div>
-
+					    
 			        </div>
 
 			        <div class="col-md-8 card mb-4 mt-3 ">

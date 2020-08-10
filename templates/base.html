@@ -63,28 +63,6 @@
 
 </script>
 
-
-<!-- feed like -->
-<!-- <script type="text/javascript">
-    $(document).on('click', '#feedlike', function(event){
-        event.preventDefault();
-        var pk = $(this).attr('value');
-
-        $.ajax({
-            type: 'POST',
-            url: "{% url 'like_feed' %}",
-            data: {'id':pk, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
-            dataType: 'json',
-            success: function(response){
-                console.log($('#like-feed-section').html(response['form']));
-            },
-            error: function(rs, e){
-                console.log(rs.e)
-            },
-        });
-    });
-
-</script> -->
 {% endblock javascript %}
 
 <!-- <script>
@@ -116,7 +94,7 @@
 </script> -->
 <!-- Go to Top Link -->
 <a href="#" class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
+    <i class="fas fa-chevron-up"></i>
 </a>
 </body>
 </html>

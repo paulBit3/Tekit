@@ -19,7 +19,7 @@
 				 	{% for comment in feed.comments.all %}
 				 	 <!-- <div class="comments"> -->
 				 	 	<p class="font-weight-bold">
-				 	 		<div class="date text-muted"><small>{{ comment.date_added}}</small></div>
+				 	 		
 					         {% if not comment.approved %}
 						         <a href="{% url 'feed:comment_removed' pk=comment.pk %}">
 						         	<i data-toggle="tooltip" data-placement="bottom" title="delete" class=" fas fa-times pr-2" aria-hidden="true"></i>
@@ -36,22 +36,36 @@
 						     {% endif %}
 				        </p>
 				        <blockquote>
-				         <strong>{{ user.username|capfirst }}</strong><br>
-					  	<!--  <p card-text>#{{ comment.content|slice:":300" }}</p> -->
+
+				         <p> <small>Posted by:</small> <strong>{{ comment.user.username|capfirst }}</strong> - <small class="date text-muted">{{ comment.date_added}}</small></p>
+					  	 <!--  <p card-text>#{{ comment.content|slice:":300" }}</p> -->
 					  	 <p class="lead"><small>{{ comment.content|markdown }}</small></p>
+					  
+					  	 	{% for reply in comment.replies.all %}
+					  	 	<p class="mb-0"><small>{{ reply.content|markdown }}</small></p>
+					  	 	<small>by {{ reply.user.username|capfirst }}</small>
+					  		{% endfor %}
+					        
 					  	 	<div class="panel-footer clearfix">
 								<a href="" class="btn "><i class="fa fa-window-close" aria-hidden="true"></i>Cancel</a>
 
 								<button class="reply btn " type="button" data-id="{{ comment.pk }}"><i class="fa fa-reply-all"></i>Reply</button>
 							</div>
-
+                            <div id="replyform-template" style="display: none;">
+						 	    <form name="replyForm" action="{% url 'feed:feed_detail' feed.id %}" method="post">
+							 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ comment.pk }}">
+							 	  	<div class="form-group">
+							 	  		{% csrf_token %}
+							 	  		<label for="reply">Reply:</label>
+							 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying..." required></textarea>
+	                            		<!-- {{ form|crispy }} -->
+							 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
+							 	  	</div>
+							 	  	<input type="submit" class="btn btn-default pull-right reply" value="Reply" name="replyForm">
+							    </form>
+					        </div>
 					  	 <p><small>Read time: {% if comment.read_time <= 1 %} < 1 Minute</small> {% else %}{{ comment.read_time }} minutes {% endif %}</p>
-					  	 <div class="comments-replied container mt-2">
-					  	 	{% for reply in comment.replies.all %}
-					  	 	<p class="mb-0"><small>{{ reply.content }}</small></p>
-					  	 	<small>by {{ reply.user.username|capfirst }}</small>
-					  		{% endfor %}
-					  	 </div>
+					  	 
 						</blockquote>
 				        <!-- Like section -->
 				        <div id="like-section">
