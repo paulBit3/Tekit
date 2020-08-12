@@ -58,6 +58,25 @@ class CommentForm(forms.ModelForm):
                    })
         }
 
+class ReplyForm(forms.ModelForm):
+    """docstring for CommentForm"""
+    def clean_reply_field(self):
+        fields = self.cleaned_data['fields']
+        return fields
+
+    class Meta:
+        model = Reply
+        fields = ['content']
+        # labels = {'reply': ''}
+        widgets = {'reply': forms.Textarea(
+            attrs={'rows': '2', 
+                   'cols': '8', 
+                   'placeholder': 'Replying...', 
+                   'class': 'form-control'
+                   })
+        }
+
+
 
 class SettingForm(forms.ModelForm):
     """docstring for SettingForm"""

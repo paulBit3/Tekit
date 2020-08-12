@@ -117,39 +117,51 @@ function showForm() {
 
 //managing comment and reply form
 
-var formTemplate = document.querySelector('#form-template form');
-var idInput = document.getElementById('id-input');
+// var formTemplate = document.querySelector('#form-template form');
+// var idInput = document.getElementById('id-input');
 
-function toggleComment(e) {
-  if (!formTemplate) return;
+// function toggleComment(e) {
+//   if (!formTemplate) return;
 
-  e.target.parentNode.insertBefore(formTemplate, e.target);
-  idInput.value = e.target.getAttribute('data-id');
-};
+//   e.target.parentNode.insertBefore(formTemplate, e.target);
+//   idInput.value = e.target.getAttribute('data-id');
+// };
 
-Array.from(document.querySelectorAll('button.cmt-btn'))
-  .forEach(btn => btn.onclick = toggleComment)
+// Array.from(document.querySelectorAll('button.cmt-btn'))
+//   .forEach(btn => btn.onclick = toggleComment)
 
 
 // reply form handling
-var replyformTemplate = document.querySelector('#replyform-template form');
-var idInput = document.getElementById('id-input');
+// var replyformTemplate = document.querySelector('#replyform-template form');
+// var idInput = document.getElementById('id-input');
 
-function toggleReply(e) {
-  if (!replyformTemplate) return;
+// function toggleReply(e) {
+//   if (!replyformTemplate) return;
 
-  e.target.parentNode.insertBefore(replyformTemplate, e.target);
-  idInput.value = e.target.getAttribute('data-id');
-};
+//   e.target.parentNode.insertBefore(replyformTemplate, e.target);
+//   idInput.value = e.target.getAttribute('data-id');
+// };
 
-Array.from(document.querySelectorAll('button.reply'))
-  .forEach(btn => btn.onclick = toggleReply)
+// Array.from(document.querySelectorAll('button.reply'))
+//   .forEach(btn => btn.onclick = toggleReply)
+
+
+
+
 
 
  // Reply to comment
- // $('.reply-btn').click(function() {
- //    $(this).parent().reply().next('.comments-replied').fadeToggle()
- // });
+// $(".reply-btn").click(function(event){
+//     event.preventDefault();
+//     $(this).parent().next(".comment-reply").fadeToggle();
+// })
+
+// $(document).ready(function () {
+//   $(".reply-btn").click(function() {
+//     $(".comment-reply").fadeToggle();
+//   });
+// });
+
 
 
 // Back to top page

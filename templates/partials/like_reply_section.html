@@ -8,15 +8,15 @@
 	   	 {% if request.user.is_authenticated %}
 		   {% if is_liked %}
 	         <!--Already liked-->
-	         <a class="" href="{% url 'like_comment' %}" id="like" name="comment_id" value="{{ comment.id }}">
-	            <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+	         <a class="" href="{% url 'like_reply' %}" id="like-reply" name="reply_id" value="{{ reply.id }}">
+	            <i class="like fas fa-thumbs-up pr-2" aria-hidden="true">
 	               <span data-count="like">{{ total_likes }} Like{{ total_likes|pluralize }}</span>
 	            </i>
 	         </a>
 	       {% else %}
 	       <!--not liked-->
-	       <a class="" href="{% url 'like_comment' %}" id="like" name="comment_id" value="{{ comment.id }}">
-	         <i data-toggle="tooltip" title="Like" class="like fas fa-thumbs-up pr-2" aria-hidden="true">
+	       <a class="" href="{% url 'like_reply' %}" id="like-reply" name="reply_id" value="{{ reply.id }}">
+	         <i class="like fas fa-thumbs-up pr-2" aria-hidden="true">
 	         <span data-count="like">{% if result %}{{ total_likes }} {% else %} 0 {% endif %}</span>
 	          </i>
 	        </a>

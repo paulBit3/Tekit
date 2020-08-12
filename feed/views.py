@@ -218,12 +218,11 @@ def get_latest_feed(self, limit=100):
 def feed_detail(request, pk):
    
     feed = get_object_or_404(Feed, pk=pk)
-    comments = Comment.objects.filter(feed=feed, parent=None, approved=True).order_by('-pk')
-    # comments = feed.comments.filter(approved=True).order_by('-created_on')
+    # comments = Comment.objects.filter(feed=feed, approved=True).order_by('-pk')
+    comments = feed.comments.all().filter(approved=True).order_by('-created_on')
     is_liked = False
-    new_comment = None
+    reply = None
     user_profile = request.user.userprofile
-    commented_by = user_profile
     view_by = user_profile
 
     #user in obj.likes.all()
@@ -233,28 +232,32 @@ def feed_detail(request, pk):
         if 'replyForm' in request.POST:
             content = request.POST.get('content')
             parent_id = request.POST.get('parent_id')
-            print(content)
-            print(parent_id)
-            parent_obj = None
+
+            reply_obj = None
+            parent_qs = None
+           
             # get parent comment id from hidden input
             try:
                 parent_id = int(request.POST.get('parent_id'))
-            except:
-                parent_id = None
-                # check if reply_id has been submitted, get parent_obj id
+                # if parent_id exists
                 if parent_id:
-                    parent_qs = Comment.objects.filter(id=parent_id)
-                    if parent_qs.exists() and parent_qs.count() == 1:
-                        parent_obj = parent_qs.first()
+                    # get parent object by id
+                    parent_qs = Comment.objects.get(id=parent_id)
 
-                comment, created = Comment.objects.get_or_create(
-                                                   user = user_profile.user,
+
+                reply, created = Reply.objects.get_or_create(
+                                                   user = request.user,
                                                    content = content,
-                                                   feed = feed.pk,
-                                                   commented_by = commented_by,
                                                    view_by = view_by,
-                                                   parent= parent_obj,
+                                                   parent= parent_qs,
                                                    )
+                reply = get_object_or_404(Reply, pk=pk)
+                is_liked = False
+                if reply.likes.filter(id=userprofile.id).exists():
+                    is_liked = True
+            except:
+                pass
+
             messages.add_message(request, messages.SUCCESS, 'Reply sent!')
             # return redirect('feed:feed_detail', pk=feed.pk)
             return HttpResponseRedirect(reverse('feed:feed_detail', kwargs={ "pk":feed.pk }))
@@ -267,6 +270,7 @@ def feed_detail(request, pk):
          'feed': feed,
          'is_liked': is_liked,
          'total_likes': feed.get_total_likes(),
+         'reply': reply,
          'comments': comments,
          # 'comment_form': comment_form
          }
@@ -450,6 +454,33 @@ def like_comment(request):
         return HttpResponseRedirect(url_)
 
 
+
+
+def like_reply(request):
+    user_profile = request.user.userprofile
+
+    reply= get_object_or_404(Reply, id=request.POST.get('id'))
+
+    is_liked = False
+
+    if reply.likes.filter(id=user_profile.id).exists():
+        reply.likes.remove(user_profile)
+        is_liked = False
+    else:
+        reply.likes.add(user_profile)
+        is_liked = True  
+
+    context = {
+         'reply': reply,
+         'is_liked': is_liked,
+         'total_likes': reply.get_total_likes(),
+    }
+    if request.is_ajax():
+        html = render_to_string('partials/like_reply_section.html', context, request=request)
+        return JsonResponse({"form": html})
+
+    # url_ = obj.get_absolute_url()
+    # return HttpResponseRedirect(url_)
 
     
 

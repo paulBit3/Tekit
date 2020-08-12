@@ -212,19 +212,6 @@ class Feed(models.Model):
         return f"{self.text[:50]}..."
   
 
-# class CommentManager(models.Manager):
-#     """comment manager"""
-#     def all(self):
-#         query_set= super(CommentManager, self).filter(parent=None)
-#         return query_set
-
-#     def filter_by_instance(self, instance):
-#         content_type = ContentType.objects.get_for_model(instance.__class__)
-#         obj_id = instance.id
-#         query_set= super(CommentManager, self).filter(content_type=content_type, object_id=obj_id).filter(parent=None)
-#         return 
-        
-
 # Comment class
 class Comment(models.Model):
     """Managing feeds or topic User comment about"""
@@ -234,7 +221,6 @@ class Comment(models.Model):
     likes = models.ManyToManyField(UserProfile, blank=True, related_name='likes')
     content = models.TextField(max_length=160, blank=False, null=False)
     commented_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='commented')
-    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE, related_name='replies') # reply comment
     is_read = models.BooleanField(blank=True, default=False)
     read_time = models.PositiveSmallIntegerField(verbose_name='Read Time', default=0)
     date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -242,7 +228,9 @@ class Comment(models.Model):
     views = models.IntegerField(default=0)
     view_by = models.ForeignKey(UserProfile, verbose_name='View', on_delete=models.CASCADE, related_name='viewed')
     approved = models.BooleanField(default=True)   # manually deactivate inappropriate comments from admin site
+    is_public = models.BooleanField(default=False) # comment moderator
     # approved = models.BooleanField(default=True)  # to prevent spam
+
     # objects= CommentManager()
 
     class meta:
@@ -282,13 +270,17 @@ class Comment(models.Model):
         markdown_text = markdown(content)
         return mark_safe(markdown_text)
 
-    def comment_reply(self):   # replies
-        return Comment.objects.filter(parent=self)
+    # def children(self):   
+    #     # Return replies of a comment
+    #     return Comment.objects.filter(parent=self)
 
 
-    @property
-    def foo(self):
-        return self._foo
+    # @property
+    # def is_parent(self):
+    #     # Return True if instance is a parent
+    #     if self.parent is not None:
+    #         return False
+    #     return True
     
     def comments(self):
         instance = self
@@ -298,11 +290,29 @@ class Comment(models.Model):
         return 'Comment {} - by {}'.format(self.content, self.user.username)[:30]
 
 
-class ReplyComment(models.Model):
-    """docstring for ReplyComment"""
-    def __init__(self, arg):
-        super(ReplyComment, self).__init__()
-        self.arg = arg
+class Reply(models.Model):
+    """Reply Comment class"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='replies')
+    parent = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replies') # reply comment
+    content = models.TextField(max_length=160, blank=False, null=False)
+    likes = models.ManyToManyField(UserProfile, blank=True, related_name='r_likes')
+    views = models.IntegerField(default=0)
+    view_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='read')
+    date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
+    is_public = models.BooleanField(default=False) # reply moderator
+
+    class Meta:
+        """A Meta class"""
+        ordering = ['-date_added']
+            
+
+
+    def get_total_likes(self):
+        return self.likes.count()
+
+
+    def __str__(self):
+        return 'Reply by {} - to {}'.format(self.user.username, str(self.parent))
         
 
 # The LikeDislikeManager() model manager 

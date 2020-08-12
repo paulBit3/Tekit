@@ -11,5 +11,8 @@ urlpatterns = [
     path('', include('feed.urls')),
     # Like comment
     path('like_comment/', views.like_comment, name='like_comment'),
+    # like reply
+    path('like_reply/', views.like_reply, name="like_reply"),
+    # like feed
     path('like_feed', views.like_feed, name='like_feed'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

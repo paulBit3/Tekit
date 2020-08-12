@@ -42,6 +42,7 @@
 
 {% block javascript %}
 
+<!-- Like comment -->
 <script type="text/javascript">
     $(document).on('click', '#like', function(event){
         event.preventDefault();
@@ -61,6 +62,31 @@
         });
     });
 
+</script>
+
+<!-- Like reply -->
+<script type="text/javascript">
+    $(document).ready(function(event){
+        $(document).on('click', '#like-reply', function(event){
+            event.preventDefault();
+            var pk = $(this).attr('value');
+
+            $.ajax({
+                type:'POST',
+                url:'/like_reply/',
+                data: {
+                    'id': pk,
+                    'csrfmiddlewaretoken':'{{ csrf_token }}'
+                },
+                success: function(response){
+                    $('#like-reply-section').html(response['form'])
+                },
+                error: function(rs, e){
+                    console.log(rs.responseText)
+                },
+            });
+        });
+    });
 </script>
 
 {% endblock javascript %}
