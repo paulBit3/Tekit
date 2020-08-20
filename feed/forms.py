@@ -25,7 +25,7 @@ class FeedForm(forms.ModelForm):
         model = Feed
         fields = ['text', 'image',]
         labels = {'text': ''}
-        widgets = {'text': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'placeholder': 'Type your feed here'})}
+        widgets = {'text': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'class': 'form-control', 'placeholder': 'Type your feed here'})}
 
 
 class CommentForm(forms.ModelForm):

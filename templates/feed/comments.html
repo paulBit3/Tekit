@@ -38,39 +38,48 @@
 				        <blockquote>
 
 				         <small>Posted by:</small> <strong>{{ comment.user.username|capfirst }}</strong> - <small class="date text-muted">{{ comment.date_added}}</small>
-					  	 <!--  <p card-text>#{{ comment.content|slice:":300" }}</p> -->
-					  	 <p class="mb-0"><small>{{ comment.content|markdown }}</small></p>
-					        <!-- Comment like section -->
-					        <div id="like-section">
-					        	{% include 'partials/like_section.html' %}
-						    </div>
-					  	 	{% for reply in comment.replies.all %}
-					  	 	<small>by <strong>{{ reply.user.username|capfirst }}</strong></small><p class="mb-0"><small>{{ reply.content|markdown }}</small></p>
-					  	 	  <!-- Reply like section -->
-					  	 	  <div id="like-reply-section">
-					        	{% include 'partials/like_reply_section.html' %}
-						      </div>
-					  		{% endfor %}
-					        
-					  	 	<div class="panel-footer clearfix">
-								<a href="" class="btn "><i class="fa fa-window-close" aria-hidden="true"></i>Cancel</a>
+				         <div id="captions">
+				         	<div class="comment">
+				         		<div class="caption" data-id="{{ comment.pk }}">
+					         		<div class="usertext">
+					         			 <!--  <p card-text>#{{ comment.content|slice:":300" }}</p> -->
+									  	 <p class="mb-0"><small>{{ comment.content|markdown }}</small></p>
+									        <!-- Comment like section -->
+									        <div id="like-section">
+									        	{% include 'partials/like_section.html' %}
+										    </div>
+									  	 	{% for reply in comment.replies.all %}
+									  	 	<small>by <strong>{{ reply.user.username|capfirst }}</strong></small><p class="mb-0"><small>{{ reply.content|markdown }}</small></p>
+									  	 	  <!-- Reply like section -->
+									  	 	  <div id="like-reply-section">
+									        	{% include 'partials/like_reply_section.html' %}
+										      </div>
+									  		{% endfor %}
+									        
+									  	 	<div class="panel-footer clearfix">
+												<a href="" class="btn "><i class="fa fa-window-close" aria-hidden="true"></i>Cancel</a>
 
-								<button class="reply-btn btn " type="button" data-id="{{ comment.pk }}"><i class="fa fa-reply-all"></i>Reply</button>
-							</div>
-                            <!-- <div id="replyform-template" style="display: none;"> -->
-                            <div class="comment-reply" style="display: none;">
-						 	    <form name="replyForm" action="{% url 'feed:feed_detail' feed.id %}" method="post">
-							 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ comment.pk }}">
-							 	  	<div class="form-group">
-							 	  		{% csrf_token %}
-							 	  		<label for="reply">Reply:</label>
-							 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying..." required></textarea>
-	                            		<!-- {{ form|crispy }} -->
-							 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
-							 	  	</div>
-							 	  	<input type="submit" class="btn btn-default pull-right reply" value="Reply" name="replyForm">
-							    </form>
-					        </div>
+												<button class="reply-btn btn " type="button" data-id="{{ comment.pk }}"><i class="fa fa-reply-all"></i>Reply</button>
+											</div>
+				                            <div id="replyform-template" style="display: none;">
+				                            <!-- <div class="comment-reply" style="display: none;"> -->
+										 	    <form id="Form1" name="replyForm" action="{% url 'feed:feed_detail' feed.id %}" method="post">
+											 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ comment.pk }}">
+											 	  	<div class="form-group">
+											 	  		{% csrf_token %}
+											 	  		<label for="reply">Reply:</label>
+											 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying..." required></textarea>
+					                            		<!-- {{ form|crispy }} -->
+											 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
+											 	  	</div>
+											 	  	<input type="submit" class="btn btn-default pull-right reply" value="Reply" name="replyForm">
+											    </form>
+									        </div>
+					         		</div>
+					         	</div>
+				            </div>
+				         </div>
+				         
 					  	 <p><small>Read time: {% if comment.read_time <= 1 %} < 1 Minute</small> {% else %}{{ comment.read_time }} minutes {% endif %}</p>
 					  	 
 						</blockquote>
@@ -87,46 +96,31 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-	$(".reply-btn").on("click", function(){
-		$(".comment-reply").toggle();
-	});
-
-</script>
-
-<section class="cta-buttons">
-
-    <div id="booknow" class="trigger" data-id="#booknow-form">
-        <span class="btn">Book now</span>
-    </div>
-
-    <?php // FORMS TRIGGERED ON CLICK ?>
-
-    <div id="booknow-form" class="form-container">BOOK NOW FORM
-    	 <form name="replyForm" action="{% url 'feed:feed_detail' feed.id %}" method="post">
-							 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ comment.pk }}">
-							 	  	<div class="form-group">
-							 	  		{% csrf_token %}
-							 	  		<label for="reply">Reply:</label>
-							 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying..." required></textarea>
-	                            		<!-- {{ form|crispy }} -->
-							 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
-							 	  	</div>
-							 	  	<input type="submit" class="btn btn-default pull-right reply" value="Reply" name="replyForm">
-							    </form>
-    </div>
-</section>
 
 <script type="text/javascript">
-	$('.trigger').click(function () {
-    var currentId = '#' + $('.form-container:visible').prop('id');
-    var newId = $(this).data('rel');
-    console.log(currentId)
-    console.log(newId)
-    $('.form-container').fadeOut();
-    if (currentId != newId) {
-        $(newId).fadeIn();
-    }
-});
+	// $(".reply-btn").on("click", function(){
+	// 	$(".comment-reply").toggle();
+	// });
+
+// 	$(document).ready(function() {
+// 		$(".reply-btn").click(function() {
+//         $(".comment-reply").toggle();
+//   });
+// });
+
+    var formTemplate = document.querySelector('#replyform-template form');
+	var idInput = document.getElementById('id-input');
+
+	function toggleReply(e) {
+	  if (!formTemplate) return;
+
+	  e.target.parentNode.insertBefore(formTemplate, e.target);
+	  idInput.value = e.target.getAttribute('data-id');
+	};
+
+	Array.from(document.querySelectorAll('button.reply-btn'))
+	  .forEach(btn => btn.onclick = toggleReply)
+
+
 </script>
 {% endblock %}

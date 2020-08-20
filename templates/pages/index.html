@@ -7,32 +7,8 @@
 {% block page_header %}
 
   <section id="showcase">
-    <header class="masthead">
-	    <div id="container">
-	    	<div class="row">
-	    		<div class="overlay py-5">
-		    		<div class="col-md-8 col-md-10 mx-auto">
-		    			<div class="site-heading">
-		                  {% if user.is_authenticated %}
-		  	    						<p class="lead">
-		  	    							<a class="logo-text" href="">Tekit</a> is a social Tech platform for sharing your  history related your Tech experience, life or business. Share and learn track your feeds or topics from friends or co-workers.
-		  	    							<a class="btn btn-info btn-sm rounded-pill" data-toggle="" data-target="" href="{% url 'feed:new_topic' %}">New Topic &raquo;</a>
-		  	    						</p>
-
-		  	    					{% else %}
-		                     <p class="lead">
-		                      <a class="logo-text" href="">Tekit</a> is a social Tech platform for sharing your  history related your Tech experience, life or business. Share and learn track your feeds or topics from friends or co-workers.
-		                      <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">+Join &raquo;</a>
-		                    </p>
-		                    
-		                  {% endif %}
-			    		</div>
-			    	</div>
-		    	</div>
-	    	</div>
-	    </div>
-    </header>
- </section> 
+   {% include 'partials/_topnote.html' %}
+ </section>
  <div class="clear"></div>
 
 {% endblock page_header %}
@@ -56,6 +32,7 @@
      <!-- start sidebar -->
     <div id="sidebar">
     	 {% include 'partials/_sidebar.html' %}
+    	 
     </div>
     <!-- end sidebar -->
 
@@ -69,10 +46,10 @@
 							<div class="panel panel-succes">
 
 									<div class="panel-heading">
-										<h2 class="panel-title">
+										<h4 class="panel-title">
 											<i class="circle-up fa fa-arrow-circle-up"
 											aria-hidden="true"></i> Hot topics
-										</h2>
+										</h4>
 									</div>
 								  
 									<div class="panel-body">
@@ -93,7 +70,7 @@
 	                        {% if topics_list %}
 	                         <div class="col-md-6">
 	                         	<div class="card-deck">
-	                         		<div class="item-info"><h3>Topics</h3></div>
+	                         		<div class="item-info"><h4>Topics</h4></div>
 					                  {% include 'feed/topics.html' with topics_list=topics_list hot_topics=False %}
 	                                   {% if show_more_link_topics %}
 	                                     <p>
@@ -105,48 +82,50 @@
 				                
 	                        </div>
 	                        {% endif %}  
-				</div>
+				        
                         <hr>
-						 <h3 class="text-center mb-3">
+						 <h4 class="text-center mb-3">
 						 	<i class="circle-up-right fa fa-arrow-circle-right"
 										aria-hidden="true"></i>
-						 Latest Posts</h3>
+						 Latest Posts</h4>
 					      
 					   
 					    {% if feeds %}
 					      {% for feed in feeds %}
 					        <div class="d-flex bd-highlight">
                         	  <div class="p-2 flex-fill bd-highlight">
-						        <div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
-								  {% if feed.image %}
-					                <div class="card-img-top">
-					                	<img src="{{ feed.image.url }}" alt="">
-					                </div>
-								   {% endif %}
+                        	  	<!-- <div class="card-shadow"> -->
+                        	  		<div class="card shadow bg-light mb-3"style="max-width: 25rem;">
+									  {% if feed.image %}
+						                <div class="card-img-top">
+						                	<img src="{{ feed.image.url }}" alt="">
+						                </div>
+									   {% endif %}
 
-									<small class="card-header text-muted">
-									  Post by {{ user.username }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}
-									</small>
+										<small class="card-header text-muted">
+										  Post by {{ user.username }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}
+										</small>
 
-									<div class="card-body">
-										<p card-text>
-											<!-- Limited the words on the excerpts to 400 characters-->
-											{{ feed.text|slice:":300" }}
-										</p>
-										 <a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count}} comments</small></a><br>
-										 <!-- Check for user authorization-->
-										 {% if not user.is_authenticated %}
-										 <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;</a>
-										 {% else %}
-										 <a href="{% url 'feed:feed_detail' pk=feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
-										    <!-- Like section -->
-									        <!-- <div id="like-feed-section">
-									        	
-										    </div> -->
-										 {% endif %}
-										 
+										<div class="card-body">
+											<p card-text>
+												<!-- Limited the words on the excerpts to 400 characters-->
+												{{ feed.text|slice:":300" }}
+											</p>
+											 <a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count}} comments</small></a><br>
+											 <!-- Check for user authorization-->
+											 {% if not user.is_authenticated %}
+											 <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;</a>
+											 {% else %}
+											 <a href="{% url 'feed:feed_detail' pk=feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
+											    <!-- Like section -->
+										        <!-- <div id="like-feed-section">
+										        	
+											    </div> -->
+											 {% endif %}
+											 
+										</div>
 									</div>
-								</div>
+							   <!-- </div> -->
 							 </div>
 		                    </div>
 						   {% empty %}
@@ -155,7 +134,7 @@
 					      {% else %}
 					     <p><a class="btn btn-primary btn-sm rounded-pill" href=""><i class="fa fa-plus" aria-hidden="true"></i>New Feed</a></p>
 					    {% endif %}
-			  
+			  </div>
 		    </div>
 		    
 		</div>

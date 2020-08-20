@@ -1,21 +1,21 @@
-{% extends 'base.html' %}
+
 
 {% block page_header %}
-
     <header class="masthead">
-      <div class="container">
+      <div id="container">
     			<div class="row">
 	    				<div class="col-md-8 col-md-10 mx-auto">
 	    					<div class="site-heading">
                   {% if user.is_authenticated %}
   	    						<p class="lead">
-  	    							<a class="logo-text" href="">Tekit</a> is a social platform for sharing your Technology history with others. How Technology change your life or your business. Share and learn track your feeds, for any topic from others.
+  	    							<a class="logo-text" href="">Tekit</a> is a social Tech platform for sharing your tech experience in your life, business or at work with friends or co-workers.
+                      <a class="btn btn-info btn-sm rounded-pill" data-toggle="" data-target="" href="{% url 'feed:new_topic' %}">New Topic &raquo;</a>
   	    						</p>
 
   	    					{% else %}
                      <p class="lead">
-                      <a class="logo-text" href="">Tekit</a> is a social platform for sharing your Technology history with others. How Technology change your life or your business. Share and learn track your feeds, for any topic from others.
-                      <a class="btn btn-primary" href="{% url 'accounts:register' %}">+Join &raquo;</a>
+                      <a class="logo-text" href="">Tekit</a> is a social Tech platform for sharing your tech experience in your life, business or at work with friends or co-workers.
+                      <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">+Join &raquo;</a>
                     </p>
                     
                   {% endif %}
@@ -24,10 +24,8 @@
     			</div>
       </div>
     </header>
-    
 {% endblock page_header %}
-{% block content %}
-   {% include 'partials/sidebar.html' %} 
-{% endblock content %}
+
+
 
 

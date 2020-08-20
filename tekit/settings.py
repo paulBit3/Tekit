@@ -155,6 +155,9 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 LOGIN_URL = 'accounts:_login'
 
+# LOGIN URL REDIRECT TO OTHER PAGE
+LOGIN_REDIRECT_URL = 'accounts:profile'
+
 # Messages
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {

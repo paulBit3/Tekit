@@ -161,8 +161,14 @@ body {
 
 /* search section*/
 .form-search {
-    padding-left: 200px;
+  padding-left: 200px;
 }
+
+
+/*.form-search:not(:focus) {
+    background-color: hsla(0,0%,100%,.3);
+}*/
+
 /* end search section */
 
 /*****Login section
@@ -481,6 +487,62 @@ input:focus {
    height: auto;
 }
 
+/* manage card for feed */
+.card-shadow {
+  margin-left: 5rem;
+  margin-top: 5rem;
+  /*background: linear-gradient(0deg, #000, #262626);*/
+}
+
+.card-shadow:before,
+.card-shadow:after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background: linear-gradient(45deg, #fb0094, #0000ff, #59c0f8, #ffff00, #ff0000, #6ab0de, #0000ff, #00ff00, #ffff00, #ff0000);
+    background-size: 400%;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    z-index: -1;
+    animation: animate 20s linear infinite;
+}
+
+.card-shadow:after {
+  filter: blur(10px);
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 300% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+/*    background:
+      repeating-linear-gradient(90deg, transparent 0 50px,
+        rgba(255, 127, 0, 0.25) 50px 56px,
+        transparent 56px 63px,
+        rgba(255, 127, 0, 0.25) 63px 69px,
+        transparent 69px 116px,
+        rgba(255, 206, 0, 0.25) 116px 166px),
+      repeating-linear-gradient(0deg, transparent 0 50px,
+        rgba(255, 127, 0, 0.25) 50px 56px,
+        transparent 56px 63px,
+        rgba(255, 127, 0, 0.25) 63px 69px,
+        transparent 69px 116px,
+        rgba(255, 206, 0, 0.25) 116px 166px),
+      repeating-linear-gradient(-45deg, transparent 0 5px,
+        rgba(143, 77, 63, 0.25) 5px 10px),
+      repeating-linear-gradient(45deg, transparent 0 5px,
+        rgba(143, 77, 63, 0.25) 5px 10px);*/
+
+/* end */
   
 
 /* manage error */
@@ -501,6 +563,33 @@ input:focus {
 
 
 /** comment**/
+
+#captions .comment .caption .usertext {
+  border-radius: 6px 6px 6px 0;
+}
+
+#captions .usertext {
+  padding: 9px 12px 11px 15px;
+  border-radius: 0 6px 6px;
+  line-height: 16px;
+  background: #cde7f4;
+  position: relative;
+}
+
+#captions .comment .caption .usertext:before {
+  border-width: 10px 10px 0 0;
+  bottom: 0;
+  top: inherit;
+}
+
+#captions .usertext:before {
+  border-width: 0 10px 10px 0;
+  border-style: solid;
+  border-color: transparent #2c2f34;
+  position: absolute;
+  top: 0;
+  left: -9px;
+}
 
 /*.comments {
   margin: 20px 0px 20px 20px;
@@ -930,6 +1019,7 @@ aside .card .card-widget {
   color: #FFF;
   cursor: pointer;
   background: #59c0f8;
+ /* border-radius: 1000px;*/
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -966,7 +1056,7 @@ aside .card .card-widget {
 
 #sidebar li {
   margin-bottom: 10px;
-  }
+}
 
 #sidebar li ul {
   padding: 0 30px 40px 30px;
@@ -977,13 +1067,27 @@ aside .card .card-widget {
   padding-left: 30px;
 }
 
+#sidebar a {
+  text-decoration: none;
+}
+
+#sidebar a:hover {
+  color: #59c0f8;
+}
+
+
 #sidebar h2 {
   padding: 0px 30px 10px 30px;
   background: url(../images/sidebar_background.jpg) no-repeat;
-  text-transform: lowercase;
+/*  text-transform: lowercase;*/
   font-weight: normal;
   font-size: 1.6em;
   color: #302D26;
+}
+
+
+.sidebar .widget {
+  background-color: #fff;
 }
 
 #categories li {
@@ -996,6 +1100,9 @@ aside .card .card-widget {
   font-weight: 700;
 }
 
+.menu-image-title {
+  padding-left: 10px;
+}
 .profil-img {
   display: block;
   max-width: 20%;

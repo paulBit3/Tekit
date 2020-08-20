@@ -12,9 +12,8 @@
 	    <ul>
 	    	<li class="current_page_item"><a href="/">Home</a></li>
 	 		<li class="current_page_item">
-	 			<a href="{% url 'accounts:user_profile' request.user.username %}">Profile</a></li>
-	 		<li><a href="{% url 'accounts:profile_detail' request.user.id %}">Account Details</a></li>
-	 		<li><a href="{#% url 'accounts:password_change' request.user.id %}">Change Password</a></li>
+	 			<a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
+	 		<li><a href="{% url 'accounts:password_change' %}">Change Password</a></li>
 	 	</ul>
 	  </div>
 
@@ -46,6 +45,8 @@
 			      			<p>State: <b>{{ request.user.userprofile.state }}</b></p>
 			      			<p>Status: <b>{{ request.user.userprofile.status }}</b></p>
 			      			<p>Date Joined: <b>{{ request.user.userprofile.date_added }}</b></p>
+			      			<!-- <p>Next Birthdate: <b>{{ next_birthday }}</b></p> -->
+
 					    </div>
 					  
 			    </div>

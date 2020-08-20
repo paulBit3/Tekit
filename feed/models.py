@@ -45,7 +45,7 @@ class TopicManager(models.Manager):
 
     def get_latest_topic(self, limit=100):
         #get a limit (default 100) latest topic
-        topics = Topic.objects.order_by('date_added')[:limit]
+        topics = Topic.objects.filter(hot_topics=False).order_by('date_added')[:limit]
         return topics
 
 
@@ -83,6 +83,11 @@ class TopicAction(models.Model):
         else:
             return "static/topimages/topicholder.png"
 
+    #getting the topic name
+    def get_topic(self):
+        if self.name:
+            return self.name
+    
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -119,7 +124,8 @@ class Topic(models.Model):
         self = Topic(from_user=from_user, action=action, is_read=False, date_added=datetime.now())
         self.save()
 
-
+    def get_absolute_url(self):
+        return reverse('feed/topic', args=[self.id])
 
     def __str__(self):
         """Return a string representation of the model."""

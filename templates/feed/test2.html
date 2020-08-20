@@ -70,4 +70,44 @@
 	Array.from(document.querySelectorAll('button.reply'))
 	  .forEach(btn => btn.onclick = toggleReply)
 </script>
+
+
+
+
+<section class="cta-buttons">
+
+    <div id="booknow" class="trigger" data-id="#booknow-form">
+        <span class="btn">Book now</span>
+    </div>
+
+    <?php // FORMS TRIGGERED ON CLICK ?>
+
+    <div id="booknow-form" class="form-container">BOOK NOW FORM
+    	 <form name="replyForm" action="{% url 'feed:feed_detail' feed.id %}" method="post">
+							 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ comment.pk }}">
+							 	  	<div class="form-group">
+							 	  		{% csrf_token %}
+							 	  		<label for="reply">Reply:</label>
+							 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying..." required></textarea>
+	                            		<!-- {{ form|crispy }} -->
+							 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
+							 	  	</div>
+							 	  	<input type="submit" class="btn btn-default pull-right reply" value="Reply" name="replyForm">
+							    </form>
+    </div>
+</section>
+
+<script type="text/javascript">
+	$('.trigger').click(function () {
+    var currentId = '#' + $('.form-container:visible').prop('id');
+    var newId = $(this).data('rel');
+    console.log(currentId)
+    console.log(newId)
+    $('.form-container').fadeOut();
+    if (currentId != newId) {
+        $(newId).fadeIn();
+    }
+});
+</script>
+
 </html>

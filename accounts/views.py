@@ -21,11 +21,11 @@ from accounts.models import *
 
 # Create your views here.
 @login_required
-def profile_detail(request, pk):
+def profile_detail(request, username):
     """Method for user profile detail"""
 
-    user = get_object_or_404(User, pk=request.user.id)
-    # user_profile = user.get_profile()  # retrieve the profile object method from User model
+    user = get_object_or_404(User, username=username)
+    # user_profile = request.user.get_profile()  # retrieve the profile object method from User model
     # Creating a new profile
     uprofile = UserProfile(user=user)
     # uprofile.save()
@@ -44,8 +44,12 @@ def profile_detail(request, pk):
     return render(request, 'accounts/profile_detail.html', context)
 
 
-def user_profile(request, username):
-    user = get_object_or_404(User, username=request.user)
+@login_required
+def get_user_profile(request, username):
+    user = User.objects.get(username=username)
+    if request.user.username != user.username:
+        raise Http404
+    
     context = {'user': user}
     return render(request, 'accounts/userprofile.html', context)
 
@@ -102,6 +106,8 @@ def register(request):
                                                 email=email,
                                                 first_name=first_name
                                                 )
+
+                
                 # A user is not considered to be active unless she/he has verified her/his email-id.
                 user.is_active = False
                 user.save()

@@ -3,39 +3,55 @@
 
 {% block content %}
 
-    <div class="container"> 
-        <div class="row">
-        
-          {% for topic in topics_list %} 
-              <div class="card-deck">
-                 
-                {% if topic.action.image %}
-                  <div class="card">
-                        
-                        <img class="card-img-top" src="{{ topic.action.image.url }}" alt=""> 
-                {% endif %}
-                      <div class="card-block">
-                        <div class="card-body"> 
-                            <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' pk=topic.id %}">{{ topic.action.name }}</a></h5> 
-                            <p class="card-text"> 
-                               
-                            </p> 
-                            <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-primary btn-sm rounded-pill"> 
-                                <i class="fa fa-plus" aria-hidden="true"></i>New Feed 
-                            </a> 
-                           <!--  <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill"> 
-                                <i class="far fa-heart"></i>check check</a>  -->
-                        </div>
-                      </div>
-                  </div>
-                  
+  <div class="container">
+ 
+
+ 
+    <div class="row">
+      {% for topic in topics_list %}
+         {% if topics_list == topics_list and hot_topics == False %}
+          <div class="card-deck">
+            {% if topic.action.image %}
+            <div class="card">
+              <img class="card-img-top" src="{{ topic.action.image.url }}" alt=""> 
+            {% endif %}
+              <div class="card-block">
+                <div class="card-body"> 
+                  <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' pk=topic.id %}">{{ topic.action.name }}</a></h5>
+                  <p class="card-text"> </p> 
+                  <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-primary btn-sm rounded-pill"> 
+                    <i class="fa fa-plus" aria-hidden="true"></i>New Feed</a> 
+                               <!--  <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill"> 
+                                    <i class="far fa-heart"></i>check check</a>  -->
+                </div>
               </div>
+            </div>         
+          </div>
+           {% else %}
+           {% if topics_list == topics_list and hot_topics == True %}
+                <div class="card-deck">
+                {% if topic.action.image %}
+                <div class="card">
+                  <img class="card-img-top" src="{{ topic.action.image.url }}" alt=""> 
+                {% endif %}
+                  <div class="card-block">
+                    <div class="card-body"> 
+                      <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' pk=topic.id %}">{{ topic.action.name }}</a></h5>
+                      <p class="card-text"> </p> 
+                      <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-primary btn-sm rounded-pill"> 
+                        <i class="fa fa-plus" aria-hidden="true"></i>New Feed</a> 
+                                   <!--  <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill"> 
+                                        <i class="far fa-heart"></i>check check</a>  -->
+                    </div>
+                  </div>
+                </div>         
+              </div>
+             {% endif %}
+           {% endif %}
            {% empty %}
-                <div class="card-text"><h3>No feed has been added yet.</h3></div>
-                
+            <div class="card-text"><h3>No feed has been added yet.</h3></div> 
            {% endfor %}
-           
-        </div> 
     </div> 
+  </div> 
 
 {% endblock %}

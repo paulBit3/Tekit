@@ -29,7 +29,7 @@ def index(request):
     """The home page for our Learning app """
     # We set how many hot topics and no hot topics to display
     max_hot_topics = 3
-    max_topics_list = 2
+    max_topics_list = 3
     
     # hot topics
     hot_topics_list = Topic.topic.get_hot_topics()
@@ -88,9 +88,10 @@ def topic(request, pk):
     # Make sure the topic belongs to the current user
     # if topic.from_user != request.user:
     #     raise Http404
-    feeds = Feed.objects.filter().select_related('topic')[:100]
+    feed = Feed.objects.all().filter(date_posted=timezone.now()).order_by('-date_posted')[:100]
+    # feeds = Feed.objects.filter().select_related('topic')[:100]
     # feeds = topic.feed_set.order_by('-date_posted')
-    context = {'topic': topic, 'feeds': feeds}
+    context = {'topic': topic, 'feeds': feed}
     return render(request, 'feed/topic.html', context)
 
 
@@ -111,8 +112,12 @@ def new_topic(request):
         t = Topic()
         t.update_topic(from_user, t_action_id, None)
 
+        topic = Topic.objects.order_by('id').last()
+        t_id = topic.id
+
         messages.add_message(request, messages.INFO, 'Topic successfully created!')
-        return redirect('feed:topics')
+
+        return HttpResponseRedirect(reverse('feed:topic', kwargs={ "pk":t_id }))
 
     else:
         return render(request, 'feed/new_topic.html')
@@ -130,9 +135,9 @@ def show_hot_topics(request):
 def new_feed(request, pk):
     """Add a new feed for a particular topic"""
     topic = Topic.objects.get(pk=pk)
-    user_profile = request.user.userprofile
-    view_by = user_profile
-    # print(user_profile)
+    u_profile = request.user.userprofile
+    view_by = u_profile
+    # print(u_profile)
     if request.method != 'POST':
         form = FeedForm()
     else:
@@ -147,7 +152,7 @@ def new_feed(request, pk):
             # nfeed = nfeed.rotate(18, expand=True)
             nfeed = form.save(commit=False)
             nfeed.topic = topic
-            nfeed.author = user_profile
+            nfeed.author = u_profile
             nfeed.view_by = view_by
             nfeed.save()
             # messages.success(request, '')
@@ -222,8 +227,8 @@ def feed_detail(request, pk):
     comments = feed.comments.all().filter(approved=True).order_by('-created_on')
     is_liked = False
     reply = None
-    user_profile = request.user.userprofile
-    view_by = user_profile
+    u_profile = request.user.userprofile
+    view_by = u_profile
 
     #user in obj.likes.all()
     if feed.likes.filter(id=request.user.pk).exists():
@@ -289,15 +294,15 @@ def add_comment_feed(request, pk):
     comments = feed.comments.all().filter(approved=True).order_by('date_added')[:10]
     new_comment = None
     com_submitted = False
-    user_profile = request.user.userprofile
-    commented_by = user_profile
-    view_by = user_profile
+    u_profile = request.user.userprofile
+    commented_by = u_profile
+    view_by = u_profile
 
     # Comment posted
     if request.method == 'POST':
         content = request.POST.get('content')
         new_comment, created = Comment.objects.get_or_create(
-                                                   user = user_profile.user,
+                                                   user = u_profile.user,
                                                    content = content,
                                                    feed_id = feed.pk,
                                                    commented_by = commented_by,
@@ -413,7 +418,7 @@ def edit_comment(request, pk):
 
 def like_comment(request):
     # user = request.user
-    user_profile = request.user.userprofile
+    u_profile = request.user.userprofile
 
 
     if request.method == 'POST':
@@ -424,12 +429,12 @@ def like_comment(request):
 
         is_liked = False
      
-        if comment_obj.likes.filter(id=user_profile.id).exists():
-            comment_obj.likes.remove(user_profile)
+        if comment_obj.likes.filter(id=u_profile.id).exists():
+            comment_obj.likes.remove(u_profile)
             is_liked = False
         else:
-            comment_obj.likes.add(user_profile)
-            like, created = LikeDislike.objects.get_or_create(liked_by=user_profile, comment_id=comment_id)
+            comment_obj.likes.add(u_profile)
+            like, created = LikeDislike.objects.get_or_create(liked_by=u_profile, comment_id=comment_id)
             if not created:
                 if like.value == 1:
                     like.value -= 1;
@@ -457,17 +462,17 @@ def like_comment(request):
 
 
 def like_reply(request):
-    user_profile = request.user.userprofile
+    u_profile = request.user.userprofile
 
     reply= get_object_or_404(Reply, id=request.POST.get('id'))
 
     is_liked = False
 
-    if reply.likes.filter(id=user_profile.id).exists():
-        reply.likes.remove(user_profile)
+    if reply.likes.filter(id=u_profile.id).exists():
+        reply.likes.remove(u_profile)
         is_liked = False
     else:
-        reply.likes.add(user_profile)
+        reply.likes.add(u_profile)
         is_liked = True  
 
     context = {

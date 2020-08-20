@@ -9,9 +9,9 @@ app_name = 'accounts'
 
 urlpatterns = [
     # user profile
-    path('profile/<str:username>/', views.user_profile, name='user_profile'),
-    path('profiledetails/<int:pk>/', views.profile_detail, name='profile_detail'),
-    path('editprofile/<str:username>', views.edit_profile, name='edit_profile'),
+    path('profile/<str:username>/', views.get_user_profile, name='get_user_profile'),
+    path('profiledetails/<str:username>/', views.profile_detail, name='profile_detail'),
+    path('editprofile/', views.edit_profile, name='edit_profile'),
     path('settings/', views.account_settings, name='account_settings'),
     
     # authentication and authorization

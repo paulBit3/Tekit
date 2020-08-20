@@ -1,43 +1,87 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block content %}
  <!-- start sidebar -->
   <!-- <div id="sidebar"> -->
+  <div id="right-sidebar" class="widget-area grid-25 tablet-grid-25 grid-parent sidebar">
+    {% if '/' == request.path %}
+
     <ul>
       <li id="categories">
-        <h4>F A A N G</h4>
+        <h4 class="widget-title">F A A N G</h4>
         
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Apple</a></li>
-          <li><a href="#">Amazon</a></li>
-          <li><a href="#">Netflix</a></li>
-          <li><a href="#">Google</a></li>
+          <li><a href="#"><img width="36" height="36" src="{% static 'images/facebook.png' %}" alt="Facebook">
+          <span class="menu-image-title">Facebook</span></a></li>
+          <li><a href="#"><img width="36" height="36" src="{% static 'images/apple.png' %}" alt="Apple">
+          <span class="menu-image-title">Apple</span></a></li>
+          <li><a href="#"><img width="36" height="36" src="{% static 'images/amazon2.jpg' %}" alt="Amazon">
+          <span class="menu-image-title">Amazon</span></a></li>
+          <li><a href="#"><img width="36" height="36" src="{% static 'images/netflix_2.png' %}" alt="Netflix">
+          <span class="menu-image-title">Netflix</span></a></li>
+          <li><a href="#"><img width="36" height="36" src="{% static 'images/google.png' %}" alt="Google">
+          <span class="menu-image-title">Google</span></a></li>
      
       </li>
 
-       <h4>IT Learning</h4>
+       <h4 class="widget-title">IT Learning</h4>
        <ul>
-         <li><a href="#">Google IT Certificate</a></li>
-         <li><a href="#">Coursera</a></li>
-         <li><a href="#">MIT</a></li>
-         <li><a href="#">Microsoft</a></li>
+         <li><a href="#"><img width="36" height="36" src="{% static 'images/mitlogo.png' %}" alt="Microsoft">
+          <span class="menu-image-title">MIT</span></a></li>
+         <li><a href="#"><img width="36" height="36" src="{% static 'images/mslogo.jpg' %}" alt="Microsoft">
+          <span class="menu-image-title">Microsoft</span></a></li>
          <li><a href="#"></a></li>
        </ul>
-
-       <h4>Programming</h4>
-       <ul>
-          <li id="categories">
-            <li><a href="#">Python</a></li>
-            <li><a href="#">Machine Learning</a></li>
-            <li><a href="#">Deep Learning</a></li>
-            <li><a href="#">JavaScript</a></li>
-            <li><a href="#">Java</a></li>
-          </li>
-        </ul>
     </ul>
+   {% endif %}
  <!--  </div> -->
-    <div class="clear"></div>
+<div class="clear"></div>
+
+  <div class="inside-right-sidebar">
+    <aside class="widget inner-padding widget_nav_menu">
+      <div><ul>
+        <li><a href="">
+          <img width="36" height="36" src="{% static 'images/facebook.png' %}" alt="Facebook">
+          <span class="menu-image-title">Facebook</span></a>
+        </li>
+        <li><a href="">
+          <img width="36" height="36" src="{% static 'images/Instagram.png' %}" alt="Fcaebook">
+          <span class=" menu-image-title">Instagram</span></a>
+        </li>
+        <li><a href="https://www.linkedin.com/in/paul-brou-660884b0/">
+          <img width="36" height="36" src="{% static 'images/linkedin.png' %}"  alt="LinkedIn">
+          <span class="menu-image-title">LinkedIn</span></a>
+        </li>
+      </ul>
+      </div>
+    </aside>
+
+    <br>
+
+    <aside id="recent-posts-2" class="widget inner-padding widget_recent_entries">
+     {% if '/' == request.path %}
+      <h2 class="widget-title">Recent Topics</h2>
+      <ul>
+         {% for topic in topics_list %} 
+        <li> <a href="{% url 'feed:topic' topic.id %}">{{ topic.action.name }}</a> <span class="post-date">{{ topic.date_added|date:"D d M Y" }}</span></li>
+
+        {% endfor %}
+      </ul>
+     {% endif %}
+    </aside>
+
+    <br>
+
+    <aside class="widget inner-padding widget_nav_menu">
+
+      {% include 'partials/_footer.html' %}
+
+    </aside>
+  </div>
+
+  
+</div>
+
 
 <!-- end sidebar -->
 {% endblock %}

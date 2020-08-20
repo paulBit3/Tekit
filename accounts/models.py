@@ -28,8 +28,6 @@ class UserProfile(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
 
-    def __str__(self):
-        return f'{self.user.username} Profil'
 
     # Methods to manage relationship between user
     def get_relationships(self):
@@ -98,6 +96,21 @@ class UserProfile(models.Model):
             # Resize the image
             self.picture = self.picture.resize(width, height)
             self.picture.save(self.picture.path)
+
+
+    def next_birthday(born):
+        today = date.today()
+
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+    def get_absolute_url(self):
+        return reverse('accounts:profile', args=[self.id])
+
+
+    def __str__(self):
+        return f'{self.user.username} Profil'
+
+
 
 
 class RelationshipType(models.Model):

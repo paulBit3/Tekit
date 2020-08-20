@@ -3,14 +3,27 @@
 
 {% block content %}
 
-<div class="container">
-  <div class="jumbotron">
+<div id="container">
+      <!-- start header -->
+  <div id="header">
+    <div id="menu">
+        <ul>
+          <li class="current_page_item"><a href="/">Home</a></li>
+          <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
+          <li><a href="{% url 'accounts:user_profile' request.user.username %}">Profile</a></li>
+          <li><a href="% url 'accounts:profile_detail' request.user.username %">Account</a></li>
+          <li class="last"><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- end header -->
+  <!-- <div class="jumbotron"> -->
     <div class="row">
     
            <div class="container"> 
               <h3>All Topics</h3> 
             {% for topic in topics %}
-            <div class="row"> 
+           <!--  <div class="row">  -->
                     <div class="card-deck">
                 
                         <div class="card">
@@ -36,13 +49,13 @@
                 
               
                
-            </div>
+           <!--  </div> -->
           {% empty %}
             <li class="card-text"><h3>No feed has been added yet.</h3></li>
           {% endfor %}
         </div> 
      
     </div>
-  </div>
+ <!--  </div> -->
 </div>
 {% endblock %}
