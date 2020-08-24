@@ -420,31 +420,24 @@ def like_comment(request):
     # user = request.user
     u_profile = request.user.userprofile
 
+    is_liked = False
 
     if request.method == 'POST':
-        comment_id = request.POST.get('id')
-        #comment_obj = Comment.objects.get(id=comment_id)
-        comment_obj = get_object_or_404(Comment, id=comment_id)
+        comment_obj = get_object_or_404(Comment, id=request.POST.get('id'))
         
+        print(comment_obj)
 
-        is_liked = False
-     
         if comment_obj.likes.filter(id=u_profile.id).exists():
             comment_obj.likes.remove(u_profile)
             is_liked = False
+
         else:
             comment_obj.likes.add(u_profile)
-            like, created = LikeDislike.objects.get_or_create(liked_by=u_profile, comment_id=comment_id)
-            if not created:
-                if like.value == 1:
-                    like.value -= 1;
-                else:
-                    like.value += 1
-            like.save()
-            is_liked = True  
+            is_liked = True
+          
             # print(like)
         context = {
-             'post': comment_obj,
+             'comment': comment_obj,
              'is_liked': is_liked,
              'total_likes': comment_obj.get_total_likes(),
         }

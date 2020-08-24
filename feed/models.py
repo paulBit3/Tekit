@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.contrib import messages
-from django.core.validators import MinLengthValidator
-
+from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 # the fields content_type , object_id , GenericForeignKey , 
 # does not create additional database migrations.
 from django.contrib.contenttypes.fields import GenericRelation
@@ -53,15 +53,16 @@ class TopicAction(models.Model):
     """a class that contains a type of each Topic"""
 
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='topimages/', default='images/topicholder.png', max_length=100)
+    image = models.ImageField(upload_to='topimages/', default='images/topicholder.png', null=True, blank=True, max_length=100)
 
     # Resizing topic photo
     def resize_image(self):
         SQUARE_FIT_SIZE = 300
-        self.image = Image.open(self.image.path)
+        img = Image.open(self.image)
+        width, height = img.size
         
         # Check if image needs to be resized.
-        if self.image.width > SQUARE_FIT_SIZE or self.image.height > SQUARE_FIT_SIZE:
+        if width > SQUARE_FIT_SIZE or height > SQUARE_FIT_SIZE:
             # Calculate the new width and height to resize to
             if width > height:
                 height = int((SQUARE_FIT_SIZE / width) * height)
@@ -71,14 +72,18 @@ class TopicAction(models.Model):
                 height = SQUARE_FIT_SIZE
 
             # Resize the image
-            self.image = self.image.resize(width, height)
-            self.image.save(self.iamge.path) 
-    
+            output_size = (width, height)
+            # img = img.resize(width, height)
+            img = img.thumbnail(output_size)
+            if img is not None:
+                img.save(img) 
+        
+        super(TopicAction, self).save(*args, **kwargs)
 
       # Handling image location
     @property
     def image_url(self):
-        if self.image:
+        if self.image and hasattr(self.image, 'url'):
             return self.image.url
         else:
             return "static/topimages/topicholder.png"
@@ -151,7 +156,7 @@ class Feed(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     text = models.TextField(max_length=160, blank=False, null=False)
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d/')
+    image = models.ImageField(null=True, blank=True, upload_to='photos/%Y/%m/%d/', default='photos/feedholder.png')
     status = models.IntegerField(choices = STATUS, default=1)
     likes = models.ManyToManyField(User, blank=True, related_name='feed_liked')
     is_read = models.BooleanField(blank=False, default=False)
@@ -170,12 +175,15 @@ class Feed(models.Model):
 
 
     # Resizing the user profile photo
-    def resize_image(self):
+    def save(self, *args, **kwargs):
         SQUARE_FIT_SIZE = 300
-        self.image = Image.open(self.image.path)
-        
+        # img_path = settings.MEDIA_ROOT
+        img = Image.open(self.image)
+        # print(img)
+        width, height = img.size
+
         # Check if image needs to be resized.
-        if self.image.width > SQUARE_FIT_SIZE or self.image.height > SQUARE_FIT_SIZE:
+        if width > SQUARE_FIT_SIZE or height > SQUARE_FIT_SIZE:
             # Calculate the new width and height to resize to
             if width > height:
                 height = int((SQUARE_FIT_SIZE / width) * height)
@@ -185,8 +193,14 @@ class Feed(models.Model):
                 height = SQUARE_FIT_SIZE
 
             # Resize the image
-            self.image = self.image.resize(width, height)
-            self.image.save(self.iamge.path)
+            # img = img.resize(width, height)
+            output_size = (width, height)
+            print(output_size)
+            img = img.thumbnail(output_size)
+            if img is not None:
+                img.save(img)
+
+        super(Feed, self).save(*args, **kwargs) 
 
 
    # approve user feed reed displaying
@@ -225,7 +239,7 @@ class Comment(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     likes = models.ManyToManyField(UserProfile, blank=True, related_name='likes')
-    content = models.TextField(max_length=160, blank=False, null=False)
+    content = models.TextField(validators=[MaxLengthValidator(160)], blank=False, null=False)
     commented_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='commented')
     is_read = models.BooleanField(blank=True, default=False)
     read_time = models.PositiveSmallIntegerField(verbose_name='Read Time', default=0)

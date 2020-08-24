@@ -13,8 +13,9 @@
 
 {% endblock page_header %}
 
-<div id="content">
+
 {% block content %}
+
      <!-- Preloader Start -->
       <div id="preloader-active">
           <div class="preloader d-flex align-items-center justify-content-center">
@@ -37,9 +38,10 @@
     <!-- end sidebar -->
 
   {% block sidebar %} {% endblock sidebar %}
+<div id="container">
     <section id="feedlist" class="py-5">
 		<div class="top-feed-container">
-			<div id="container" class="jumbotron">
+			<!-- <div id="container" class="jumbotron"> -->
 				<div class="row">
 					<div class="col-md-6">
 						{% if hot_topics_list %}
@@ -68,17 +70,17 @@
 					 
                         <hr>
 	                        {% if topics_list %}
-	                         <div class="col-md-6">
+	                         <div class="col-sm-6">
 	                         	<div class="card-deck">
-	                         		<div class="item-info"><h4>Topics</h4></div>
+                                 
+					            </div>
+					            <div class="item-info"><h4>Topics</h4></div>
 					                  {% include 'feed/topics.html' with topics_list=topics_list hot_topics=False %}
 	                                   {% if show_more_link_topics %}
 	                                     <p>
 	                                     	<a href="topics/all/">See all topics</a>
 					                     </p>
 					                    {% endif %}
-					            
-					            </div>
 				                
 	                        </div>
 	                        {% endif %}  
@@ -94,11 +96,15 @@
 					      {% for feed in feeds %}
 					        <div class="d-flex bd-highlight">
                         	  <div class="p-2 flex-fill bd-highlight">
-                        	  	<!-- <div class="card-shadow"> -->
+                        	  	<div class="shadow">
                         	  		<div class="card shadow bg-light mb-3"style="max-width: 25rem;">
 									  {% if feed.image %}
 						                <div class="card-img-top">
-						                	<img src="{{ feed.image.url }}" alt="">
+						                	<img width="100" height="100" src="{{ feed.image.url }}" alt="">
+						                </div>
+						               {% else %}
+						                <div class="card-img-top">
+						                	<img width="100" height="100" src="{% static 'photos/feedholder.png' %}" alt="">
 						                </div>
 									   {% endif %}
 
@@ -111,21 +117,21 @@
 												<!-- Limited the words on the excerpts to 400 characters-->
 												{{ feed.text|slice:":300" }}
 											</p>
-											 <a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count}} comments</small></a><br>
+											 
 											 <!-- Check for user authorization-->
-											 {% if not user.is_authenticated %}
-											 <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;</a>
-											 {% else %}
-											 <a href="{% url 'feed:feed_detail' pk=feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
-											    <!-- Like section -->
-										        <!-- <div id="like-feed-section">
-										        	
-											    </div> -->
-											 {% endif %}
+											{% if not request.user.is_authenticated %}
+											<small>Comments: {{ feed.comments.count}} comments</small>
+											 <button class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;</button>
+											{% else %}
+											<a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count}} comments</small>
+											</a>
+											<a href="{% url 'feed:feed_detail' pk=feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
+											{% endif %}
+											
 											 
 										</div>
 									</div>
-							   <!-- </div> -->
+							   </div>
 							 </div>
 		                    </div>
 						   {% empty %}
@@ -135,7 +141,7 @@
 					     <p><a class="btn btn-primary btn-sm rounded-pill" href=""><i class="fa fa-plus" aria-hidden="true"></i>New Feed</a></p>
 					    {% endif %}
 			  </div>
-		    </div>
+		    <!-- </div> -->
 		    
 		</div>
 		<!-- <button class="btn btn-primary " data-toggle="modal" data-target="#authModal">Make An Inquiry</button> -->

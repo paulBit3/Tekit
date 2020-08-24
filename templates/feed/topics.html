@@ -6,12 +6,13 @@
   <div class="container">
  
 
- 
     <div class="row">
       {% for topic in topics_list %}
          {% if topics_list == topics_list and hot_topics == False %}
+
           <div class="card-deck">
             {% if topic.action.image %}
+            <div class="card-group">
             <div class="card">
               <img class="card-img-top" src="{{ topic.action.image.url }}" alt=""> 
             {% endif %}
@@ -25,14 +26,14 @@
                                     <i class="far fa-heart"></i>check check</a>  -->
                 </div>
               </div>
-            </div>         
+            </div></div>         
           </div>
            {% else %}
            {% if topics_list == topics_list and hot_topics == True %}
                 <div class="card-deck">
                 {% if topic.action.image %}
-                <div class="card">
-                  <img class="card-img-top" src="{{ topic.action.image.url }}" alt=""> 
+                <div class="card" style="width: 10rem">
+                  <img class="card-img-top" src="{{ topic.action.image.url }}" alt="" style="width: 10rem"> 
                 {% endif %}
                   <div class="card-block">
                     <div class="card-body"> 

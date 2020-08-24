@@ -38,7 +38,6 @@
         </div>
     </div>
 
-    {% include 'base/js.html' %}
 
 {% block javascript %}
 
@@ -52,7 +51,7 @@
             type: 'POST',
             url: "/like_comment/",
             data: {'id':pk, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
-            dataType: 'json',
+            // dataType: 'json',
             success: function(response){
                 console.log($('#like-section').html(response['form']));
             },
@@ -89,6 +88,8 @@
     });
 </script>
 
+ {% include 'base/js.html' %}
+ 
 {% endblock javascript %}
 
 <!-- <script>

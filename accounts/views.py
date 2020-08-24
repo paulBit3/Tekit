@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib import auth, messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
 
@@ -83,8 +84,6 @@ def edit_profile(request):
 
 # We will not authenticate the user, instead we will sent an activation link
 def register(request):
-    if request.user.is_authenticated:
-        return redirect('accounts:userprofile', username=request.user.username)
 
     if request.method == 'POST':
         first_name = request.POST['full_name']
@@ -139,6 +138,9 @@ def register(request):
 
 
 def _login(request):
+    if request.user.is_authenticated:
+        return redirect('accounts:get_user_profile', username=request.user.username)
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -167,6 +169,14 @@ def logout(request):
 # Sent activation link
 def activation_sent(request):
     return render(request, 'accounts/account_activation_sent.html')
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        return password_reset(request, 
+            from_email=request.POST.get('email'))
+    else:
+        return render(request, 'accounts/password_reset.html')
 
 
 # Activate user creating account

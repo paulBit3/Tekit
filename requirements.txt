@@ -1,6 +1,12 @@
-Django~>3.0
-Pillo~>5.3.0
+asgiref==3.2.10
+Django==3.0.8
+django-cors-headers==3.4.0
+django-crispy-forms==1.9.1
+django-markdown-deux==1.0.5
+markdown2==2.3.9
+Pillow==7.2.0
 psycopg2==2.8.5
 pytz==2020.1
+six==1.15.0
 sqlparse==0.3.1
-django-crispy-forms==1.9.1
+utils==1.0.1

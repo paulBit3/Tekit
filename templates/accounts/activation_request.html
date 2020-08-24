@@ -7,4 +7,6 @@
        {{protocol}}://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
 
        Your username is: {{ user.get_username }}
+       Thanks,
+       The Beam Team
        {% endautoescape %}

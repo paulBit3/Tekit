@@ -40,7 +40,7 @@
 						<div class="card-body">
 							{% if feed.image %}
 							  <div class="card-img-top">
-								<img src="{{ feed.image.url }}" alt="">
+								<img width="100" height="100" src="{{ feed.image.url }}" alt="">
 							  </div>
 							{% endif %}
 							<small class="card-header text-muted">
@@ -70,7 +70,9 @@
 						 	  	<div class="form-group">
 						 	  		{% csrf_token %}
 						 	  		<div class="modal-body">
-						 	  		<textarea class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Say something..." required></textarea></div>
+						 	  		<textarea id="content" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Say something..." required></textarea></div>
+						 	  		<small id="charactersLeft"></small> 
+						 	  		<small id="char_count"></small>  
                             		<!-- {{ form|crispy }} -->
 						 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
 						 	  	</div>

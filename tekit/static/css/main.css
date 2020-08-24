@@ -315,7 +315,7 @@ body {
 
 input[type="text"]:focus,
 [type="password"]:focus{
-  border: 2px solid #862d59;
+  border: 1px solid #862d59;
   outline: none;
   box-shadow: 0 0 0 0 !important;
 }
@@ -327,6 +327,9 @@ input [type="email"] {
 input:focus {
   border: 2px solid red;
 }
+
+
+
 
 .form-rounded {
   border-radius: 1rem;
@@ -379,6 +382,28 @@ input:focus {
 .close {
   color: #5f4dee;
 }
+
+.modal-backdrop.fade {
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+.modal-backdrop.fade.in {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+/*.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+  background-color: #333333;
+  opacity:0;
+}*/
+
 
 /*.modal-content button {
   background-color: #5f4dee;
