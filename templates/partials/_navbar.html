@@ -42,7 +42,7 @@
                     <div class="dropdown-items-divide-hr"></div>
                     <a class="dropdown-item" href="{% url 'accounts:get_user_profile' request.user.username %}"><span class="item-text"></span>See your Profile</a>
                     <a class="dropdown-item" href="{% url 'accounts:profile_detail' request.user.username %}"><span class="item-text"></span>Account Details</a>
-                    <a class="dropdown-item" href=""><span class="item-text"></span>Settings</a>
+                    <a class="dropdown-item" href="{% url 'accounts:password_reset' %}"><span class="item-text"></span>Settings</a>
                     <div class="dropdown-items-divide-hr"></div>
                     <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">
                       <i class="fas fa-sign-out-alt"></i> Logout

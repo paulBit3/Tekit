@@ -171,12 +171,12 @@ def activation_sent(request):
     return render(request, 'accounts/account_activation_sent.html')
 
 
-def forgot_password(request):
-    if request.method == 'POST':
-        return password_reset(request, 
-            from_email=request.POST.get('email'))
-    else:
-        return render(request, 'accounts/password_reset.html')
+# def forgot_password(request):
+#     if request.method == 'POST':
+#         return password_reset(request, 
+#             from_email=request.POST.get('email'))
+#     else:
+#         return render(request, 'accounts/password_reset.html')
 
 
 # Activate user creating account
@@ -237,7 +237,7 @@ def update_profile(request, user_id):
 
 # Sent password reset link
 def password_reset_sent(request):
-    return render(request, 'accounts/password_reset_sent.html')
+    return render(request, 'registration/password_reset_sent.html')
 
 
 # password reset request
@@ -250,7 +250,7 @@ def password_reset_request(request):
             if ass_users.exists():
                 current_site = get_current_site(request)
                 subject = 'Password Reset Requested'
-                email_temp_name = 'accounts/password_reset_email.html'
+                email_temp_name = 'registration/password_reset_email.html'
                 email_from = settings.DEFAULT_FROM_EMAIL
 
                 context = {
@@ -267,9 +267,9 @@ def password_reset_request(request):
                 html_message = email
                 user.email_user(subject, html_message, email_from, fail_silently=False)
 
-                return render(request, 'accounts/password_reset_done.html')
+                return render(request, 'registration/password_reset_done.html')
     else:
-        return render(request, 'accounts/password_reset.html')
+        return render(request, 'registration/password_reset_form.html')
 
 
 # Relationship request method

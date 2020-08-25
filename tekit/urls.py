@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('accounts.urls')),
+    path('account/', include('accounts.urls')),
     path('', include('feed.urls')),
     # Like comment
     path('like_comment/', views.like_comment, name='like_comment'),
