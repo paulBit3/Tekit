@@ -11,7 +11,7 @@
       <ul>
         <li class="current_page_item"><a href="/">Home</a></li>
         <li><a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
-        <li><a href="% url 'accounts:profile_detail' request.user.username %">Account</a></li>
+        <li><a href="{% url 'accounts:profile_detail' request.user.username %}">Account</a></li>
         <li class="last"><a href="#">Contact</a></li>
       </ul>
     </div>
