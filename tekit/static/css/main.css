@@ -328,8 +328,17 @@ input:focus {
   border: 2px solid red;
 }
 
-
-
+/*input[type="password"],
+input[type="text"],
+input[type="email"],*/
+input[type="url"],
+input[type="search"],
+textarea {
+  color: #666;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+}
 
 .form-rounded {
   border-radius: 1rem;
@@ -990,14 +999,7 @@ aside .card .card-widget {
   line-height: 1.9;
 }*/
 
-@media (min-width: 500px) {
- /* .content {
-    width: 43%;
-  }*/
-  .back-to-top {
-    margin: 30px;
-  }
-}
+
 /*.content h1 {
   margin-bottom: -10px;
   color: #03a9f4;
@@ -1009,27 +1011,70 @@ aside .card .card-widget {
 }
 */
 
+/* =Media Queries
+----------------------------------------------- */
+.nav-mobile {
+  display:none; /* Hide from browsers that don't support media queries */
+  cursor:pointer;
+  position:absolute;
+  top:0;
+  right:0;
+  height:40px;
+  width:40px;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+}
+
+
+
+@media screen and (max-width : 760px){
+
+.menu ul {
+    position: static;
+    display: none;
+}    
+
+/*Create vertical spacing*/
+.menu li {
+    margin-bottom: 1px;
+}
+/*Make all menu links full width*/
+.menu ul li, li a {
+    width: 100%;
+}
+/*Display 'show menu' link*/
+.menu {
+    display:block;
+    }
+}
+
+
+
+}
+/* =End Media Queries
+----------------------------------------------- */
 
 #header {
   height: 42px;
 }
 
-#menu {
+.menu {
   float: right;
 }
 
-#menu ul {
+.menu ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-#menu li {
+.menu li {
   display: block;
   float: left;
   height: 42px;
 }
-#menu a {
+.menu a {
   display: block;
   padding: 2px 20px 2px 20px;
   margin-top: 10px;
@@ -1049,18 +1094,18 @@ aside .card .card-widget {
   border-top-right-radius: 5px;
 }
 
-#menu .last {
+.menu .last {
   margin-right: 20px;
 }
 
-#menu a:hover {
+.menu a:hover {
   color: #5f4dee;
 }
 
-#menu .current_page_item {
+.menu .current_page_item {
 
 }
-#menu .current_page_item a {
+.menu .current_page_item a {
 
 }
 

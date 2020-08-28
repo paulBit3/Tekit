@@ -382,16 +382,6 @@ class LikeDislike(models.Model):
         return '%s %s %f' % (self.liked_by, self.comment, self.feed, self.value)
 
 
-
-class FollowUser(models.Model):
-    """A FollowUser Class"""
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='profile')
-    followed_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='followed_by')
-
-    def __str__(self):
-        return "%s Followed by %s" % (self.profile, self.followed_by)
-
-
 #Getting readtime
 @receiver(pre_save, sender=Comment)
 def pre_save_comment_receiver(sender, instance, *args, **kwargs):

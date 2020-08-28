@@ -13,6 +13,9 @@ urlpatterns = [
     path('users/profiledetails/<str:username>/', views.profile_detail, name='profile_detail'),
     path('users/editprofile/', views.edit_profile, name='edit_profile'),
     path('users/settings/', views.account_settings, name='account_settings'),
+    path('users/follow/<str:username>/', views.follow, name='follow'),
+    path('users/unfollow/<str:username>/', views.unfollow, name='unfollow'),
+    path('users/members/', views.ProfileListView.as_view(), name='members'),
     
     # authentication and authorization
     path('login', views._login, name='_login'),

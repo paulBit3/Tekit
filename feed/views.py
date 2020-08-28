@@ -480,7 +480,6 @@ def like_reply(request):
     # url_ = obj.get_absolute_url()
     # return HttpResponseRedirect(url_)
 
-    
 
 
     

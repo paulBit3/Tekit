@@ -148,8 +148,6 @@ function showForm() {
 
 
 
-
-
  // Reply to comment
 // $(".reply-btn").click(function(event){
 //     event.preventDefault();
@@ -161,7 +159,6 @@ function showForm() {
 //     $(".comment-reply").fadeToggle();
 //   });
 // });
-
 
 
 // Back to top page

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} <b>{{ page_title }}</b> {% endblock %}
+
+{% block content %}
+
+    {% for member in userprofile_list %}
+
+     <div class="card bg-light mb-3" style="max-width: 35rem;">
+     	<div class="card-header"><h4><b>{{ page_title }}</b></h4></div>
+     	<div class="card-body">
+     		<p> <b>{{ member.name}}</b></p>
+			<p> <b>{{ member.status }}</b></p>
+	    </div>
+	    <span class="">
+
+		 	{% if member.followed %}
+				<a class="btn btn-danger btn-sm rounded-pill" href="{% url 'accounts:unfollow' request.user.username  %}">Unfollow</a>
+			{% else %}
+				<a class="btn btn-primary btn-sm rounded-pill" href="{% url 'accounts:follow' request.user.username  %}">Follow</a>
+			{% endif %}
+
+	    </span>
+	 </div>
+	 
+
+	{% endfor %}
+
+{% endblock %}

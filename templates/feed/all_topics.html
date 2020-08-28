@@ -6,8 +6,8 @@
 <div id="container">
       <!-- start header -->
   <div id="header">
-    <div id="menu">
-        <ul>
+    <div class="menu">
+        <ul class="sf-menu nav-menu">
           <li class="current_page_item"><a href="/">Home</a></li>
           <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
           <li><a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>

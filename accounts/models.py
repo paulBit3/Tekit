@@ -111,6 +111,13 @@ class UserProfile(models.Model):
         return f'{self.user.username} Profil'
 
 
+class FollowUser(models.Model):
+    """A FollowUser Class"""
+    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='profile')
+    followed_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='followed_by')
+
+    def __str__(self):
+        return "%s Followed by %s" % (self.profile, self.followed_by)
 
 
 class RelationshipType(models.Model):

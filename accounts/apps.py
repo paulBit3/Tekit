@@ -6,4 +6,4 @@ class AccountsConfig(AppConfig):
     
     # Iporting our user signal
     def ready(self):
-    	import accouns.mysignal
+    	import accounts.mysignal

@@ -8,12 +8,13 @@
 	<!-- start header -->
 	<div id="header">
 
-	  <div id="menu">
-	    <ul>
+	  <div class="menu">
+	    <ul class="sf-menu nav-menu">
 	    	<li class="current_page_item"><a href="/">Home</a></li>
 	 		<li class="current_page_item">
 	 			<a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
 	 		<li><a href="{% url 'accounts:password_change' %}">Change Password</a></li>
+	 		<li><a href="{% url 'accounts:members' %}">Members</a></li>
 	 	</ul>
 	  </div>
 
@@ -30,26 +31,28 @@
     <div id="container">
     	<div class="row-fluid">
     		<div class="col-lg-6 col-md-6 col-sm-6">
+    			
     			<div class="card bg-light mb-3" style="max-width: 35rem;">
-		      		<div class="card-header"><h4><b>{{request.user.userprofile.name}}</b></h4></div>
-		      		  {% if user.userprofile.picture %}
-                        <img class="img-responsive rounded-circle profil-img" src="{{ request.user.userprofile.picture.url }}" alt=""> 
-                        {% endif %}
+		      		<div class="card-header"><h4><b>{{ u_profile.name}}</b></h4></div>
+		      		  {% if  u_profile.picture %}
+                        <img class="img-responsive rounded-circle profil-img" src="{{ u_profile.picture.url }}" alt=""> 
+                      {% endif %}
+                      
 			      		<div class="card-body">
 			      			
 			      			<p>UserName: <b>{{request.user.username}}</b></p>
 			      			<p>Email: <b>{{ request.user.email }}</b></p>
-			      			<p>Phone: <b>{{ request.user.userprofile.phone_no }}</b></p>
-			      			<p>Birthdate: <b>{{ request.user.userprofile.birthdate }}</b></p>
-			      			<p>City: <b>{{ request.user.userprofile.city }}</b></p>
-			      			<p>State: <b>{{ request.user.userprofile.state }}</b></p>
-			      			<p>Status: <b>{{ request.user.userprofile.status }}</b></p>
-			      			<p>Date Joined: <b>{{ request.user.userprofile.date_added }}</b></p>
+			      			<p>Phone: <b>{{ u_profile.phone_no }}</b></p>
+			      			<p>Birthdate: <b>{{ u_profile.birthdate }}</b></p>
+			      			<p>City: <b>{{ u_profile.city }}</b></p>
+			      			<p>State: <b>{{ u_profile.state }}</b></p>
+			      			<p>Status: <b>{{ u_profile.status }}</b></p>
+			      			<p>Date Joined: <b>{{ u_profile.date_added }}</b></p>
 			      			<!-- <p>Next Birthdate: <b>{{ next_birthday }}</b></p> -->
 
 					    </div>
-					  
-			    </div>
+			    </div>  
+
 			</div>
 		</div>
 	</div>

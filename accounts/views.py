@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.urls import reverse
+from django.db.models import Q
 
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode
@@ -12,6 +14,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib import auth, messages
 from django.contrib.auth import authenticate, login
+from django.views.generic.list import ListView
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
@@ -25,19 +28,18 @@ from accounts.models import *
 def profile_detail(request, username):
     """Method for user profile detail"""
 
-    user = get_object_or_404(User, username=username)
-    # user_profile = request.user.get_profile()  # retrieve the profile object method from User model
+    # user = get_object_or_404(User, username=username)
     # Creating a new profile
-    uprofile = UserProfile(user=user)
+    # uprofile = UserProfile(user=user)
     # uprofile.save()
     # user_profile = user.get_profile()
-
-    user_relationships = uprofile.get_relationships()
-    user_request = uprofile.get_friend_request()
+    u_profile = request.user.userprofile
+    user_relationships = u_profile.get_relationships()
+    user_request = u_profile.get_friend_request()
 
     context = {
-         'user': user,
-         'uprofile': uprofile,
+         # 'user': user,
+         'u_profile': u_profile,
          'user_relationships': user_relationships,
          'user_request': user_request
     }
@@ -47,15 +49,40 @@ def profile_detail(request, username):
 
 @login_required
 def get_user_profile(request, username):
-    user = User.objects.get(username=username)
-    if request.user.username != user.username:
-        raise Http404
+    # user = User.objects.get(username=username)
+    u_profile = request.user.userprofile
+    # if request.user.username != user.username:
+    #     raise Http404
     
-    context = {'user': user}
+    context = {'u_profile': u_profile}
     return render(request, 'accounts/userprofile.html', context)
 
     # uprofile_url = '/user/%d' % request.user.id
     # return HttpResponseRedirect(uprofile_url)
+
+
+# Class view to display members
+
+@method_decorator(login_required, name='dispatch')
+class ProfileListView(ListView):
+    model = UserProfile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Member'
+        return context
+
+    def get_queryset(self):
+        profList = UserProfile.objects.all().order_by("-id");
+        for uprofile in profList:
+            uprofile.followed = False
+            obj = FollowUser.objects.filter(profile = uprofile, followed_by=self.request.user.userprofile)
+            if obj:
+                uprofile.followed = True
+        return profList
+
+    
+
 
 
 @login_required
@@ -79,6 +106,7 @@ def edit_profile(request):
              'profile': profile
         }
         return render(request, 'accounts/edit_profile.html', context)
+
 
 
 
@@ -270,6 +298,21 @@ def password_reset_request(request):
                 return render(request, 'registration/password_reset_done.html')
     else:
         return render(request, 'registration/password_reset_form.html')
+
+
+def follow(request, username):
+    #user = UserProfile.objects.get(pk=pk)
+    u_profile = request.user.userprofile
+    FollowUser.objects.create(profile=u_profile, followed_by = request.user.userprofile)
+    return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={ "username":username }))
+
+
+def unfollow(request, username):
+    u_profile = request.user.userprofile
+    #user = UserProfile.objects.get(pk=pk)
+    FollowUser.objects.filter(profile=u_profile, followed_by = request.user.userprofile).delete()
+    return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={ "username":username }))
+
 
 
 # Relationship request method

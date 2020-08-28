@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Topic, TopicAction, Feed, Comment, Reply, LikeDislike, UserProfile, FollowUser
+from .models import Topic, TopicAction, Feed, Comment, Reply, LikeDislike, UserProfile
 
 # Register your models here.
 
@@ -23,11 +23,6 @@ class ReplyAdmin(admin.ModelAdmin):
 	actions = ['is_public']
 
 
-class FollowUserAdmin(admin.ModelAdmin):
-	list_display = ['profile', 'followed_by']
-	search_fields = ['profile', 'followed_by']
-	list_filter = ['profile', 'followed_by']
-
 
 class LikeDislikeAdmin(admin.ModelAdmin):
 	list_display = ['feed', 'comment', 'liked_by', 'value']
@@ -41,5 +36,4 @@ admin.site.register(TopicAction)
 admin.site.register(Feed)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Reply, ReplyAdmin)
-admin.site.register(FollowUser, FollowUserAdmin)
 admin.site.register(LikeDislike, LikeDislikeAdmin)
