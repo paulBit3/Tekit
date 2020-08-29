@@ -3,7 +3,21 @@
 {% block title %} <b>{{ page_title }}</b> {% endblock %}
 
 {% block content %}
+ <div id="container">
+ 		<!-- start header -->
+	<div id="header">
 
+	  <div class="menu">
+	    <ul class="sf-menu nav-menu">
+	    	<li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
+	 		<li class="current_page_item">
+	 			<a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
+	 		<li><a href="{% url 'accounts:password_change' %}">Change Password</a></li>
+	 	</ul>
+	  </div>
+
+	</div>
+	<!-- end header -->
     {% for member in userprofile_list %}
 
      <div class="card bg-light mb-3" style="max-width: 35rem;">
@@ -25,5 +39,5 @@
 	 
 
 	{% endfor %}
-
+ </div>
 {% endblock %}

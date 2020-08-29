@@ -7,8 +7,13 @@
 
 <div class="login-container">
     <div class="d-flex justify-content-center h100">
-      
+
         <div id="form_right">
+            {% if messages %}
+                {% for message in messages %}
+                  <p class="alert alert-info">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
             <div class="card login">
                 <div class="card-header bg-primary text-white">
                  <h4><i class="fas fa-sign-in-alt"></i>Login</h4>
@@ -39,11 +44,12 @@
                        <div class="form-group">
                            <button type="submit" value="" class="btn btn-primary btn-block rounded-pill">LOGIN</button>
                        </div>
+                       <input type="hidden" name="next" value="{{ next }}">
                     </form>
                      <br>
 
                   <span id="login-help-text">Forgot your
-                    <a class="" href="{% url 'accounts:password_reset' %}">username / password?</a></span>
+                    <a class="m-auto" href="{% url 'accounts:password_reset' %}">username / password?</a></span>
                   <span id="signup-text">
                        Not a member?
                     <a class="" href="{% url 'accounts:register' %}">Sign Up</a>

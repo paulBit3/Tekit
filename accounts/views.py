@@ -61,6 +61,31 @@ def get_user_profile(request, username):
     # return HttpResponseRedirect(uprofile_url)
 
 
+# profile update view.
+@login_required
+def profile_update_view(request, pk):
+    user = User.objects.get(pk=pk)
+    form = UserProfileInfoForm(instance=user)
+
+    if request.user.is_authenticated and request.user.id == user.id:
+        if request.method == "POST":
+            user_form = UserProfileInfoForm(request.POST, request.FILES, instance=user)
+
+        if user_form.is_valid():
+            created_prof = user_form.save(commit=False)
+            created_prof.user = request.user
+            created_prof.save()
+
+            # return redirect('accounts:profile_detail', pk=pk)
+            return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={ "pk":pk }))
+    # else:
+    #     raise PermissionDenied
+    context = {"pk": pk,"form": user_form,}
+    return render(request, "accounts/account_update.html", context)
+
+
+
+
 # Class view to display members
 
 @method_decorator(login_required, name='dispatch')
@@ -157,7 +182,7 @@ def register(request):
                 html_message = email
                 user.email_user(subject,  html_message, email_from, fail_silently=True)
                 return render(request, 'accounts/account_activation_sent.html')
-
+                
                 # Log the user in and redirect to home page
                 # login(request, user)
                 # return redirect('index')
@@ -166,8 +191,8 @@ def register(request):
 
 
 def _login(request):
-    if request.user.is_authenticated:
-        return redirect('accounts:get_user_profile', username=request.user.username)
+    # if request.user.is_authenticated:
+    #     return redirect('accounts:get_user_profile', username=request.user.username)
 
     if request.method == 'POST':
         username = request.POST['username']
@@ -178,10 +203,9 @@ def _login(request):
         if user is not None:
             auth.login(request, user)
             #messages.success(request, 'You are now logged in !')
-            # return redirect('feed:topics')
             return redirect('feed:index')
         else:
-            messages.add_message(request, messages.INFO, "Hmm, wrong username or password. Please try again.")
+            messages.error(request, "Hmm, wrong username or password. Please try again.")
             return redirect('accounts:_login')
     else:
         return render(request, 'accounts/login.html')
@@ -191,7 +215,8 @@ def logout(request):
     if request.method == 'POST':
         auth.logout(request)
         messages.add_message(request, messages.INFO, 'You are logged out!')
-    return redirect('feed:index')
+    # return redirect('feed:index')
+    return redirect('accounts:_login')
 
 
 # Sent activation link
