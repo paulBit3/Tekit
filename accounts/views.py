@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -17,6 +18,8 @@ from django.contrib.auth import authenticate, login
 from django.views.generic.list import ListView
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.forms import PasswordResetForm
+from django.forms.models import inlineformset_factory
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 
 from .forms import *
@@ -25,21 +28,15 @@ from accounts.models import *
 
 # Create your views here.
 @login_required
-def profile_detail(request, username):
+def profile_detail(request, pk):
     """Method for user profile detail"""
-
-    # user = get_object_or_404(User, username=username)
-    # Creating a new profile
-    # uprofile = UserProfile(user=user)
-    # uprofile.save()
-    # user_profile = user.get_profile()
-    u_profile = request.user.userprofile
-    user_relationships = u_profile.get_relationships()
-    user_request = u_profile.get_friend_request()
+    profile = request.user.userprofile
+    user_relationships = profile.get_relationships()
+    user_request = profile.get_friend_request()
 
     context = {
          # 'user': user,
-         'u_profile': u_profile,
+         'profile': profile,
          'user_relationships': user_relationships,
          'user_request': user_request
     }
@@ -48,45 +45,43 @@ def profile_detail(request, username):
 
 
 @login_required
-def get_user_profile(request, username):
-    # user = User.objects.get(username=username)
-    u_profile = request.user.userprofile
+def get_user_profile(request, pk):
+
+    profile = request.user.userprofile
     # if request.user.username != user.username:
     #     raise Http404
     
-    context = {'u_profile': u_profile}
+    context = {'profile': profile}
     return render(request, 'accounts/userprofile.html', context)
-
-    # uprofile_url = '/user/%d' % request.user.id
-    # return HttpResponseRedirect(uprofile_url)
 
 
 # profile update view.
 @login_required
-def profile_update_view(request, pk):
+def profile_update(request, pk):
     user = User.objects.get(pk=pk)
-    form = UserProfileInfoForm(instance=user)
+    # profile = UserProfile(user = user)
+    profile = request.user.userprofile
+    profile_form = UserProfileInfoForm(instance=profile)
+    
+    if request.method == 'POST':
+        profile_form = UserProfileInfoForm(request.POST, request.FILES, instance=profile)
+        if profile_form.is_valid():
+            #save user profile info
+            profile_form.save()
 
-    if request.user.is_authenticated and request.user.id == user.id:
-        if request.method == "POST":
-            user_form = UserProfileInfoForm(request.POST, request.FILES, instance=user)
-
-        if user_form.is_valid():
-            created_prof = user_form.save(commit=False)
-            created_prof.user = request.user
-            created_prof.save()
-
+            messages.add_message(request, messages.INFO, 'Your profile has been updated !')
             # return redirect('accounts:profile_detail', pk=pk)
-            return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={ "pk":pk }))
-    # else:
-    #     raise PermissionDenied
-    context = {"pk": pk,"form": user_form,}
-    return render(request, "accounts/account_update.html", context)
+            return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={ "pk":pk, }))
+    else:
+        profile_form = UserProfileInfoForm(instance=profile)
+    context = {"form": profile_form,}
+    return render(request, "accounts/profile_update.html", context)
+ 
 
 
 
 
-# Class view to display members
+# Class view to display list of members
 
 @method_decorator(login_required, name='dispatch')
 class ProfileListView(ListView):
@@ -98,10 +93,11 @@ class ProfileListView(ListView):
         return context
 
     def get_queryset(self):
-        profList = UserProfile.objects.all().order_by("-id");
+        profList = UserProfile.objects.all().order_by("-user_id");
         for uprofile in profList:
+            print(uprofile)
             uprofile.followed = False
-            obj = FollowUser.objects.filter(profile = uprofile, followed_by=self.request.user.userprofile)
+            obj = FollowUser.objects.filter(profile = uprofile, from_user=self.request.user.userprofile.user.id)
             if obj:
                 uprofile.followed = True
         return profList
@@ -139,7 +135,8 @@ def edit_profile(request):
 def register(request):
 
     if request.method == 'POST':
-        first_name = request.POST['full_name']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
@@ -156,13 +153,20 @@ def register(request):
                 user = User.objects.create_user(username=username,
                                                 password=password,
                                                 email=email,
-                                                first_name=first_name
+                                                first_name=first_name,
+                                                last_name=last_name
                                                 )
 
-                
+                user.refresh_from_db()
+
                 # A user is not considered to be active unless she/he has verified her/his email-id.
                 user.is_active = False
                 user.save()
+
+                user.userprofile.first_name = request.POST.get('first_name')
+                user.userprofile.last_name = request.POST.get('last_name')
+
+                user.userprofile.save()
 
                 # Send the account activation email
                 current_site = get_current_site(request)
@@ -248,10 +252,9 @@ def activate(request, uidb64, token):
         # Log the user in and redirect to home page
         login(request, user)
         # return redirect('index')
-        # messages.success(request,  'Your account has been activated successfully.')
-        # return redirect('feed:index')
-        return redirect('accounts:activation_complete')
-        # return render(request, 'accounts/login.html')
+        messages.success(request,  'Your account has been activated successfully.')
+        return redirect('/')
+        # return redirect('accounts:activation_complete')
     else:
         return HttpResponse('Link Expired!')
 
@@ -271,11 +274,6 @@ def account_settings(request):
     return render(request, 'accounts/settings.html', {'form':setform})
 
 
-# Update user profile
-def update_profile(request, user_id):
-    user = User.objects.get(pk=user_id)
-    user.profile.photo
-    user.save()
 
 # def update_profile(request):
 #     if request.method == 'POST':
@@ -326,18 +324,39 @@ def password_reset_request(request):
 
 
 def follow(request, username):
-    #user = UserProfile.objects.get(pk=pk)
-    u_profile = request.user.userprofile
-    FollowUser.objects.create(profile=u_profile, followed_by = request.user.userprofile)
-    return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={ "username":username }))
+    user_to_follow = get_object_or_404(User, username = username)
+    user_profile = request.user.userprofile
+    data = {}
+
+    #chek if user already follow the user to follow
+    followed = FollowUser.objects.filter(user = user_profile, from_user = user_to_follow)
+    is_followed = True if followed else False
+
+    if is_followed:
+        FollowUser.unfollow(user_profile, user_to_follow)
+        data['message'] = "You are already following this user."
+        is_followed = False
+    else:
+        FollowUser.follow(user_profile, user_to_follow)
+        data['message'] = "You are now following {}".format(user_to_follow)
+        is_followed = True
+
+    resp = {
+       "followed": is_followed,
+    }
+    return JsonResponse(data, resp, safe=False)
 
 
-def unfollow(request, username):
-    u_profile = request.user.userprofile
-    #user = UserProfile.objects.get(pk=pk)
-    FollowUser.objects.filter(profile=u_profile, followed_by = request.user.userprofile).delete()
-    return HttpResponseRedirect(reverse('accounts:profile_detail', kwargs={ "username":username }))
-
+# def follow_user(request, pk):
+#     user_to_follow = get_object_or_404(User, pk=pk)
+#     user_profile = request.user.userprofile
+#     data = {}
+#     if user_to_follow.to_user.filter(id=user_profile.id).exists():
+#         data['message'] = "You are already following this user."
+#     else:
+#         user_to_follow.to_user.add(user_profile)
+#         data['message'] = "You are now following {}".format(user_to_follow)
+#     return JsonResponse(data, safe=False)
 
 
 # Relationship request method

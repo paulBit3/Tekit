@@ -63,7 +63,7 @@
       <h2 class="widget-title">Recent Topics</h2>
       <ul>
          {% for topic in topics_list %} 
-        <li> <a href="{% url 'feed:topic' topic.id %}">{{ topic.action.name }}</a> <span class="post-date">{{ topic.date_added|date:"D d M Y" }}</span></li>
+        <li> <a href="{% url 'feed:topic' topic.id %}">{{ topic.action.name }}</a> <small><span class="post-date">{{ topic.date_added|date:"D d M Y" }}</span></small></li>
 
         {% endfor %}
       </ul>

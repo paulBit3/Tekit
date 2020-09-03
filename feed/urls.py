@@ -24,7 +24,7 @@ urlpatterns = [
     # Page for adding a new entry
     path('new_feed/<int:pk>/', views.new_feed, name='new_feed'),
     # Page for editing a post
-    path('edit_feed/<int:feed_id>/', views.edit_feed, name='edit_feed'),
+    path('edit_feed/<int:pk>/', views.edit_feed, name='edit_feed'),
     # Page that shows all of the feeds
     path('feeds/', views.feeds, name='feeds'),
     # Page that shows all feed details

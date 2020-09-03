@@ -11,7 +11,11 @@
 
  		{% if messages %}
  		 {% for message in messages %}
- 		  <p class="alert alert-info">{{ message }}</p>
+ 		  <p class="alert alert-info alert-dismissible fade show">{{ message }}
+ 		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+					</p>
  		 {% endfor %}
  		{% endif %}
 
@@ -29,9 +33,9 @@
  	<div class="col-lg-6 col-md-6 col-sm-6">
  		<h4></h4>
  		<p>
- 			<a href="{% url 'accounts:get_user_profile' request.user.username %}">My Profile</a>
- 			<a href="{% url 'accounts:profile_detail' request.user.id %}">Account Details</a>
- 			<a href="{% url 'accounts:password_change' request.user.id %}">Change Password</a>
+ 			<a href="{% url 'accounts:get_user_profile' pk=user.id %}">My Profile</a>
+ 			<a href="{% url 'accounts:profile_detail' pk=user.id %}">Account Details</a>
+ 			<a href="{% url 'accounts:password_change' %}">Change Password</a>
  		</p>
  	</div>
  </div>

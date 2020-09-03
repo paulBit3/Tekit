@@ -758,7 +758,7 @@ aside .card .card-widget {
 
 
 
-@media (max-width: 1023px) and (min-width: 641px)
+/*@media (max-width: 1023px) and (min-width: 641px)
   .col-right aside {
     width: 50%;
     float: left;
@@ -768,10 +768,27 @@ aside .card .card-widget {
   .jumbotron {
     padding-bottom: 0; 
 }
-}
+}*/
 
 
 /*END S I D E B A R*/
+
+
+/* crispy form */
+
+.asteriskField {
+    display: none;
+}
+
+/* end crispy form */
+
+.my_list_blue {
+   color: #13A1DA;
+}
+
+.custom-file-input {
+  width: 50%;
+}
 
 /*P r e l o a d e r*/
 

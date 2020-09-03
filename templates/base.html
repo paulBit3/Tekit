@@ -88,6 +88,25 @@
     });
 </script>
 
+<!-- user following -->
+<script type="text/javascript">
+    $("#follow").click(function(e){
+        e.preventDefault();
+        var href = this.href;
+        $.ajax({
+            url : href,
+            success : function(response){
+                if(response["following"]){
+                    $("#follow").html("Unfollow");
+                }
+                else{
+                    $("#follow").html("Follow");
+                }
+            }
+        })
+    })
+</script>
+
  {% include 'base/js.html' %}
  
 {% endblock javascript %}

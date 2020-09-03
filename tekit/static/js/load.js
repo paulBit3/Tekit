@@ -11,8 +11,8 @@ window.addEventListener('load', setup, false);
 
 //Register focus
 function resetup() {
-	var textInput;
-	textInput = document.getElementById('fullname').focus();
+	var text2Input;
+	text2Input = document.getElementById('first_name').focus();
 	// textInput.focus();
 }
 

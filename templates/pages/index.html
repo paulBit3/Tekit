@@ -44,6 +44,15 @@
 			<!-- <div id="container" class="jumbotron"> -->
 				<div class="row">
 					<div class="col-md-6">
+						 {% if messages %}
+			                {% for message in messages %}
+			                 <p class="alert alert-info alert-dismissible fade show">{{ message }}
+			                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							    <span aria-hidden="true">&times;</span>
+							  </button>
+							 </p>
+			                {% endfor %}
+			             {% endif %}
 						{% if hot_topics_list %}
 							<div class="panel panel-succes">
 
@@ -74,14 +83,17 @@
 	                         	<div class="card-deck">
                                  
 					            </div>
-					            <div class="item-info"><h4>Topics</h4></div>
+					            <div class="panel-heading">
+									<h4 class="panel-title"> Topics</h4>
+								</div>
+					            <div class="panel-body">
 					                  {% include 'feed/topics.html' with topics_list=topics_list hot_topics=False %}
 	                                   {% if show_more_link_topics %}
 	                                     <p>
 	                                     	<a href="topics/all/">See all topics</a>
 					                     </p>
 					                    {% endif %}
-				                
+				                </div>
 	                        </div>
 	                        {% endif %}  
 				        
@@ -89,10 +101,9 @@
 						 <h4 class="text-center mb-3">
 						 	<i class="circle-up-right fa fa-arrow-circle-right"
 										aria-hidden="true"></i>
-						 Latest Posts</h4>
+						 Latest <span class="my_list_blue">Posts</span></h4>
 					      
-					   
-					    {% if feeds %}
+					
 					      {% for feed in feeds %}
 					        <div class="d-flex bd-highlight">
                         	  <div class="p-2 flex-fill bd-highlight">
@@ -120,10 +131,10 @@
 											 
 											 <!-- Check for user authorization-->
 											{% if not request.user.is_authenticated %}
-											<small>Comments: {{ feed.comments.count}} comments</small>
+											<small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize }}</small>
 											 <button class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;</button>
 											{% else %}
-											<a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count}} comments</small>
+											<a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize}}</small>
 											</a>
 											<a href="{% url 'feed:feed_detail' pk=feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
 											{% endif %}
@@ -135,11 +146,9 @@
 							 </div>
 		                    </div>
 						   {% empty %}
-					          <li class="card-text"><h3>No feed has been added yet.</h3></li>
-					      {% endfor %}
-					      {% else %}
-					     <p><a class="btn btn-primary btn-sm rounded-pill" href=""><i class="fa fa-plus" aria-hidden="true"></i>New Feed</a></p>
-					    {% endif %}
+					          <span class="card-text info"><h3>No feed has been added yet.</h3></span>
+					       {% endfor %}
+					    
 			  </div>
 		    <!-- </div> -->
 		    
@@ -149,18 +158,8 @@
 
 </div>
 
-   <!-- <section class="py-5">
-   	 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#authModal">
-   +Join &raquo;
-  </button>
-
-  <section class="py-5">
-   	 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#authModal">
-   +Join &raquo;
-  </button> -->
-  
-
-      <!--Modal: Login / Register Form-->
+{% block modals %}
+<!--Modal: Login / Register Form-->
 
   <section>
        
@@ -220,5 +219,5 @@
     </div>
   
   </section>
-
+{% endblock modals %}
 {% endblock %}

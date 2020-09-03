@@ -12,11 +12,12 @@
  			<ul class="messages">
 	 		 {% if messages %}
 		       {% for message in messages %}
-		        <li class="{{ message.tags }}">
-		        	<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>{{ message }}
-		        </li>
-		        <!-- <p class="alert alert-info"></p> -->
-		        {% endfor %}
+		        <p class="alert alert-info alert-dismissible fade show">{{ message }}
+	                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					</button>
+				</p>
+		       {% endfor %}
 		      {% endif %}
 	 		</ul>
  			<div class="card-body">

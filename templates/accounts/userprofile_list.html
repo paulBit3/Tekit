@@ -11,7 +11,7 @@
 	    <ul class="sf-menu nav-menu">
 	    	<li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
 	 		<li class="current_page_item">
-	 			<a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
+	 			<a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
 	 		<li><a href="{% url 'accounts:password_change' %}">Change Password</a></li>
 	 	</ul>
 	  </div>
@@ -23,21 +23,31 @@
      <div class="card bg-light mb-3" style="max-width: 35rem;">
      	<div class="card-header"><h4><b>{{ page_title }}</b></h4></div>
      	<div class="card-body">
-     		<p> <b>{{ member.name}}</b></p>
+     		<p> <b>{{ member.first_name}}</b></p>
 			<p> <b>{{ member.status }}</b></p>
 	    </div>
-	    <span class="">
 
-		 	{% if member.followed %}
-				<a class="btn btn-danger btn-sm rounded-pill" href="{% url 'accounts:unfollow' request.user.username  %}">Unfollow</a>
-			{% else %}
-				<a class="btn btn-primary btn-sm rounded-pill" href="{% url 'accounts:follow' request.user.username  %}">Follow</a>
-			{% endif %}
+	    <div class="message-section" style="display:none;"></div>
+	    {% if member.followed %}
+	     <a href="{% url 'accounts:follow' request.user.username %}" class="btn btn-danger btn-sm rounded-pill follow-button">UnFollow</a>
+	    {% else %}
+	     <a href="{% url 'accounts:follow' request.user.username %}" class="btn btn-danger btn-sm rounded-pill follow-button">Follow</a>
+	    {% endif %}
 
-	    </span>
+	    <p>Follower : {{from_user}} Following : {{followed}}</p>
 	 </div>
 	 
 
 	{% endfor %}
  </div>
+
+
+<!-- <script type="text/javascript">
+	$('.follow-button').click(function() {
+		$.get($(this).data('url'), function(response) {
+        $('.message-section').text(response.message).show();
+    });
+});
+
+</script> -->
 {% endblock %}

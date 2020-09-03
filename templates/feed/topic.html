@@ -10,8 +10,8 @@
       <ul class="sf-menu nav-menu">
         <li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
         <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
-        <li><a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
-        <li><a href="% url 'accounts:profile_detail' request.user.username %">Account</a></li>
+        <li><a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
+        <li><a href="{% url 'accounts:profile_detail' pk=user.id %}">Account</a></li>
         <li class="last"><a href="#">Contact</a></li>
       </ul>
     </div>
@@ -30,14 +30,18 @@
   <div id="container">
       <div class="container p-5">
 
-        <h5>{{ topic.action.name }}</h5>
+        
        
           <div class="rows">
             <div class="col-lg-6 col-md-6 col-sm-6">
 
               {% if messages %}
                 {% for message in messages %}
-                  <p class="alert alert-info">{{ message }}</p>
+                  <p class="alert alert-info alert-dismissible fade show">{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </p>
                 {% endfor %}
               {% endif %}
               <br>
@@ -47,14 +51,14 @@
                 
                   {% for feed in feeds %}
                    <div class="card bg-light mb-3"style="max-width: 50rem;">
-                     <h5 class="card-header">
-                       
-                         {{ feed.date_added | date:'M d, Y H:i a' }}<small>
-                            <a class="card-text" href="{% url 'feed:edit_feed' feed.id %}"><span class="glyphicon glyphicon-pencil"></span>Edit Feed<i class="fas fa-pencil-alt"></i></a></small>
-                      </h5>
-                     <div class="card-body">
+                     <h5 class="card-header alert alert-primary alert-link"><strong>{{ topic.action.name }}</strong></h5>
+                      <div class="card-body">
+                        <h5><small>{{ feed.date_posted | date:'M d, Y H:i a' }}</small></h5>
                           {{ feed.text|linebreaks }}
-                    </div>
+                        <p>
+                          <a href="{% url 'feed:edit_feed' pk=feed.id %}">Edit Feed</a>
+                        </p>
+                      </div>
                    </div>
                    {% empty %}
                      <p class="card-text">There are no feeds for this topic yet.</p>

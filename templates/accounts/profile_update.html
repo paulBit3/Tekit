@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %} <b>{{ page_title }}</b> {% endblock %}
+
+{% block content %}
+ <div id="container">
+ 		<!-- start header -->
+	<div id="header">
+
+	  <div class="menu">
+	    <ul class="sf-menu nav-menu">
+	    	<li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
+	 		<li><a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
+	 		<li><a href="{% url 'accounts:password_change' %}">Change Password</a></li>
+	 	</ul>
+	  </div>
+
+	</div>
+	<!-- end header -->
+ 
+   <div id="container">
+      <div class="row-fluid">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          
+             <div class="shadow">
+                <div class="card shadow bg-light mb-3"style="max-width: 35rem;">
+                  <div class="card-img-top">
+                    <div class="navbar-custom">
+                      <img width="30" height="30" src="{% static 'images/social_discuss7.png' %}">
+                       <a class="navbar-brand logo-text" href="/">Tekit</a>
+                    </div>
+                  </div>
+                  <small class="card-header text-muted">
+                    <strong>
+                      <p>Update your information. </p>
+                    </strong>
+                  </small><br>
+                  <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+
+                       {% csrf_token %}
+                       {% crispy form %}
+                       {{ form.media }}
+                       <input type="hidden" name="next" value="{{ next }}">
+
+                       <br>
+
+                       <!-- <button class="btn btn-primary btn-block rounded-pill" type="submit"><strong>Update Profile</strong></button> -->
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+ </div>
+{% endblock %}

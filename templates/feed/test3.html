@@ -301,5 +301,17 @@
 }
 
 
+   <!-- start header -->
+    <div id="header">
 
-<div id="right-sidebar" class="widget-area grid-25 tablet-grid-25 grid-parent sidebar" itemtype="https://schema.org/WPSideBar" itemscope=""><div class="inside-right-sidebar"><aside id="nav_menu-8" class="widget inner-padding widget_nav_menu"><div class="menu-follow-us-container"><ul id="menu-follow-us" class="menu"><li id="menu-item-143" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-143"><a href="https://www.facebook.com/TheHealthy.Humans2020/" class="menu-image-title-after menu-image-not-hovered"><img width="36" height="36" src="http://www.thehealthyhumans.com/wp-content/uploads/2020/04/facebook-36x36.png" class="menu-image menu-image-title-after" alt="Facebook"><span class="menu-image-title-after menu-image-title">Facebook</span></a></li><li id="menu-item-144" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-144"><a href="https://www.instagram.com/thehealthy_humans/" class="menu-image-title-after menu-image-not-hovered"><img width="36" height="36" src="http://www.thehealthyhumans.com/wp-content/uploads/2020/04/Instagram-36x36.png" class="menu-image menu-image-title-after" alt=""><span class="menu-image-title-after menu-image-title">Instagram</span></a></li><li id="menu-item-180" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-180"><a href="https://www.linkedin.com/company/the-healthy-humans/" class="menu-image-title-after menu-image-not-hovered"><img width="36" height="36" src="http://www.thehealthyhumans.com/wp-content/uploads/2020/05/linkedin-36x36.png" class="menu-image menu-image-title-after" alt="LinkedIn"><span class="menu-image-title-after menu-image-title">LinkedIn</span></a></li></ul></div></aside><aside id="recent-posts-2" class="widget inner-padding widget_recent_entries"><h2 class="widget-title">Recent Posts</h2><ul><li> <a href="http://www.thehealthyhumans.com/10-best-low-calories-food-for-weight-loss/">10 Best Low Calories food for weight loss</a> <span class="post-date">July 12, 2020</span></li><li> <a href="http://www.thehealthyhumans.com/60-minutes-full-body-home-workout/">60-Minutes Full Body Home Workout (No Equipment)</a> <span class="post-date">June 6, 2020</span></li><li> <a href="http://www.thehealthyhumans.com/diets-to-lose-weight/">8 Popular Different Types of Diets to lose weight</a> <span class="post-date">May 27, 2020</span></li><li> <a href="http://www.thehealthyhumans.com/what-is-whey-protein/">What is Whey Protein: Benefits, Side Effects, Uses, Types, and Dosage!!</a> <span class="post-date">May 21, 2020</span></li><li> <a href="http://www.thehealthyhumans.com/yoga-for-weight-loss/">Yoga for Weight Loss – 10 Best Yoga Poses to Lose Weight Quickly</a> <span class="post-date">May 11, 2020</span></li></ul></aside></div></div>
+      <div class="menu">
+        <ul>
+          <li class="current_page_item"><a href="/">Home</a></li>
+        <li class="current_page_item">
+          <a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
+        <li><a href="{% url 'accounts:profile_detail' pk=user.id %}">Account</a></li>
+      </ul>
+      </div>
+
+    </div>
+    <!-- end header -->

@@ -1,4 +1,6 @@
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field
 
 from .models import *
 
@@ -24,8 +26,14 @@ class FeedForm(forms.ModelForm):
     class Meta:
         model = Feed
         fields = ['text', 'image',]
-        labels = {'text': ''}
-        widgets = {'text': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'class': 'form-control', 'placeholder': 'Type your feed here'})}
+       
+    helper = FormHelper()
+    helper.form_class = 'form-group'
+    helper.layout = Layout(
+        Field('text',rows="2", css_class='input-xlarge form-control form-rounded mt-2 mb-3 col-xs-7 '),
+        Field('image'),
+        )
+    helper.add_input(Submit('submit', 'Post Feed', css_class='btn btn-primary rounded-pill'))
 
 
 class CommentForm(forms.ModelForm):
@@ -75,17 +83,3 @@ class ReplyForm(forms.ModelForm):
                    'class': 'form-control'
                    })
         }
-
-
-
-class SettingForm(forms.ModelForm):
-    """docstring for SettingForm"""
-    def __init__(self, arg):
-        super(SettingForm, self).__init__()
-        self.arg = arg
-
-    class Meta:
-        model = UserProfile
-        fields = ['name', 'about_me', 'picture', 'phone_no', 'birthdate', 'city', 'state', 'status']
-        widgets = {'class': ' form-control'}
-        

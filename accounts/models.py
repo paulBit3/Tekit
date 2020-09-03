@@ -3,8 +3,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.db.models.signals import post_save
-from datetime import datetime
+from django.db.models.signals import post_save, m2m_changed
+from datetime import datetime, date
 # from django.template.RequestContext
 
 from PIL import Image
@@ -16,16 +16,19 @@ from PIL import Image
 # Profile class inherit form User abstract class
 class UserProfile(models.Model):
     """Store extract information relates to the user model"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
-    name = models.CharField(max_length=100)
-    about_me = models.TextField(max_length=150)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name  = models.CharField(max_length=100, blank=True)
+    last_name  = models.CharField(max_length=100, blank=True)
+    about_me = models.TextField(max_length=150, blank=True)
     picture = models.ImageField(upload_to='images/pictures', default='images/pictures/user_default.png', blank=True, null=True)
-    phone_no = models.CharField(max_length=15)
-    birthdate = models.DateField(auto_now= False, auto_now_add=False, blank=True, null=True)
-    city = models.CharField(max_length=30)
-    state = models.CharField(max_length=50)
+    phone_no = models.CharField(max_length=15, blank=True)
+    dob = models.DateField(auto_now= False, auto_now_add=False, blank=True, null=True)
+    city = models.CharField(max_length=30, blank=True)
+    state = models.CharField(max_length=50, blank=True)
     status = models.CharField(max_length=200, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    follower = models.IntegerField(default=0)
+    following = models.IntegerField(default=0)
 
 
 
@@ -98,11 +101,14 @@ class UserProfile(models.Model):
             self.picture.save(self.picture.path)
 
 
-    def next_birthday(born):
-        today = date.today()
+    def next_birthday(self):
+        bd = self.dob
+        if bd:
+            today = date.today()
+            return today.year - bd.year - ((today.month, today.day) < (bd.month, bd.day))
 
-        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
+   
     def get_absolute_url(self):
         return reverse('accounts:profile', args=[self.id])
 
@@ -111,13 +117,41 @@ class UserProfile(models.Model):
         return f'{self.user.username} Profil'
 
 
+
 class FollowUser(models.Model):
     """A FollowUser Class"""
-    profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='profile')
-    followed_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='followed_by')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    from_user = models.ManyToManyField(User, related_name='followed') #the follower
+    to_user = models.ManyToManyField(User, related_name='followers') # target
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    @classmethod
+    def save(self, **kwargs):
+        """validates a user if not attempting to follow themselves"""
+        if self.from_user == self.to_user:
+            raise ValueError("Cannot follow yourself!")
+        super(FollowUser, self).save(**kwargs)
+    
+    @classmethod
+    def follow(cls, user, **kwargs):
+        obj = cls.objects.get(user = user)
+        obj.from_user.add(**kwargs)
+    
+    @classmethod
+    def unfollow(cls, user, **kwargs):
+        obj = cls.objects.get(user = user)
+        obj.from_user.remove(**kwargs)
+
+
+    class Meta:
+        """docstring for Meta"""
+        # unique_together = (('to_user', 'from_user'),)
+        ordering = ['-created']
+
 
     def __str__(self):
-        return "%s Followed by %s" % (self.profile, self.followed_by)
+        return "%s Followed by %s" % (self.from_user, self.to_user)
+
 
 
 class RelationshipType(models.Model):

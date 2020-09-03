@@ -12,7 +12,7 @@
 	    <ul class="sf-menu nav-menu">
 	    	<li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
 	 		<li class="current_page_item">
-	 			<a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
+	 			<a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
 	 		<li><a href="{% url 'accounts:password_change' %}">Change Password</a></li>
 	 		<li><a href="{% url 'accounts:members' %}">Members</a></li>
 	 	</ul>
@@ -31,24 +31,40 @@
     <div id="container">
     	<div class="row-fluid">
     		<div class="col-lg-6 col-md-6 col-sm-6">
-    			
+    			<h2 class="flow-text">Profile details</h2>
+	          <hr>
+	            {% if messages %}
+	                {% for message in messages %}
+	                  <p class="alert alert-info alert-dismissible fade show">{{ message }}
+	                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    <span aria-hidden="true">&times;</span>
+					  </button>
+					  </p>
+	                {% endfor %}
+	            {% endif %}
+	             <br>
     			<div class="card bg-light mb-3" style="max-width: 35rem;">
-		      		<div class="card-header"><h4><b>{{ u_profile.name}}</b></h4></div>
-		      		  {% if  u_profile.picture %}
-                        <img class="img-responsive rounded-circle profil-img" src="{{ u_profile.picture.url }}" alt=""> 
+
+		      		<div class="card-header"><h4><b>{{ profile.first_name}}</b></h4></div>
+		      		  {% if  profile.picture %}
+                        <img class="img-responsive rounded-circle profil-img" src="{{ profile.picture.url }}" alt=""> 
                       {% endif %}
+
+                       {% if profile.followed == true and profile.followed_by != from_user %}
+                        <p class="alert alert-warning alert-link" role="alert"><b>{{ profile.first_name }}</b> is following you!</p>
+                       {% endif %}
                       
 			      		<div class="card-body">
 			      			
 			      			<p>UserName: <b>{{request.user.username}}</b></p>
 			      			<p>Email: <b>{{ request.user.email }}</b></p>
-			      			<p>Phone: <b>{{ u_profile.phone_no }}</b></p>
-			      			<p>Birthdate: <b>{{ u_profile.birthdate }}</b></p>
-			      			<p>City: <b>{{ u_profile.city }}</b></p>
-			      			<p>State: <b>{{ u_profile.state }}</b></p>
-			      			<p>Status: <b>{{ u_profile.status }}</b></p>
-			      			<p>Date Joined: <b>{{ u_profile.date_added }}</b></p>
-			      			<!-- <p>Next Birthdate: <b>{{ next_birthday }}</b></p> -->
+			      			<p>Phone: <b>{{ profile.phone_no }}</b></p>
+			      			<p>Birthdate: <b>{{ profile.dob }}</b></p>
+			      			<p>City: <b>{{ profile.city }}</b></p>
+			      			<p>State: <b>{{ profile.state }}</b></p>
+			      			<p>Status: <b>{{ profile.status }}</b></p>
+			      			<p>Date Joined: <b>{{ profile.date_added }}</b></p>
+			      			<p class="alert alert-warning alert-link" role="alert">Next Birthday: <b>{{ profile.next_birthday }}</b></p>
 
 					    </div>
 			    </div>  

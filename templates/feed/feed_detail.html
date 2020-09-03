@@ -14,8 +14,8 @@
 	      <ul class="sf-menu nav-menu">
 	        <li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
 	        <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
-	        <li><a href="{% url 'accounts:get_user_profile' request.user.username %}">Profile</a></li>
-	        <li><a href="{% url 'accounts:profile_detail' request.user.username %}">Account</a></li>
+	        <li><a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
+	        <li><a href="{% url 'accounts:profile_detail' pk=user.id %}">Account</a></li>
 	        <li class="last"><a href="#">Contact</a></li>
 	      </ul>
 	    </div>
@@ -52,7 +52,7 @@
 							 <!-- #{{ feed.text|markdown }} -->
 							</p>
 							<div class="panel-footer clearfix">
-								<a href="{% url 'feed:edit_feed' feed.id %}" class="btn "><i class="fas fa-pencil-alt"></i>Edit</a>
+								<a href="{% url 'feed:edit_feed' pk=feed.id %}" class="btn "><i class="fas fa-pencil-alt"></i>Edit</a>
 
 								<button class="cmt-btn btn " type="button" data-id="{{ feed.id }}"><i class="far fa-comment-dots"></i>Comment</button>
 
@@ -62,7 +62,7 @@
 							</div>
 						</div>
 						<!-- comments -->
-				        <small>{{ feed.comments.count }} comments </small>
+				        <small>{{ feed.comments.count }} comment {{ feed.comments.count|pluralize }} </small>
 
 				          <div id="form-template" style="display: none;">
 					 	    <form name="cmntForm" action="{% url 'feed:add_comment_feed' feed.id %}" method="POST">
@@ -70,7 +70,7 @@
 						 	  	<div class="form-group">
 						 	  		{% csrf_token %}
 						 	  		<div class="modal-body">
-						 	  		<textarea id="content" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Say something..." required></textarea></div>
+						 	  		<textarea id="content" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Say something...{{request.user.first_name}}" required></textarea></div>
 						 	  		<small id="charactersLeft"></small> 
 						 	  		<small id="char_count"></small>  
                             		<!-- {{ form|crispy }} -->

@@ -9,11 +9,7 @@
 		<div class="rows">
 			<div class="col-lg-6 col-md-6 col-sm-6">
 			  <div class="d-flex bd-highlight">
-				<!-- {% if messages %}
-	                {% for message in messages %}
-	                  <p class="alert alert-info">{{ message }}</p>
-	                {% endfor %}
-	            {% endif %} -->
+
 	              <br>
 				<div class="card-body">
 				 	{% for comment in feed.comments.all %}
@@ -45,9 +41,10 @@
 					         			 <!--  <p card-text>#{{ comment.content|slice:":300" }}</p> -->
 									  	 <p class="mb-0"><small>{{ comment.content|markdown }}</small></p>
 									        <!-- Comment like section -->
-									        <div id="like-section">
-									        	{% include 'partials/like_section.html' %}
+									        <div class="ml-1" id="like-section">
+									         {% include 'partials/like_section.html' %}
 										    </div>
+										    <br>
 									  	 	{% for reply in comment.replies.all %}
 									  	 	<small>by <strong>{{ reply.user.username|capfirst }}</strong></small><p class="mb-0"><small>{{ reply.content|markdown }}</small></p>
 									  	 	  <!-- Reply like section -->
@@ -68,7 +65,7 @@
 											 	  	<div class="form-group">
 											 	  		{% csrf_token %}
 											 	  		<label for="reply">Reply:</label>
-											 	  		<textarea id="contents" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying..." required></textarea>
+											 	  		<textarea id="contents" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying... to {% if comment.user %} {{comment.user}} {% endif %}" required></textarea>
 											 	  		<small id="charactersReplyLeft"></small>  
 											 	  		<small id="repchar_count"></small>  
 					                            		<!-- {{ form|crispy }} -->

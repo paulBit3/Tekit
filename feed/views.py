@@ -88,9 +88,11 @@ def topic(request, pk):
     # Make sure the topic belongs to the current user
     # if topic.from_user != request.user:
     #     raise Http404
-    feed = Feed.objects.all().filter(date_posted=timezone.now()).order_by('-date_posted')[:100]
-    # feeds = Feed.objects.filter().select_related('topic')[:100]
-    # feeds = topic.feed_set.order_by('-date_posted')
+    
+    # feed = Feed.objects.filter().select_related('topic')[:100]
+    feed = Feed.objects.filter().select_related('topic').order_by('-date_posted')[:100]
+    #feed = Topic.topic.order_by('-date_added')
+
     context = {'topic': topic, 'feeds': feed}
     return render(request, 'feed/topic.html', context)
 
@@ -103,11 +105,14 @@ def new_topic(request):
         topic_name = request.POST['topic_name']
         topicfile = request.FILES.get('topicfile')  # Avoiding duplicated dict keys.
         # topicfile = request.FILES.get['topicfile'] # This gives duplicated dict key
-        from_user = User.objects.get(id=request.user.id)
-        print(from_user)
+        # from_user = User.objects.get(id=request.user.id)
+        profile = request.user.userprofile
+        from_user = profile.user
+
+        # creating topic 
         topic_action = TopicAction.objects.get_or_create(name=topic_name, image=topicfile)
         t_action_id = TopicAction.objects.all().order_by('-id').distinct('id')[:1]
-        print(t_action_id)
+        # print(t_action_id)
         # update topic table
         t = Topic()
         t.update_topic(from_user, t_action_id, None)
@@ -122,6 +127,8 @@ def new_topic(request):
     else:
         return render(request, 'feed/new_topic.html')
 
+
+
 # Show hot topics
 def show_hot_topics(request):
     topics = Topic.objects.get_hot_topics()
@@ -135,9 +142,9 @@ def show_hot_topics(request):
 def new_feed(request, pk):
     """Add a new feed for a particular topic"""
     topic = Topic.objects.get(pk=pk)
-    u_profile = request.user.userprofile
-    view_by = u_profile
-    # print(u_profile)
+    profile = request.user.userprofile
+    view_by = profile
+    # print(profile)
     if request.method != 'POST':
         form = FeedForm()
     else:
@@ -152,7 +159,7 @@ def new_feed(request, pk):
             # nfeed = nfeed.rotate(18, expand=True)
             nfeed = form.save(commit=False)
             nfeed.topic = topic
-            nfeed.author = u_profile
+            nfeed.author = profile
             nfeed.view_by = view_by
             nfeed.save()
             # messages.success(request, '')
@@ -166,9 +173,9 @@ def new_feed(request, pk):
 
 # Edit a feed
 @login_required
-def edit_feed(request, feed_id):
+def edit_feed(request, pk):
     """Edit an existing feed"""
-    feed = Feed.objects.get(id=feed_id)
+    feed = Feed.objects.get(id=pk)
     topic = feed.topic
 
     # Protecting the edit feed page.
@@ -180,7 +187,7 @@ def edit_feed(request, feed_id):
         form = FeedForm(instance=feed)
     else:
         # POST data submitted; process data
-        form = FeedForm(instance=feed, data=request.POST)
+        form = FeedForm(request.POST, request.FILES, instance=feed)
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.INFO, 'Feed successfully updated')
@@ -221,18 +228,18 @@ def get_latest_feed(self, limit=100):
 
 # Feed details
 def feed_detail(request, pk):
-   
+
     feed = get_object_or_404(Feed, pk=pk)
     # comments = Comment.objects.filter(feed=feed, approved=True).order_by('-pk')
     comments = feed.comments.all().filter(approved=True).order_by('-created_on')
     is_liked = False
     reply = None
-    u_profile = request.user.userprofile
-    view_by = u_profile
+    profile = request.user.userprofile
+    view_by = profile
 
     #user in obj.likes.all()
-    if feed.likes.filter(id=request.user.pk).exists():
-        is_liked = True
+    # if feed.likes.filter(id=request.user.pk).exists():
+
     if request.method == 'POST':
         if 'replyForm' in request.POST:
             content = request.POST.get('content')
@@ -251,14 +258,14 @@ def feed_detail(request, pk):
 
 
                 reply, created = Reply.objects.get_or_create(
-                                                   user = request.user,
+                                                   user = profile.user,
                                                    content = content,
                                                    view_by = view_by,
                                                    parent= parent_qs,
                                                    )
                 reply = get_object_or_404(Reply, pk=pk)
-                is_liked = False
-                if reply.likes.filter(id=userprofile.id).exists():
+               
+                if reply.likes.filter(id=request.user.id).exists():
                     is_liked = True
             except:
                 pass
@@ -294,15 +301,15 @@ def add_comment_feed(request, pk):
     comments = feed.comments.all().filter(approved=True).order_by('date_added')[:10]
     new_comment = None
     com_submitted = False
-    u_profile = request.user.userprofile
-    commented_by = u_profile
-    view_by = u_profile
+    profile = request.user.userprofile
+    commented_by = profile
+    view_by = profile
 
     # Comment posted
     if request.method == 'POST':
         content = request.POST.get('content')
         new_comment, created = Comment.objects.get_or_create(
-                                                   user = u_profile.user,
+                                                   user = profile.user,
                                                    content = content,
                                                    feed_id = feed.pk,
                                                    commented_by = commented_by,
@@ -417,68 +424,50 @@ def edit_comment(request, pk):
 
 
 def like_comment(request):
-    # user = request.user
-    u_profile = request.user.userprofile
+    user = request.user.id
+    # profile = request.user.userprofile
+    comment = get_object_or_404(Comment, id = int(request.POST.get('id')))
+    if comment.likes.filter(id=user).exists():
+        comment.likes.remove(user)
+        is_liked = False
+    else:
+        is_liked = True
+        comment.likes.add(user)
 
-    is_liked = False
-
-    if request.method == 'POST':
-        comment_obj = get_object_or_404(Comment, id=request.POST.get('id'))
-        
-        print(comment_obj)
-
-        if comment_obj.likes.filter(id=u_profile.id).exists():
-            comment_obj.likes.remove(u_profile)
-            is_liked = False
-
-        else:
-            comment_obj.likes.add(u_profile)
-            is_liked = True
-          
-            # print(like)
-        context = {
-             'comment': comment_obj,
-             'is_liked': is_liked,
-             'total_likes': comment_obj.get_total_likes(),
+    context = {
+        'comment': comment,
+        'is_liked': is_liked,
+        'total_likes': comment.get_total_likes(),
         }
-        print(comment_obj)
-        # print(valueobj)
-        print(comment_obj.get_total_likes())
-        if request.is_ajax():
-            html = render_to_string('partials/like_section.html', context, request=request)
-            return JsonResponse({"form": html})
-
-        url_ = obj.get_absolute_url()
-        return HttpResponseRedirect(url_)
-
-
+    if request.is_ajax():
+        html = render_to_string('partials/like_section.html', context, request=request)
+        return JsonResponse({"form": html})
+        url_ = comment.get_absolute_url()
+        return HttpResponseRedirect(reverse(url_))
+        
+    
 
 
 def like_reply(request):
-    u_profile = request.user.userprofile
-
-    reply= get_object_or_404(Reply, id=request.POST.get('id'))
-
-    is_liked = False
-
-    if reply.likes.filter(id=u_profile.id).exists():
-        reply.likes.remove(u_profile)
+    user = request.user.id
+    reply= get_object_or_404(Reply, id = int(request.POST.get('id')))
+    if reply.likes.filter(id=user).exists():
+        reply.likes.remove(user)
         is_liked = False
     else:
-        reply.likes.add(u_profile)
-        is_liked = True  
-
+        is_liked = True 
+        reply.likes.add(request.user.id)
+    
     context = {
-         'reply': reply,
-         'is_liked': is_liked,
-         'total_likes': reply.get_total_likes(),
-    }
+        'reply': reply,
+        'is_liked': is_liked,
+        'total_likes': reply.get_total_likes(),
+        }
     if request.is_ajax():
         html = render_to_string('partials/like_reply_section.html', context, request=request)
         return JsonResponse({"form": html})
-
-    # url_ = obj.get_absolute_url()
-    # return HttpResponseRedirect(url_)
+        url_ = reply.get_absolute_url()
+        return HttpResponseRedirect(reverse(url_))
 
 
 

@@ -12,7 +12,7 @@
       <div class="menu">
         <ul class="sf-menu nav-menu">
           <li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
-          <li><a href="{% url 'accounts:profile_detail' request.user.username %}">Your Account</a></li>
+          <li><a href="{% url 'accounts:profile_detail' pk=user.id %}">Your Account</a></li>
           <li><a href="{% url 'accounts:password_reset' %}">Reset Your Password</a></li>
         </ul>
       </div>
@@ -32,7 +32,7 @@
           	{% endif %}
           	<div id="side-menu">
           		{% if user == request.user %}
-        	  		 <a href="" class="btn btn-primary btn-sm rounded-pill">Edit Profile</a>
+        	  		 <a href="{% url 'accounts:profile_update' pk=user.id %}" class="btn btn-primary btn-sm rounded-pill">Edit Profile</a>
                  <br><br>
           		{% else %}
           		    {% if user.is_authenticated %}
@@ -83,15 +83,16 @@
 
           <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="card bg-light mb-3" style="max-width: 35rem;">
-                <div class="card-header"><h4><b>{{request.user.userprofile.name}}</b></h4></div>
+                <div class="card-header"><h4><b>{{profile.first_name}} {{profile.last_name}}</b></h4></div>
 
                   <div class="card-body">
                     <p>Email: <b>{{ request.user.email }}</b></p>
-                    <p>Phone: <b>{{ request.user.userprofile.phone_no }}</b></p>
-                    <p>Birthdate: <b>{{ request.user.userprofile.birthdate }}</b></p>
-                    <p>City: <b>{{ request.user.userprofile.city }}</b></p>
-                    <p>State: <b>{{ request.user.userprofile.state }}</b></p>
-                    <p>Status: <b>{{ request.user.userprofile.status }}</b></p>
+                    <p>Phone: <b>{{ profile.phone_no }}</b></p>
+                    <p>Birthdate: <b>{{ profile.dob }}</b></p>
+                    <p>City: <b>{{ profile.city }}</b></p>
+                    <p>State: <b>{{ profile.state }}</b></p>
+                    <p>Status: <b>{{ profile.status }}</b></p>
+                    <p class="alert alert-warning alert-link" role="alert">Next Birthday: <b>{{ profile.next_birthday }}</b></p>
                 </div>
               
             </div>

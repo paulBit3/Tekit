@@ -41,7 +41,7 @@ class TopicManager(models.Manager):
 
     # get all topics given a feed
     def get_by_feed(self, is_published):
-        return super().get_queryset().filter(feed__is_published__iexact=feed)
+        return super().get_queryset().filter(feed__published__iexact=True)
 
     def get_latest_topic(self, limit=100):
         #get a limit (default 100) latest topic
@@ -329,7 +329,9 @@ class Reply(models.Model):
 
     def get_total_likes(self):
         return self.likes.count()
-
+    
+    def get_absolute_url(self):
+        return reverse('feed:feed_detail', args=[self.id])
 
     def __str__(self):
         return 'Reply by {} - to {}'.format(self.user.username, str(self.parent))
