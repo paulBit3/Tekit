@@ -14,7 +14,7 @@
 	      <ul class="sf-menu nav-menu">
 	        <li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
 	        <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
-	        <li><a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
+	        <li><a href="{% url 'accounts:get_user_profile' user.username %}">Profile</a></li>
 	        <li><a href="{% url 'accounts:profile_detail' pk=user.id %}">Account</a></li>
 	        <li class="last"><a href="#">Contact</a></li>
 	      </ul>
@@ -40,25 +40,36 @@
 						<div class="card-body">
 							{% if feed.image %}
 							  <div class="card-img-top">
-								<img width="100" height="100" src="{{ feed.image.url }}" alt="">
+								<img width="90" height="100" src="{{ feed.image.url }}" alt="">
 							  </div>
 							{% endif %}
 							<small class="card-header text-muted">
-								Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}<br><br>
+								Post by {{ feed.author|capfirst }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}<br><br>
 							</small>
 							<p card-text>
 								<!-- Limited the words on the excerpts to 400 characters-->
 							 {{ feed.text|slice:":300" }}
 							 <!-- #{{ feed.text|markdown }} -->
 							</p>
-							<div class="panel-footer clearfix">
-								<a href="{% url 'feed:edit_feed' pk=feed.id %}" class="btn "><i class="fas fa-pencil-alt"></i>Edit</a>
 
+							<div class="panel-footer clearfix">
+                                <!-- show edit button only to feed owner, if not hide it -->
+								{% if  feed.author != request.user.userprofile %}
+								
 								<button class="cmt-btn btn " type="button" data-id="{{ feed.id }}"><i class="far fa-comment-dots"></i>Comment</button>
 
 								<a class="share" href="">
 									<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share
 								</a>
+								{% else %}
+								<a href="{% url 'feed:edit_feed' pk=feed.id %}" class="btn "><i class="fas fa-pencil-alt"></i>Edit</a>
+								<button class="cmt-btn btn " type="button" data-id="{{ feed.id }}"><i class="far fa-comment-dots"></i>Comment</button>
+
+								<a class="share" href="">
+									<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share
+								</a>
+								{% endif %}
+
 							</div>
 						</div>
 						<!-- comments -->
@@ -70,7 +81,7 @@
 						 	  	<div class="form-group">
 						 	  		{% csrf_token %}
 						 	  		<div class="modal-body">
-						 	  		<textarea id="content" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Say something...{{request.user.first_name}}" required></textarea></div>
+						 	  		<textarea id="content" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Say something...{{request.user.username}}" required></textarea></div>
 						 	  		<small id="charactersLeft"></small> 
 						 	  		<small id="char_count"></small>  
                             		<!-- {{ form|crispy }} -->
@@ -83,16 +94,18 @@
 			        </div>
 
 			        <div class="col-md-8 card mb-4 mt-3 ">
-			        	<ul class="messages">
+			        	
 				 		 {% if messages %}
 					       {% for message in messages %}
-					        <li class="{{ message.tags }}">
-					        	<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>{{ message }}
-					        </li>
+					          <div class="alert alert-dismissible fade show" role="alert">{{ message }}
+			                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							    <span aria-hidden="true">&times;</span>
+							   </button>
+							  </div>
 					        <!-- <p class="alert alert-info"></p> -->
 					        {% endfor %}
 					      {% endif %}
-				 		</ul>
+				 		
 			        	
 			            <!-- comments -->
 			            {% include 'feed/comments.html' %}

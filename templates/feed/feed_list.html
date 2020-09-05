@@ -9,7 +9,7 @@
 		  <ul class="sf-menu nav-menu">
 	        <li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
 	        <li><a href="{% url 'feed:new_topic' %}">Topic</a></li>
-	        <li><a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
+	        <li><a href="{% url 'accounts:get_user_profile' user.username %}">Profile</a></li>
 	        <li><a href="{% url 'accounts:profile_detail' pk=user.id %}">Account</a></li>
 	        <li class="last"><a href="#">Contact</a></li>
 	      </ul>
@@ -23,12 +23,13 @@
     	 {% include 'partials/_sidebar.html' %}
     </div>
     <!-- end sidebar -->
+   <div id="container">
 	<div class="container py-2">
-
-		{% include 'partials/_topnote.html' %} 
 		<!-- Feeds column -->
 	    <div class="row">
 	      	<div class="col-md-8 mt3 left">
+	      		<h2 class="flow-text">Feeds list</h2>
+                <hr>
 	      		<section id="showcase-inner">
 					<div class="jumbotron">
 
@@ -39,11 +40,11 @@
 						<div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
 						    {% if feedlist.image %}
 	                            <div class="card-img-top">
-	                            	<img src="{{ feedlist.image.url }}" alt="">
+	                            	<img width="200" height="300" src="{{ feedlist.image.url }}" alt="">
 	                            </div>
 							{% endif %} 
                                 <small class="card-header text-muted">
-									Post by {{ user.username }} | {{ feed.date_added | date:'M d, Y H:i, a' }}
+									Post by {{ feedlist.author }} | {{ feedlist.date_posted | date:'M d, Y H:i, a' }}
 								</small> 
                                   <br>
 								<div class="card-body">
@@ -63,5 +64,6 @@
 	      	</div>
 		 </div>
 	</div>
+</div>
 </div>
 {% endblock %}

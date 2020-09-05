@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.urls import reverse
 from django.db.models import Q
-
+import json
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode
 from django.utils.http import urlsafe_base64_encode
@@ -45,13 +45,33 @@ def profile_detail(request, pk):
 
 
 @login_required
-def get_user_profile(request, pk):
-
-    profile = request.user.userprofile
+def get_user_profile(request, username):
+    user_obj = User.objects.filter(username=username)
+    
+    
     # if request.user.username != user.username:
     #     raise Http404
+
+    if user_obj:
+        user_obj = user_obj[0]
+        profile = UserProfile.objects.get(user=user_obj)
+        conn = profile.connection
+        followuser_obj = FollowUser.objects.get(user = user_obj)
+        # followuser_obj = FollowUser.objects.get(user = user)
+        follower, following = profile.follower, followuser_obj.from_user.count()
+        is_following = FollowUser.objects.filter(user = request.user, from_user = user_obj)
+        print(profile)
+        print(conn)
+        print(follower)
+        print(following)
     
-    context = {'profile': profile}
+    context = {
+           'profile': profile,
+           'conn':conn, 
+           'follower': follower, 
+           'following': following, 
+           'is_following': is_following 
+           }
     return render(request, 'accounts/userprofile.html', context)
 
 
@@ -94,15 +114,14 @@ class ProfileListView(ListView):
 
     def get_queryset(self):
         profList = UserProfile.objects.all().order_by("-user_id");
+        
         for uprofile in profList:
-            print(uprofile)
             uprofile.followed = False
-            obj = FollowUser.objects.filter(profile = uprofile, from_user=self.request.user.userprofile.user.id)
+            obj = FollowUser.objects.filter(user = uprofile.user.id, from_user=self.request.user.userprofile.user.id)
             if obj:
                 uprofile.followed = True
         return profList
 
-    
 
 
 
@@ -252,7 +271,7 @@ def activate(request, uidb64, token):
         # Log the user in and redirect to home page
         login(request, user)
         # return redirect('index')
-        messages.success(request,  'Your account has been activated successfully.')
+        messages.success(request,  'Your account has been successfully activated!')
         return redirect('/')
         # return redirect('accounts:activation_complete')
     else:
@@ -323,28 +342,31 @@ def password_reset_request(request):
         return render(request, 'registration/password_reset_form.html')
 
 
+#user following method
 def follow(request, username):
     user_to_follow = get_object_or_404(User, username = username)
-    user_profile = request.user.userprofile
+    user = request.user
     data = {}
-
+    print(user_to_follow)
+    print(user)
     #chek if user already follow the user to follow
-    followed = FollowUser.objects.filter(user = user_profile, from_user = user_to_follow)
+    followed = FollowUser.objects.filter(user = user, from_user = user_to_follow)
     is_followed = True if followed else False
 
     if is_followed:
-        FollowUser.unfollow(user_profile, user_to_follow)
+        FollowUser.unfollow(user, user_to_follow)
         data['message'] = "You are already following this user."
         is_followed = False
     else:
-        FollowUser.follow(user_profile, user_to_follow)
+        FollowUser.follow(user, user_to_follow)
         data['message'] = "You are now following {}".format(user_to_follow)
         is_followed = True
 
     resp = {
        "followed": is_followed,
     }
-    return JsonResponse(data, resp, safe=False)
+    response = json.dumps(resp)
+    return HttpResponse(response, content_type="application/json")
 
 
 # def follow_user(request, pk):

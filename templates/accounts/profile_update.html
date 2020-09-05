@@ -13,7 +13,7 @@
 	  <div class="menu">
 	    <ul class="sf-menu nav-menu">
 	    	<li class="current_page_item"><a href="/"><i class="fa fa-reply-all"></i> Go to Feeds</a></li>
-	 		<li><a href="{% url 'accounts:get_user_profile' pk=user.id %}">Profile</a></li>
+	 		<li><a href="{% url 'accounts:get_user_profile' user.username %}">Profile</a></li>
 	 		<li><a href="{% url 'accounts:password_change' %}">Change Password</a></li>
 	 	</ul>
 	  </div>

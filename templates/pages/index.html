@@ -38,6 +38,7 @@
     <!-- end sidebar -->
 
   {% block sidebar %} {% endblock sidebar %}
+
 <div id="container">
     <section id="feedlist" class="py-5">
 		<div class="top-feed-container">
@@ -82,7 +83,7 @@
 	                         <div class="col-sm-6">
 	                         	<div class="card-deck">
                                  
-					            </div>
+					            
 					            <div class="panel-heading">
 									<h4 class="panel-title"> Topics</h4>
 								</div>
@@ -95,9 +96,15 @@
 					                    {% endif %}
 				                </div>
 	                        </div>
+	                        </div>
 	                        {% endif %}  
 				        
-                        <hr>
+                      
+                </div>  <hr>
+                
+                <div class="row">
+                	<div class="col-md-8 mt3 left">
+                		<section id="showcase-inner">
 						 <h4 class="text-center mb-3">
 						 	<i class="circle-up-right fa fa-arrow-circle-right"
 										aria-hidden="true"></i>
@@ -107,11 +114,11 @@
 					      {% for feed in feeds %}
 					        <div class="d-flex bd-highlight">
                         	  <div class="p-2 flex-fill bd-highlight">
-                        	  	<div class="shadow">
-                        	  		<div class="card shadow bg-light mb-3"style="max-width: 25rem;">
+                        	  	<!-- <div class="shadow"> -->
+                        	  		<div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
 									  {% if feed.image %}
 						                <div class="card-img-top">
-						                	<img width="100" height="100" src="{{ feed.image.url }}" alt="">
+						                	<img width="200" height="300" src="{{ feed.image.url }}" alt="">
 						                </div>
 						               {% else %}
 						                <div class="card-img-top">
@@ -120,7 +127,7 @@
 									   {% endif %}
 
 										<small class="card-header text-muted">
-										  Post by {{ user.username }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}
+										  Post by {{ feed.author|capfirst }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}
 										</small>
 
 										<div class="card-body">
@@ -142,17 +149,18 @@
 											 
 										</div>
 									</div>
-							   </div>
+							   <!-- </div> -->
 							 </div>
 		                    </div>
 						   {% empty %}
 					          <span class="card-text info"><h3>No feed has been added yet.</h3></span>
 					       {% endfor %}
-					    
+					</section>    
 			  </div>
 		    <!-- </div> -->
 		    
 		</div>
+		
 		<!-- <button class="btn btn-primary " data-toggle="modal" data-target="#authModal">Make An Inquiry</button> -->
     </section>
 

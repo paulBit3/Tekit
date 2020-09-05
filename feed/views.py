@@ -28,8 +28,8 @@ from .forms import *
 def index(request):
     """The home page for our Learning app """
     # We set how many hot topics and no hot topics to display
-    max_hot_topics = 3
-    max_topics_list = 3
+    max_hot_topics = 2
+    max_topics_list = 2
     
     # hot topics
     hot_topics_list = Topic.topic.get_hot_topics()
@@ -61,6 +61,7 @@ def topics(request):
 
     # Retrieve only the Topic whose owner attribute matches the current user
     topics = Topic.objects.filter(from_user=request.user).order_by('date_added')
+    print(topics)
     context = {'topics': topics}
     return render(request, 'feed/topics.html', context)
 
@@ -82,7 +83,7 @@ def show_all_topics(request):
 @login_required
 def topic(request, pk):
     """Show a single topic and all its feeds"""
-    topic = Topic.objects.get(id=pk)
+    topic_action = TopicAction.objects.get(id=pk)
 
 
     # Make sure the topic belongs to the current user
@@ -93,7 +94,7 @@ def topic(request, pk):
     feed = Feed.objects.filter().select_related('topic').order_by('-date_posted')[:100]
     #feed = Topic.topic.order_by('-date_added')
 
-    context = {'topic': topic, 'feeds': feed}
+    context = {'topic': topic_action, 'feeds': feed}
     return render(request, 'feed/topic.html', context)
 
 
@@ -180,7 +181,9 @@ def edit_feed(request, pk):
 
     # Protecting the edit feed page.
     if topic.from_user != request.user:
-        raise Http404
+        messages.warning(request, ' Not authorized! You cannot edit this Feed.', extra_tags='alert')
+        return redirect('feed:topic', pk=topic.id)
+        # raise Http404
 
     if request.method != 'POST':
         # Initial request; pre-fill form with the current entry
@@ -286,6 +289,7 @@ def feed_detail(request, pk):
          'comments': comments,
          # 'comment_form': comment_form
          }
+
     if request.is_ajax():
         html = render_to_string('feed/comments.html', context, request=request)
         return JsonResponse({'form': html})

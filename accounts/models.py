@@ -27,6 +27,7 @@ class UserProfile(models.Model):
     state = models.CharField(max_length=50, blank=True)
     status = models.CharField(max_length=200, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    connection = models.CharField(max_length = 100, blank=True)
     follower = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
 
@@ -114,7 +115,17 @@ class UserProfile(models.Model):
 
 
     def __str__(self):
-        return f'{self.user.username} Profil'
+        return f'{self.user.username}'
+    
+
+    @receiver(post_save, sender=User)
+    def update_profile_signal(sender, instance, created, **kwargs):
+        if created:
+            profile=UserProfile.objects.create(user = instance)
+            followuser = FollowUser.objects.create(user = instance)
+            profile.save()
+            followuser.save()
+
 
 
 
@@ -126,21 +137,26 @@ class FollowUser(models.Model):
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     @classmethod
-    def save(self, **kwargs):
+    def validate(self, **kwargs):
         """validates a user if not attempting to follow themselves"""
         if self.from_user == self.to_user:
             raise ValueError("Cannot follow yourself!")
         super(FollowUser, self).save(**kwargs)
     
     @classmethod
-    def follow(cls, user, **kwargs):
-        obj = cls.objects.get(user = user)
-        obj.from_user.add(**kwargs)
+    def follow(cls, user, another_account):
+        """cls define to the class itself. here cls = FollowUser"""
+        obj, create = cls.objects.get_or_create(user = user)
+        # obj = cls.objects.get(user = user)
+        obj.from_user.add(another_account)
+        #print("followed!")
     
     @classmethod
-    def unfollow(cls, user, **kwargs):
-        obj = cls.objects.get(user = user)
-        obj.from_user.remove(**kwargs)
+    def unfollow(cls, user, another_account):
+        obj, create = cls.objects.get_or_create(user = user)
+        # obj = cls.objects.get(user = user)
+        obj.from_user.remove(another_account)
+        #print("unfollowed!")
 
 
     class Meta:
@@ -150,7 +166,8 @@ class FollowUser(models.Model):
 
 
     def __str__(self):
-        return "%s Followed by %s" % (self.from_user, self.to_user)
+        return str(self.user)
+        # return "%s Followed by %s" % (self.from_user, self.to_user)
 
 
 

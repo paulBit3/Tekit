@@ -18,7 +18,7 @@
             {% endif %}
               <div class="card-block">
                 <div class="card-body"> 
-                  <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' pk=topic.id %}">{{ topic.action.name }}</a></h5>
+                  <h5 class="card-title"><a class="nav-link" href="{% url 'feed:topic' topic.id %}">{{ topic.action.name }}</a></h5>
                   <p class="card-text"> </p> 
                   <a href="{% url 'feed:new_feed' topic.id %}" class="btn btn-primary btn-sm rounded-pill"> 
                     <i class="fa fa-plus" aria-hidden="true"></i>New Feed</a> 

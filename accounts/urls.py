@@ -9,12 +9,10 @@ app_name = 'accounts'
 
 urlpatterns = [
     # user profile
-    path('users/profile/<int:pk>/', views.get_user_profile, name='get_user_profile'),
+    path('users/profile/<str:username>/', views.get_user_profile, name='get_user_profile'),
     path('users/profiledetails/<int:pk>/', views.profile_detail, name='profile_detail'),
     path('users/editprofile/', views.edit_profile, name='edit_profile'),
     path('users/settings/', views.account_settings, name='account_settings'),
-    # path('users/follow/<int:pk>/', views.follow, name='follow'),
-    # path('users/unfollow/<int:pk>/', views.unfollow, name='unfollow'),
     path('users/follow/<str:username>/', views.follow, name='follow'),
     path('users/members/', views.ProfileListView.as_view(), name='members'),
     path('users/profile/update/<int:pk>/', views.profile_update, name='profile_update'),

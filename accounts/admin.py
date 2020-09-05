@@ -10,7 +10,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 class FollowUserAdmin(admin.ModelAdmin):
-	list_display = ['created']
+	list_display = ['user','created']
 	search_fields = ['to_user', 'from_user']
 	list_filter = ['to_user', 'from_user']
 

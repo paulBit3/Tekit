@@ -95,57 +95,8 @@ function showForm() {
 }
 
 
-// validate comment and reply form
-// function validateForm() {
-//     var form = document.forms['cmntForm']['content'].value;
-//     var form = document.forms['replyForm']['content'].value;
-//     if (form == '') {
-//         alert('Required: Type a comment before submit!');
-//         return false;
-//     }
-// }
-
-// function required() {
-//     var empt = document.forms['replyForm'].content.value;
-//     if (empt === '') {
-//         alert('Required: Type a reply before submit!')
-//         return false
-//     }
-// }
-
-
 
 //managing comment and reply form
-
-// var formTemplate = document.querySelector('#form-template form');
-// var idInput = document.getElementById('id-input');
-
-// function toggleComment(e) {
-//   if (!formTemplate) return;
-
-//   e.target.parentNode.insertBefore(formTemplate, e.target);
-//   idInput.value = e.target.getAttribute('data-id');
-// };
-
-// Array.from(document.querySelectorAll('button.cmt-btn'))
-//   .forEach(btn => btn.onclick = toggleComment)
-
-
-// reply form handling
-// var replyformTemplate = document.querySelector('#replyform-template form');
-// var idInput = document.getElementById('id-input');
-
-// function toggleReply(e) {
-//   if (!replyformTemplate) return;
-
-//   e.target.parentNode.insertBefore(replyformTemplate, e.target);
-//   idInput.value = e.target.getAttribute('data-id');
-// };
-
-// Array.from(document.querySelectorAll('button.reply'))
-//   .forEach(btn => btn.onclick = toggleReply)
-
-
 
 
  // Reply to comment

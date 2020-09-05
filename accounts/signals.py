@@ -5,13 +5,13 @@ from accounts.models import *
 
 
 
-@receiver(post_save, sender=User)
-def update_profile_signal(sender, instance, created, **kwargs):
-	if created:
-		profile=UserProfile.objects.create(user = instance)
-		followuser = FollowUser.objects.create(user = instance)
-        profile.save()
-        followuser.save()
+# @receiver(post_save, sender=User)
+# def update_profile_signal(sender, instance, created, **kwargs):
+# 	if created:
+# 		profile=UserProfile.objects.create(user = instance)
+# 		followuser = FollowUser.objects.create(user = instance)
+#         profile.save()
+#         followuser.save()
 
 
 
@@ -23,12 +23,16 @@ def add_follower(sender, instance, action, reverse, pk_set, **kwargs):
       A profile can be followed by 1 or many users
     """
 	user_followed = []
+
+    #getting user who be logged in request.user
     user_to_follow = User.objects.get(username = instance)
+    
     #looping through the primary key subset
     for i in pk_set:
     	user = User.objects.get(pk = i)
         followuser_obj = FollowUser.objects.get(user = user)
         user_followed.append(followuser_obj)
+        # print(user_followed)
 
     #looping the type of update that is done on the relation
     if action == "pre_add":

@@ -53,7 +53,13 @@ class TopicAction(models.Model):
     """a class that contains a type of each Topic"""
 
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='topimages/', default='images/topicholder.png', null=True, blank=True, max_length=100)
+    image = models.ImageField(
+        upload_to='topimages/', 
+        default='images/topicholder.png', 
+        null=True, 
+        blank=True, 
+        max_length=100
+        )
 
     # Resizing topic photo
     def resize_image(self):
