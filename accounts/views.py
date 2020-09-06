@@ -367,7 +367,7 @@ def follow(request, username):
     }
     response = json.dumps(resp)
     return HttpResponse(response, content_type="application/json")
-
+    # return HttpResponseRedirect(redirect_url)
 
 # def follow_user(request, pk):
 #     user_to_follow = get_object_or_404(User, pk=pk)

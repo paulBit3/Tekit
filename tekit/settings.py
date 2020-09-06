@@ -22,12 +22,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%oljx75rpnpz-7w5#97*+1&%6-q14o#likq6cnewxk@mehb2=y'
+# SECRET_KEY = '%oljx75rpnpz-7w5#97*+1&%6-q14o#likq6cnewxk@mehb2=y'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -86,10 +90,6 @@ WSGI_APPLICATION = 'tekit.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tekit',
-        'USER': 'postgres',
-        'PASSWORD': 'paulbit10',
-        'HOST': 'localhost'
     }
 }
 
@@ -157,6 +157,7 @@ LOGIN_URL = 'accounts:_login'
 
 # LOGIN URL REDIRECT TO OTHER PAGE
 LOGIN_REDIRECT_URL = 'accounts:profile'
+# LOGOUT_REDIRECT_URL = 'feed:index'
 
 # Messages
 from django.contrib.messages import constants as messages

@@ -136,7 +136,7 @@ class Topic(models.Model):
         self.save()
 
     def get_absolute_url(self):
-        return reverse('feed/topic', args=[self.id])
+        return reverse('feed:topic', args=[self.id])
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -219,7 +219,7 @@ class Feed(models.Model):
         return os.path.join('feed/photos/', now().date().strftime("%Y/%m/%d"), filename)
 
     def get_absolute_url(self):
-        return reverse('feed/feed_detail', args=[self.id])
+        return reverse('feed:feed_detail', args=[self.id])
 
     def get_total_likes(self):
         return self.likes.count()

@@ -7,19 +7,23 @@
 	    				<div class="col-md-8 col-md-10 mx-auto">
 	    					<div class="site-heading">
                   {% if user.is_authenticated %}
+                  <div class="alert-banner error">
   	    						<p class="lead">
-  	    							<a class="logo-text" href="">Tekit</a> <small>is a social Tech platform that allows users to share techs histories related to their  Tech experience, life, business , with friends, colleagues & 
-                      family.</small>
+  	    							<a class="logo-text" href="">Tekit</a> <small>is a social Tech platform that allows users to share Tech stories experience, life, business , with friends, colleagues & 
+                      family on social media.</small>
                       <a class="btn btn-info btn-sm rounded-pill" data-toggle="" data-target="" href="{% url 'feed:new_topic' %}">New Topic &raquo;</a>
   	    						</p>
+                  </div>
+
 
   	    					{% else %}
+                  <div class="alert-banner error">
                      <p class="lead">
-                      <a class="logo-text" href="">Tekit</a> <small>is a social Tech platform that allows users to share techs histories related to their  Tech experience, life, business , with friends, colleagues & 
-                      family.</small>
+                      <a class="logo-text" href="">Tekit</a> <small>is a social Tech platform that allows users to share Tech stories experience, life, business , with friends, colleagues & 
+                      family on social media.</small>
                       <a class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">+Join &raquo;</a>
                     </p>
-                    
+                  </div>
                   {% endif %}
 	    					</div>
 	    				</div>

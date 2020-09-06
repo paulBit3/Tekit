@@ -233,6 +233,10 @@ def get_latest_feed(self, limit=100):
 def feed_detail(request, pk):
 
     feed = get_object_or_404(Feed, pk=pk)
+
+    #managing sharing feed
+    share_feed = quote_plus(feed.text)
+    #end sharing feed
     # comments = Comment.objects.filter(feed=feed, approved=True).order_by('-pk')
     comments = feed.comments.all().filter(approved=True).order_by('-created_on')
     is_liked = False
@@ -287,6 +291,7 @@ def feed_detail(request, pk):
          'total_likes': feed.get_total_likes(),
          'reply': reply,
          'comments': comments,
+         'share_feed': share_feed,
          # 'comment_form': comment_form
          }
 

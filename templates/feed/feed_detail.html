@@ -58,15 +58,38 @@
 								
 								<button class="cmt-btn btn " type="button" data-id="{{ feed.id }}"><i class="far fa-comment-dots"></i>Comment</button>
 
-								<a class="share" href="">
-									<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share
+								<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share on 
+
+								<a class="share facebook" href="https://www.facebook.com/sharer.php?u={{ request.build_absolute_uri }}">
+									 <i class="fab fa-facebook" style="font-size:18px;color:#3B5998; margin:5px"></i>
 								</a>
+								<a class="share twitter" href="https://twitter.com/share?url={{ share_feed }} {{ request.build_absolute_uri }}">
+									<i class="fab fa-twitter-square" style="font-size:18px;color:#0084b4; margin:5px"></i>
+								</a>
+								<a class="share" href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ share_feed }} {{ request.build_absolute_uri }} &title={{ feed.topic }}&summary={{ share_feed }}&source={{ request.build_absolute_uri }} ">
+									<i class="fab fa-linkedin" style="margin:5px;"></i>
+								</a>
+								<a class="share google-plus" href="https://plus.google.com/share?url={{ request.build_absolute_uri }} ">
+									<i class="fa fa-google-plus" style="font-size:18px;color:#d34836"></i>
+								</a>
+
 								{% else %}
 								<a href="{% url 'feed:edit_feed' pk=feed.id %}" class="btn "><i class="fas fa-pencil-alt"></i>Edit</a>
 								<button class="cmt-btn btn " type="button" data-id="{{ feed.id }}"><i class="far fa-comment-dots"></i>Comment</button>
+                                
+                                <i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true" data-show-face="true" data-share="true"></i>Share on
 
-								<a class="share" href="">
-									<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-share" aria-hidden="true"></i>Share
+								<a class="share facebook" href="https://www.facebook.com/sharer.php?u={{ request.build_absolute_uri }}">
+									 <i class="fab fa-facebook" style="font-size:18px;color:#3B5998; margin:5px"></i>
+								</a>
+								<a class="share twitter" href="https://twitter.com/share?url={{ share_feed }} {{ request.build_absolute_uri }}">
+									<i class="fab fa-twitter-square" style="font-size:18px;color:#0084b4; margin:5px"></i>
+								</a>
+								<a class="share" href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ share_feed }} {{ request.build_absolute_uri }} &title={{ feed.topic }}&summary={{ share_feed }}&source={{ request.build_absolute_uri }} ">
+									<i class="fab fa-linkedin" style="margin:5px;"></i>
+								</a>
+								<a class="share google-plus" href="https://plus.google.com/share?url={{ request.build_absolute_uri }} ">
+									<i class="fa fa-google-plus" style="font-size:18px;color:#d34836"></i>
 								</a>
 								{% endif %}
 

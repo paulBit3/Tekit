@@ -1004,7 +1004,30 @@ aside .card .card-widget {
   visibility: visible;
 }
 
+.alert-banner:not(.icons-only).error {
+    background: #fce4e4;
+    color: #4b5658;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 10px solid #ed5a5a;
+    -webkit-box-shadow: inset 0px 0px 0px 2px #ed5a5a;
+    -moz-box-shadow: inset 0px 0px 0px 2px #ed5a5a;
+    box-shadow: inset 0px 0px 0px 2px #ed5a5a;
+}
 
+.alert-banner:not(.fixed) {
+    margin-bottom: 30px;
+    position: relative;
+    border-radius: 4px;
+}
+
+.alert-banner {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 /* Styles for the content section */
 /*
