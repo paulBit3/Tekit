@@ -1091,7 +1091,37 @@ aside .card .card-widget {
 }
 
 
-
+/* Small sized screens */
+@media (max-width: 480px) {
+  .box{
+    width: 300px;
+  }
+  .button{
+    margin-left: 70px;
+  }
+  .slogan{
+    font-size: 24px; 
+  }
+  #toolbar li{
+    width: 64px;
+    font-size: 14px; 
+  }
+}
+/* Medium sized screens */
+@media only screen and (min-width: 481px) {
+  .box{
+    width: 360px;
+  }
+  .button{
+    margin-left: 170px;
+  }
+  .slogan{
+    font-size: 48px; 
+  }
+  #toolbar li{
+    width: 128px;
+    font-size: 24px; 
+  }
 }
 /* =End Media Queries
 ----------------------------------------------- */
