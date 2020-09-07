@@ -18,6 +18,11 @@ __init__.py
 asgi.pi
 wsgi.py
 /media
+settings.py
+secret_settings.py
+production_settings.py
+dev_settings.py
+email_info.py
 static/* linguist-vendored
 
 ### Django.Python Stack ###

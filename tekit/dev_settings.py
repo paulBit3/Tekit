@@ -2,7 +2,6 @@ from .settings import *
 
 DEBUG = True
 
-SECRET_KEY = '%oljx75rpnpz-7w5#97*+1&%6-q14o#likq6cnewxk@mehb2=y'
 
 DATABASES['default']['NAME'] = 'tekit'
 DATABASES['default']['USER'] = 'postgres'
