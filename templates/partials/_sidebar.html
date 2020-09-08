@@ -56,7 +56,7 @@
 
     <aside id="recent-posts-2" class="widget inner-padding widget_recent_entries">
      {% if '/' == request.path %}
-      <h2 class="widget-title">Recent Topics</h2>
+      <h4 class="widget-title">Recent Topics</h4>
       <ul>
          {% for topic in topics_list %} 
         <li> <a href="{% url 'feed:topic' topic.id %}">{{ topic.action.name }}</a> <small><span class="post-date">{{ topic.date_added|date:"D d M Y" }}</span></small></li>

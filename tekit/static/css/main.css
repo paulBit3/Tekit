@@ -2,7 +2,8 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4feff;
+  /*background-color: #f4feff;*/
+  background-image: url("../images/dot_back_g.jpg");
 }
 
 /* Nav Bar */
@@ -1017,13 +1018,13 @@ aside .card .card-widget {
 }
 
 .alert-banner:not(.fixed) {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     position: relative;
     border-radius: 4px;
 }
 
 .alert-banner {
-    padding: 15px;
+    padding: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1200,7 +1201,7 @@ aside .card .card-widget {
 }
 
 #sidebar li ul {
-  padding: 0 30px 40px 30px;
+  padding: 0 20px 30px 20px;
 }
 
 #sidebar li li {
@@ -1218,8 +1219,8 @@ aside .card .card-widget {
 
 
 #sidebar h2 {
-  padding: 0px 30px 10px 30px;
-  background: url(../images/sidebar_background.jpg) no-repeat;
+  padding: 0px 20px 10px 20px;
+  background: url(../images/dot_back_g.jpg) no-repeat;
 /*  text-transform: lowercase;*/
   font-weight: normal;
   font-size: 1.6em;
