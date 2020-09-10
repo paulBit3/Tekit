@@ -4,8 +4,7 @@
 
        Please click on the link below to activate your account.
 
-      
-       <a class="btn btn-primary btn-block" href=" {{protocol}}://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}">ACTIVATE YOUR ACCOUNT</a>
+       {{protocol}}://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
 
        Your username is: {{ user.get_username }}
 
