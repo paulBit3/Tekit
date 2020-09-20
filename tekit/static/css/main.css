@@ -1140,12 +1140,16 @@ aside .card .card-widget {
     width: 100%
   }
 
-  #sidebar li {
+  .sidebar li {
     width: 33.3333333%;
+    margin-left: 90px;
+  }
+  .sidebar h4{
+    margin-left: 90px;
   }
 }
 /* Medium sized screens */
-@media only screen and (min-width: 481px) {
+@media screen and (min-width: 481px) {
   .box{
     width: 360px;
   }
@@ -1163,8 +1167,12 @@ aside .card .card-widget {
     float: none;
     width: 100%
   }
-  #sidebar li {
+  .sidebar li {
     width: 50.6666667%;
+    margin-left: 90px;
+  }
+  .sidebar h4{
+    margin-left: 90px;
   }
 
 }
