@@ -3,7 +3,8 @@ body {
   margin: 0;
   padding: 0;
   /*background-color: #f4feff;*/
-  background-image: url("../images/dot_back_g.jpg");
+  background-image: url("../images/bg2.PNG");
+  /*background-image: url("../images/dot_back_g.jpg");*/
 }
 
 /* Nav Bar */
@@ -440,7 +441,7 @@ textarea {
   /* Navigation */
   .navbar-custom {
     padding: 2.125rem 1.5rem 2.125rem 2rem;
-        background: transparent;
+    background: transparent;
     box-shadow: none;
   }
 
@@ -459,7 +460,7 @@ textarea {
   }
 
   .navbar-custom.top-nav-collapse {
-        padding: 0.5rem 1.5rem 0.5rem 2rem;
+    padding: 0.5rem 1.5rem 0.5rem 2rem;
     background-color: #5f4dee;
     box-shadow: 0 0.0625rem 0.375rem 0 rgba(0, 0, 0, 0.1);
   }
@@ -468,6 +469,34 @@ textarea {
   .navbar-custom.top-nav-collapse .nav-item .nav-link.active {
     color: #fff;
   }
+
+  .navbar-custom .dropdown-menu {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 0.25rem solid rgba(0, 0, 0, 0);
+    border-radius: 0.25rem;
+  }
+
+  .navbar-custom.top-nav-collapse .dropdown-menu {
+    border-top: 0.25rem solid rgba(0, 0, 0, 0);
+    box-shadow: 0 0.375rem 0.375rem 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .navbar-custom .dropdown-item {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .navbar-custom .dropdown-items-divide-hr {
+    width: 84%;
+  }
+
+  .navbar-custom .nav-item .btn-outline-sm {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 1rem;
+  }
+}
 
   /* end of navigation */
 
@@ -859,9 +888,6 @@ aside .card .card-widget {
   height: 50px;
 }
 
-.preloader .preloader-img img {
-  max-width:55px
-}
 
 @-webkit-keyframes zoom {
   0% {
@@ -890,7 +916,9 @@ aside .card .card-widget {
   }
 }
 
-
+.preloader .preloader-img img {
+  max-width:55px
+}
 
 .preloader .pre-text h3 {
   font-family: "Audiowide", cursive;
@@ -1107,6 +1135,14 @@ aside .card .card-widget {
     width: 64px;
     font-size: 14px; 
   }
+  .column {
+    float: none;
+    width: 100%
+  }
+
+  #sidebar li {
+    width: 33.3333333%;
+  }
 }
 /* Medium sized screens */
 @media only screen and (min-width: 481px) {
@@ -1123,6 +1159,14 @@ aside .card .card-widget {
     width: 128px;
     font-size: 24px; 
   }
+    .column {
+    float: none;
+    width: 100%
+  }
+  #sidebar li {
+    width: 50.6666667%;
+  }
+
 }
 /* =End Media Queries
 ----------------------------------------------- */
