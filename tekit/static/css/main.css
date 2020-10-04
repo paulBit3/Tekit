@@ -661,6 +661,19 @@ textarea {
   background-color: powderblue;
 }*/
 
+/*comment reply*/
+.sent-icon {
+  position: relative;
+  left: 20px;
+  font-size:18px;
+  color:#0069d9;
+}
+
+.reply {
+  padding-left: 20px;
+  color:#0069d9;
+  font-size:18px;
+}
 
 .clearfix .cmt-btn .share {
   align-items: center;
@@ -1116,12 +1129,225 @@ aside .card .card-widget {
 /*Display 'show menu' link*/
 .menu {
     display:block;
+}
+
+.sidebar #categories li {
+  width: 90px;
+  padding-left: 2px;
+  font-size: .75em;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: 700;
+}
+
+} 
+
+
+
+@media only screen and (max-width : 768px){
+
+  .menu ul {
+      position: static;
+      display: none;
+  }    
+  
+  /*Create vertical spacing*/
+  .menu li {
+      margin-bottom: 1px;
+  }
+  /*Make all menu links full width*/
+  .menu ul li, li a {
+      width: 100%;
+  }
+  /*Display 'show menu' link*/
+  .menu {
+      display:block;
+  }
+  
+  .sidebar li {
+    width: 33.3333333%;
+    margin-left: 10px;
+  }
+
+  .sidebar h4{
+    margin-left: 10px;
+  }
+
+  .sidebar #categories li {
+    width: 50px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    font-weight: 700;
+  }
+  
+  }
+
+
+  @media only screen and (min-width: 414px) and (max-width: 767px) {
+    .menu ul {
+      position: static;
+      display: none;
+  }    
+  
+  /*Create vertical spacing*/
+  .menu li {
+      margin-bottom: 1px;
+  }
+  /*Make all menu links full width*/
+  .menu ul li, li a {
+      width: 100%;
+  }
+  /*Display 'show menu' link*/
+  .menu {
+      display:block;
+  }
+  
+  .sidebar li {
+    width: 33.3333333%;
+    margin-left: 10px;
+  }
+
+  .sidebar h4{
+    margin-left: 10px;
+  }
+
+  .sidebar #categories li {
+    width: 20px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 10px;
+    line-height: 10px;
+    overflow: hidden;
+    font-weight: 700;
+  }
+  }
+
+  
+
+/* Small screens */
+@media all and (max-width: 500px) {
+  .nav {
+
+    flex-direction: column;
+  }
+  .sidebar li {
+    width: 33.3333333%;
+    margin-left: 50px;
+  }
+
+  .sidebar h4{
+    margin-left: 10px;
+  }
+
+  .sidebar #categories li {
+    width: 90px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    font-weight: 700;
+  }
+}
+
+/*Small sized screens*/
+@media only screen and (max-width: 575px)
+{
+
+    .form-search
+    {
+      height: 40px;
     }
+    .form-search::-webkit-input-placeholder
+    {
+      font-size: 13px !important;
+    }
+    .form-search:-moz-placeholder
+    {
+      font-size: 13px !important;
+    }
+    .form-search::-moz-placeholder
+    {
+      font-size: 13px !important;
+    } 
+    .form-search:-ms-input-placeholder
+    { 
+      font-size: 13px !important;
+    }
+    .form-search::input-placeholder
+    {
+      font-size: 13px !important;
+    }
+    .form-search .button
+    {
+      height: 42px;
+      font-size: 12px;
+    }
+    .sidebar #categories li {
+      width: 90px;
+      padding-left: 2px;
+      font-size: .75em;
+      height: 20px;
+      line-height: 20px;
+      overflow: hidden;
+      font-weight: 700;
+    }
+
 }
 
 
 /* Small sized screens */
-@media (max-width: 480px) {
+@media only screen and (max-width: 576px) {
+  .sidebar li {
+    width: 33.3333333%;
+    margin-left: 50px;
+  }
+
+  .sidebar h4{
+    margin-left: 10px;
+  }
+
+  .sidebar #categories li {
+    width: 90px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    font-weight: 700;
+  }
+}
+
+
+/* Small sized screens */
+@media only screen and (min-width: 600px){
+  .sidebar li {
+    width: 40.3333333%;
+    margin-left: 50px;
+  }
+
+  .sidebar h4{
+    margin-left: 10px;
+  }
+
+  .sidebar #categories li {
+    width: 90px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    font-weight: 700;
+  }
+}
+
+
+/* Small sized screens */
+@media only screen and (max-width: 460px) {
   .box{
     width: 300px;
   }
@@ -1139,17 +1365,68 @@ aside .card .card-widget {
     float: none;
     width: 100%
   }
-
+  
   .sidebar li {
     width: 33.3333333%;
-    margin-left: 90px;
+    margin-left: 10px;
   }
+
   .sidebar h4{
-    margin-left: 90px;
+    margin-left: 10px;
+  }
+
+  .sidebar #categories li {
+    width: 90px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    font-weight: 700;
+  }
+}
+
+/* Small sized screens */
+@media only screen and (max-width: 480px) {
+  .box{
+    width: 300px;
+  }
+  .button{
+    margin-left: 70px;
+  }
+  .slogan{
+    font-size: 24px; 
+  }
+  #toolbar li{
+    width: 64px;
+    font-size: 14px; 
+  }
+  .column {
+    float: none;
+    width: 100%
+  }
+  
+  .sidebar li {
+    width: 33.3333333%;
+    margin-left: 70px;
+  }
+
+  .sidebar h4{
+    margin-left: 70px;
+  }
+
+  .sidebar #categories li {
+    width: 90px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    font-weight: 700;
   }
 }
 /* Medium sized screens */
-@media screen and (min-width: 481px) {
+@media only screen and (min-width: 481px) {
   .box{
     width: 360px;
   }
@@ -1163,7 +1440,7 @@ aside .card .card-widget {
     width: 128px;
     font-size: 24px; 
   }
-    .column {
+  .column {
     float: none;
     width: 100%
   }
@@ -1175,6 +1452,15 @@ aside .card .card-widget {
     margin-left: 90px;
   }
 
+  .sidebar #categories li {
+    width: 90px;
+    padding-left: 2px;
+    font-size: .75em;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    font-weight: 700;
+  }
 }
 /* =End Media Queries
 ----------------------------------------------- */
@@ -1232,7 +1518,7 @@ aside .card .card-widget {
 .menu .current_page_item a {
 
 }
-
+/*
 #sidebar {
   float: right;
   width: 300px;
@@ -1273,7 +1559,7 @@ aside .card .card-widget {
 #sidebar h2 {
   padding: 0px 20px 10px 20px;
   background: url(../images/dot_back_g.jpg) no-repeat;
-/*  text-transform: lowercase;*/
+
   font-weight: normal;
   font-size: 1.6em;
   color: #302D26;
@@ -1292,7 +1578,7 @@ aside .card .card-widget {
   line-height: 24px;
   overflow: hidden;
   font-weight: 700;
-}
+}*/
 
 .menu-image-title {
   padding-left: 10px;

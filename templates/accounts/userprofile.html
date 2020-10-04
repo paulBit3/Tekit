@@ -23,69 +23,24 @@
    <div id="container">
       <div class="row-fluid">
         {% block sidebar %}
-          <div id="sidebar" class="span2">
+          <!-- <div id="sidebar" class="span2"> </div> -->
           	{% if user.userprofile.picture %}
           	 <img src="{{ request.user.userprofile.picture.url }}" class="rounded-circle profil-img" alt="profile pic" id="profile-pic">
              {% else %}
              <img src="{% static 'images/default-sign.png' %}" alt="profile pic" id="profile-pic">
-             <p><b>{{request.user.username}}</b></p>
           	{% endif %}
-          	<div id="side-menu">
-          		{% if user == request.user %}
-        	  		 <a href="{% url 'accounts:profile_update' pk=user.id %}" class="btn btn-primary btn-sm rounded-pill">Edit Profile</a>
-                 <br><br>
-          		{% else %}
-          		    {% if user.is_authenticated %}
-        	  		   {% if request.user|has_relationship:user %}
-        	  		   <p class="alert alert-success">Friend</p>
-        	  		   {% else %}
-        	  		    {% if request.user|has_request:user and 'no request' %}
-        		  		   	{% if request.user != user %}
-        		  		      <a href="javascript:void(0);" id="send_request_from{{ user.id }}_to{{ owner.id }}" class="js-sendRequest btn btn-block btn-sm rounded-pill">+Friend</a>
-        		  		   	{% endif %}
-        		  		{% else %}
-        		  		    {% if request.user|has_request:user and 'sent request' %}
-        		  		      <p class="alert alert-success">Request already sent!</p>
-        		  		    {% else %}
-        		  		      <p class="alert">Received request.</p>
-        		  		    {% endif %}
-        	  		    {% endif %}
-        	  		   {% endif %}
-          		    {% endif %}
-          		{% endif %}
-
-          		{% if user == request.user %}
-          		 {% if user_request %}
-          		  <a href="#js-friendRequestModal" class="js-sendRequest btn btn-block btn-succes btn-sm rounded-pill">Friend request({{ user_request.count }})</a>
-          		  <div id="js-sendRequestModal" class="modal hide fade">
-          		  	<div class="modal-header">
-          		  		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-          		  		<h3>Friend request</h3>
-          		  	</div>
-          		  	<div class="modal-body">
-          		  		{% for request in user_request %}
-          		  		  <div class="fr-request">
-          		  		 	<p>{{ request.from_user }}</p>
-          		  		 	<p>{{ request.message }}</p>
-          		  		 	<a href="javascript:void(0);" class="js-acceptRequest btn btn-success btn-sm rounded-pill" id="accept_request_from{{ request.from_user.id }}_to{{ user.id }}">Accept</a>
-          		  		 </div>
-          		  		{% endfor %}
-          		  	</div>
-          		  	<div class="modal-footer">
-          		  		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-          		  	</div>
-          		  </div>
-          		 {% endif %}
-          		{% endif %}
-          	</div>
-
-          </div>
+         
 
           <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="card bg-light mb-3" style="max-width: 35rem;">
-                <div class="card-header"><h4><b>{{profile.first_name}} {{profile.last_name}}</b></h4></div>
+                <div class="card-header"><h4><b>{{profile.first_name}} {{profile.last_name}}</b></h4>
+                </div>
 
                   <div class="card-body">
+                  {% if user == request.user %}
+                  <a href="{% url 'accounts:profile_update' pk=user.id %}" class="btn btn-primary btn-sm rounded-pill">Edit Profile</a>
+                  <br><br>
+                  {% endif %}
                     <p>Email: <b>{{ request.user.email }}</b></p>
                     <p>Phone: <b>{{ profile.phone_no }}</b></p>
                     <p>Birthdate: <b>{{ profile.dob }}</b></p>
