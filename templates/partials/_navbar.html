@@ -6,6 +6,13 @@
       <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top top-nav-collapse">
         <div class="container-fluid">
           <img src="{% static 'images/social_discuss7.png' %}">
+          {% if user.is_authenticated %}
+           {% if user.userprofile.picture %}
+             <img src="{{ request.user.userprofile.picture.url }}" class="rounded-circle profil-img" alt="profile pic" id="profile-pic">
+             {% else %}
+             <img src="{% static 'images/default-sign.png' %}" alt="profile pic" id="profile-pic">
+            {% endif %}
+          {% endif %}
         <a class="navbar-brand logo-text" href="/">Tekit</a>
         <!--  For mobile menu toggle button -->
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbars"aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +44,7 @@
                   </a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class=""> {{ user.username|title }}.</span></a>
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class=""> {{ user.username|title }}.</span></a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <div class="dropdown-items-divide-hr"></div>
                     <a class="dropdown-item" href="{% url 'accounts:get_user_profile' user.username %}"><span class="item-text"></span>See your Profile</a>
