@@ -6,13 +6,6 @@
       <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top top-nav-collapse">
         <div class="container-fluid">
           <img src="{% static 'images/social_discuss7.png' %}">
-          {% if user.is_authenticated %}
-           {% if user.userprofile.picture %}
-             <img src="{{ request.user.userprofile.picture.url }}" class="rounded-circle profil-img" alt="profile pic" id="profile-pic">
-             {% else %}
-             <img src="{% static 'images/default-sign.png' %}" alt="profile pic" id="profile-pic">
-            {% endif %}
-          {% endif %}
         <a class="navbar-brand logo-text" href="/">Tekit</a>
         <!--  For mobile menu toggle button -->
         <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbars"aria-controls="navbars" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,12 +30,17 @@
             <ul class="navbar-nav navbar-right ml-auto">
               {% if user.is_authenticated %}
               <!-- <li class="nav-item mr-3"><span class="navbar-text">Hello, {{ user.username }}.</span></li> -->
-                 <li class="nav-item active">
+                 <!-- <li class="nav-item active">
                   <a class="nav-link" href="/">
                     <i class="fas fa-home" aria-hidden="true"></i>
                     <span class="sr-only">(current)</span>
                   </a>
-                </li>
+                </li> -->
+                  {% if user.userprofile.picture %}
+                  <img src="{{ request.user.userprofile.picture.url }}" class="rounded-circle profil-img" alt="profile pic" id="profile-pic">
+                  {% else %}
+                  <img src="{% static 'images/default-sign.png' %}" alt="profile pic" id="profile-pic">
+                  {% endif %}
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class=""> {{ user.username|title }}.</span></a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
