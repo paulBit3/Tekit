@@ -23,7 +23,7 @@
                   <div class="preloader-circle"></div>
                   <div class="preloader-img pre-text">
                     <img src="{% static 'images/social_discuss8.png' %}" alt="tekit-image">
-                    <h3 class="">BeaM Inc.</h3>
+                    <h3 class="">DigitX Inc.</h3>
                   </div>
               </div>
           </div>
@@ -101,69 +101,101 @@
 				        
                       
                 </div>  <hr>
-                
-                <div class="row">
-                	<div class="col-md-8 mt3 left">
+       
+                	<div class="col-md-8 mt3 ">
                 		<section id="showcase-inner">
 						 <h4 class="text-center mb-3">
 						 	<i class="circle-up-right fa fa-arrow-circle-right"
 										aria-hidden="true"></i>
 						 Latest <span class="my_list_blue">Posts</span></h4>
-					      
-					
-					      {% for feed in feeds %}
-					        <div class="d-flex bd-highlight">
-                        	  <div class="p-2 flex-fill bd-highlight">
-                        	  	<!-- <div class="shadow"> -->
-                        	  		<div class="card bg-light mb-3 px-3"style="max-width: 25rem;">
-									  {% if feed.image %}
-						                <div class="card-img-top">
-						                	<img width="200" height="300" src="{{ feed.image.url }}" alt="">
-						                </div>
-						               {% else %}
-						                <div class="card-img-top">
-						                	<img width="100" height="100" src="{% static 'photos/feedholder.png' %}" alt="">
-						                </div>
-									   {% endif %}
+					</div>    
 
-										<small class="card-header text-muted">
-										  Post by {{ feed.author|capfirst }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}
-										</small>
-
-										<div class="card-body">
-											<p card-text>
-												<!-- Limited the words on the excerpts to 400 characters-->
-												{{ feed.text|slice:":300" }}
-											</p>
-											 
-											 <!-- Check for user authorization-->
-											{% if not request.user.is_authenticated %}
-											<small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize }}</small>
-											 <button class="btn btn-primary btn-sm rounded-pill" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;</button>
-											{% else %}
-											<a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize}}</small>
-											</a>
-											<a href="{% url 'feed:feed_detail' pk=feed.id  %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
-											{% endif %}
-											
-											 
-										</div>
-									</div>
-							   <!-- </div> -->
-							 </div>
-		                    </div>
-						   {% empty %}
-					          <span class="card-text info"><h3>No feed has been added yet.</h3></span>
-					       {% endfor %}
 					</section>    
-			  </div>
+			  
 		    <!-- </div> -->
-		    
+		   	{% for feed in feeds %}
+			<div class="container">
+				
+		        <div class="row"> 
+		            <div class="col-lg-6 mb-4">
+		            	<small class="card-header text-muted">
+							Post by {{ feed.author|capfirst }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}
+						</small>
+		                <div class="card bg-light"style="max-width: 30rem;"> 
+		                   {% if feed.image %}
+								<div class="card-img-top">
+								    <img width="200" height="300" src="{{ feed.image.url }}" alt="">
+								</div>
+							{% else %}
+								<div class="card-img-top">
+								    <img width="100" height="100" src="{% static 'photos/feedholder.png' %}" alt="">
+								</div>
+							{% endif %} 
+		  
+		                    <div class="card-body"> 
+		                        <h5 class="card-title">{{feed.topic.action}}</h5> 
+		                        <p class="card-text"> 
+		                            {{ feed.text|slice:":300" }} 
+		                        </p> 
+		                        <!-- Check for user authorization-->
+								{% if not request.user.is_authenticated %}
+									<small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize }}</small>
+		                        <a href="#" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;
+		                        </a>
+		                        {% else %}
+								<a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize}}</small></a>
+		                        
+		                        <a href="{% url 'feed:feed_detail' pk=feed.id %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
+		                        {% endif %}
+		                    </div> 
+		                </div> 
+		            </div> 
+		            <div class="col-lg-6 mb-4">
+		             <small class="card-header text-muted">
+						Post by {{ feed.author|capfirst }} | {{ feed.date_posted | date:'M d, Y H:i, a' }}
+					 </small> 
+		                <div class="card"> 
+		                    {% if feed.image %}
+								<div class="card-img-top">
+								    <img width="200" height="300" src="{{ feed.image.url }}" alt="">
+								</div>
+							{% else %}
+								<div class="card-img-top">
+								    <img width="100" height="100" src="{% static 'photos/feedholder.png' %}" alt="">
+								</div>
+							{% endif %} 
+		  
+		                    <div class="card-body"> 
+		                        <h5 class="card-title">{{feed.topic.action}}</h5> 
+		                        <p class="card-text"> 
+		                            {{ feed.text|slice:":300" }} 
+		                        </p> 
+
+		                        <!-- Check for user authorization-->
+								{% if not request.user.is_authenticated %}
+									<small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize }}</small>
+		                        <a href="#" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#authModal" href="{% url 'accounts:register' %}">Read More &rarr;
+		                        </a>
+		                        {% else %}
+								<a href="{% url 'feed:feed_detail' pk=feed.pk  %}" class="text-muted"><small>Comments: {{ feed.comments.count }} comment {{ feed.comments.count|pluralize}}</small></a>
+		                        
+		                        <a href="{% url 'feed:feed_detail' pk=feed.id %}" class="btn btn-primary btn-sm">Read More &rarr;</a>
+		                        {% endif %}
+		                    </div> 
+		                </div> 
+		            </div> 
+		        </div>
+		        
+		    </div>
+		    {% empty %}
+		        <span class="card-text info"><h3>No feed has been added yet.</h3></span>
+			{% endfor %}
 		</div>
-		
-    </section>
+ 
+
+    <!-- </section> -->
     {% include 'partials/_footer.html' %}
-</div>
+<!-- </div> -->
 
 {% block modals %}
 <!--Modal: Login / Register Form-->

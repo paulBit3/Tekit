@@ -503,10 +503,21 @@ textarea {
 /* Content */
 
 #content {
+  overflow: auto;
+  height: 100%;
+}
+
+.column1{
+  background-color: #efefef;
+  width: 300px;
+  float: left;
+  margin: 10px;
+}
+
+#content2 {
   border-bottom: 3px solid #59C0F8;
   border-top: 3px solid #59C0F8;
 }
-
 
 .top-feed-container .card {
   margin-top: 55px;
