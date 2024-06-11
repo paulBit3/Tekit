@@ -4,9 +4,7 @@
 
 ------
 
-is a social Tech platform that allows users to share Tech stories experience, life, business , with friends, colleagues & 
-family on social media.
-A social full-stack web application taht makes easier for user to share technologies. 
+A social full-stack web application taht makes easier for user to share technologies stories with friends, family. 
 The app allows users to post, reply, like and comment, and share a topic. I implemented 
 
 -------
@@ -21,6 +19,26 @@ Features
 The App has a security algorithms implemented using JWT for authentication and authorization system for users to login and logout, and follow and un-follow others users. It also contains a password reset system which allows users to request a password reset link, which their receive in their email to reset their password. 
 The App is deployed in AWS cloud Lightsail(A Virtual Private  server and Web Hosting).
 
+1 - User posts a topic
+2 - User comments topic
+3 - User like / unlike a topic
+4 - User reply to comment
+5 - User can cancel own replies
+6 - Comment words are limited
+---
+Auth features are:
+1 - User login
+2 - User logout
+3 - User modify own profil
+4 - User follow / unfollow friends
+
+
+
+Some others features are that:
+1 - User receive reset link in their email accounts(Which ever email account)
+2 - User can reset their password through a reset link
+3 - User click on the reset link to reset their password
+4 - User can be notified if the link has expired or alive.
 -----
 - Frontend
 ----
