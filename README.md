@@ -22,9 +22,10 @@ The App has a security algorithms implemented using JWT for authentication and a
 The App is deployed in AWS cloud Lightsail(A Virtual Private  server and Web Hosting).
 
 -----
-
+- Frontend
+----
 Templates
-
+-
 -------
 Splash screen
 
