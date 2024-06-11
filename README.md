@@ -1,7 +1,65 @@
 # Tekit
+----
+
+🤔About the Project:
+
+------
 
 is a social Tech platform that allows users to share Tech stories experience, life, business , with friends, colleagues & 
 family on social media.
+A social full-stack web application taht makes easier for user to share technologies. 
+The app allows users to post, reply, like and comment, and share a topic. I implemented 
+
+-------
+- Front-end techs stack: HTML, CSS, JavaScript, react 
+- Back-end techs stack: Python/Django
+
+------
+- git clone: https://github.com/paulBit3/Tekit.git
+
+Features
+-
+The App has a security algorithms implemented using JWT for authentication and authorization system for users to login and logout, and follow and un-follow others users. It also contains a password reset system which allows users to request a password reset link, which their receive in their email to reset their password. 
+The App is deployed in AWS cloud Lightsail(A Virtual Private  server and Web Hosting).
+
+-----
+
+Templates
+
+```
+
+{% block content %}
+
+     <!-- Preloader Start -->
+      <div id="preloader-active">
+          <div class="preloader d-flex align-items-center justify-content-center">
+              <div class="preloader-inner position-relative">
+                  <div class="preloader-circle"></div>
+                  <div class="preloader-img pre-text">
+                    <img src="{% static 'images/social_discuss8.png' %}" alt="tekit-image">
+                    <h3 class="">DigitX Inc.</h3>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- End Preloader -->
+
+     <!-- start sidebar -->
+   <!--  <div id="sidebar">
+    	 {#% include 'partials/_sidebar.html' %#}
+    	 
+    </div> -->
+    <!-- end sidebar -->
+
+  {% block sidebar %} {% endblock sidebar %}
+```
+
+------
+
+Demo screens
+
+-------
+
 
 ![take_login_page](https://user-images.githubusercontent.com/43505777/92321495-1c0c9e80-eff0-11ea-939d-2a89db16d63b.JPG)
 ![tekit_registration_page_screen](https://user-images.githubusercontent.com/43505777/92321500-2890f700-eff0-11ea-9a8b-ad38b759524a.JPG)
