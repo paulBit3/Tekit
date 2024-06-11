@@ -26,6 +26,9 @@ The App is deployed in AWS cloud Lightsail(A Virtual Private  server and Web Hos
 
 Templates
 
+-------
+Splash screen
+
 ```
 
 {% block content %}
@@ -53,9 +56,221 @@ Templates
 
   {% block sidebar %} {% endblock sidebar %}
 ```
+-----
+Comment page
 
+```
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load markdown_deux_tags %}
+
+{% block content %}
+
+  <div id="container">
+	<div class="container">
+		<div class="rows">
+			<div class="col-lg-6 col-md-6 col-sm-6">
+			  <div class="d-inline-flex bd-highlight">
+
+	              <br>
+				<div class="card-body">
+				 	{% for comment in feed.comments.all %}
+				 	 <!-- <div class="comments"> -->
+				 	 	<p class="font-weight-bold">
+				 	 		
+					         {% if not comment.approved %}
+						         <a href="{% url 'feed:comment_removed' pk=comment.pk %}">
+						         	<i data-toggle="tooltip" data-placement="bottom" title="delete" class=" fas fa-times pr-2" aria-hidden="true"></i>
+								 </a>
+								 <a href="{% url 'feed:comment_approved' pk=comment.pk %}">
+								 	<i data-toggle="tooltip" data-placement="bottom" title="approve" class=" fa fa-check pr-2" aria-hidden="true"></i>
+						         </a>
+				             {% endif %}
+
+							 {#% if user.is_authenticated and comment.approved %#}
+							  <!-- only allows user to delete his own comment -->
+							 {% if  feed.comments.commented == request.user.userprofile and comment.approved %}
+							   <a href="{% url 'feed:comment_removed' pk=comment.pk %}">
+							   <i class="fa fa-trash"></i>
+							   </a>
+						     {% endif %}
+				        </p>
+				        <blockquote>
+
+				         <small>Posted by:</small> <strong>{{ comment.user.username|capfirst }}</strong> - <small class="date text-muted">{{ comment.date_added}}</small>
+				         <div id="captions">
+				         	<div class="comment">
+				         		<div class="caption" data-id="{{ comment.pk }}">
+					         		<div class="usertext">
+					         			 <!--  <p card-text>#{{ comment.content|slice:":300" }}</p> -->
+									  	 <p class="mb-0"><small>{{ comment.content|markdown }}</small></p>
+									        <!-- Comment like section -->
+									        <div class="ml-1" id="like-section">
+									         {% include 'partials/like_section.html' %}
+										    </div>
+										    <br>
+									  	 	{% for reply in comment.replies.all %}
+									  	 	<small>by <strong>{{ reply.user.username|capfirst }}</strong></small><p class="mb-0"><small>{{ reply.content|markdown }}</small></p>
+									  	 	  <!-- Reply like section -->
+									  	 	  <div id="like-reply-section">
+									        	{% include 'partials/like_reply_section.html' %}
+										      </div>
+									  		{% endfor %}
+									        
+									  	 	<div class="panel-footer clearfix">
+												<a href="" class="btn "><i class="fa fa-window-close" aria-hidden="true"></i>Cancel</a>
+
+												<button class="reply-btn btn " type="button" data-id="{{ comment.pk }}"><i class="fa fa-reply-all"></i>Reply</button>
+											</div>
+				                            <div id="replyform-template" style="display: none;">
+				                            <!-- <div class="comment-reply" style="display: none;"> -->
+										 	    <form id="Form1" name="replyForm" action="{% url 'feed:feed_detail' feed.id %}" method="post">
+											 	  	<input id="id-input" type="hidden" name="parent_id" value="{{ comment.pk }}">
+											 	  	<div class="form-group">
+											 	  		{% csrf_token %}
+											 	  		<label for="reply">Reply:</label>
+											 	  		<textarea id="contents" class="form-control form-rounded inputstl col-8" rows="2" type="text" name="content" placeholder="Replying... to {% if comment.user %} {{comment.user}} {% endif %}" required></textarea>
+											 	  		<small id="charactersReplyLeft"></small>  
+											 	  		<small id="repchar_count"></small>  
+					                            		<!-- {{ form|crispy }} -->
+											 	  		<!-- <textarea class="form-control" type="text" name="text"></textarea> -->
+													   </div>
+													<span><i class="fa fa-send sent-icon"></i></span>
+											 	  	<input type="submit" class="btn btn-default pull-right reply" value="Send" name="replyForm">
+											    </form>
+									        </div>
+					         		</div>
+					         	</div>
+				            </div>
+				         </div>
+				         
+					  	 <p><small>Read time: {% if comment.read_time <= 1 %} < 1 Minute</small> {% else %}{{ comment.read_time }} minutes {% endif %}</p>
+					  	 
+						</blockquote>
+				         <hr style='width:400px;'>
+					     
+					 <!-- </div> -->
+					{% empty %}
+					<p>No comments here yet :(</p>
+					{% endfor %}
+				</div>
+			</div>
+		  </div>
+		</div>
+	</div>
+</div>
+
+```
 ------
 
+- Backend
+--------
+Models
+-
+```
+#Topic table
+
+class Topic(models.Model):
+    is_read = models.BooleanField(blank=True)
+    read_time = models.PositiveSmallIntegerField(verbose_name='View Time', default=0)
+    action = models.ForeignKey(TopicAction, on_delete=models.CASCADE)
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='topic_set1')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='topic_set2', null=True)
+    hot_topics = models.BooleanField(default=False)
+    date_added = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    # Adding meta information about the model
+    class Meta:
+        ordering = ['-hot_topics']
+
+    # An instance of TopicManager class
+    objects = models.Manager()
+    topic= TopicManager()
+
+
+    def get_total_likes(self):
+        return self.likes.count()
+
+    
+    # Update topics
+    def update_topic(self, from_user, action_id, to_user=None):
+        action = TopicAction.objects.get(id=action_id)
+        self = Topic(from_user=from_user, action=action, is_read=False, date_added=datetime.now())
+        self.save()
+
+    def get_absolute_url(self):
+        return reverse('feed:topic', args=[self.id])
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return '{}'.format(self.from_user.username)
+```
+
+```
+#Reply table
+
+class Reply(models.Model):
+    """Reply Comment class"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='replies')
+    parent = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replies') # reply comment
+    content = models.TextField(max_length=160, blank=False, null=False)
+    likes = models.ManyToManyField(UserProfile, blank=True, related_name='r_likes')
+    views = models.IntegerField(default=0)
+    view_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='read')
+    date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
+    is_public = models.BooleanField(default=False) # reply moderator
+
+    class Meta:
+        """A Meta class"""
+        ordering = ['-date_added']
+            
+
+
+    def get_total_likes(self):
+        return self.likes.count()
+    
+    def get_absolute_url(self):
+        return reverse('feed:feed_detail', args=[self.id])
+
+    def __str__(self):
+        return 'Reply by {} - to {}'.format(self.user.username, str(self.parent))
+```
+
+```
+# Profile class inherit form User abstract class
+class UserProfile(models.Model):
+    """Store extract information relates to the user model"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name  = models.CharField(max_length=100, blank=True)
+    last_name  = models.CharField(max_length=100, blank=True)
+    about_me = models.TextField(max_length=150, blank=True)
+    picture = models.ImageField(upload_to='images/pictures', default='images/pictures/user_default.png', blank=True, null=True)
+    phone_no = models.CharField(max_length=15, blank=True)
+    dob = models.DateField(auto_now= False, auto_now_add=False, blank=True, null=True)
+    city = models.CharField(max_length=30, blank=True)
+    state = models.CharField(max_length=50, blank=True)
+    status = models.CharField(max_length=200, blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    connection = models.CharField(max_length = 100, blank=True)
+    follower = models.IntegerField(default=0)
+    following = models.IntegerField(default=0)
+
+```
+
+```
+ # Methods to manage relationship between user
+    def get_relationships(self):
+        relationships = Relationship.objects.filter(
+            models.Q(from_user=self.user) |
+            models.Q(to_user=self.user)
+            )
+        return relationships
+```
+
+
+
+------
 Demo screens
 
 -------
