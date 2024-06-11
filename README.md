@@ -14,7 +14,7 @@ The app allows users to post, reply, like and comment, and share a topic. I impl
 - Back-end techs stack: Python/Django
 
 ------
-- git clone: https://github.com/paulBit3/Tekit.git
+- ```git clone: https://github.com/paulBit3/Tekit.git```
 
 Features
 -
