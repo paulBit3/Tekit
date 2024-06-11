@@ -4,11 +4,11 @@
 
 ------
 
-A social full-stack web application taht makes easier for user to share technologies stories with friends, family. 
-The app allows users to post, reply, like and comment, and share a topic. I implemented 
+A social full-stack web application that makes easier for user to share technologies stories with friends, family. 
+The app allows users to post, reply, like and comment, and share a topic.
 
 -------
-- Front-end techs stack: HTML, CSS, JavaScript, react 
+- Front-end techs stack: HTML, CSS, JavaScript, React 
 - Back-end techs stack: Python/Django
 
 ------
