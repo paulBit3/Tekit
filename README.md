@@ -14,23 +14,25 @@ The app allows users to post, reply, like and comment, and share a topic.
 ------
 - ```git clone: https://github.com/paulBit3/Tekit.git```
 
-Features that Users can do:
+Features 
 -
 The App has a security algorithms implemented using JWT for authentication and authorization system for users to login and logout, and follow and un-follow others users. It also contains a password reset system which allows users to request a password reset link, which their receive in their email to reset their password. 
 The App is deployed in AWS cloud Lightsail(A Virtual Private  server and Web Hosting).
 
-- 1 - User posts a topic
-- 2 - User comments topic
-- 3 - User like / unlike a topic
-- 4 - User reply to comment
-- 5 - User can cancel own replies
-- 6 - Comment words are limited
+Feature that Users can do:
+-
+- 1 - Post and comment on topic 
+- 3 - Like and unlike a comment, Like a post
+- 4 - Reply to comment
+- 5 - Login and logout
+- 6 - Comment words are limited		  			
 ---
 - Authentication features are:
-- 1 - User login
+- 1 - Login and logout 
 - 2 - User logout
-- 3 - User modify own profil
-- 4 - User follow / unfollow friends
+- 3 - User modify profile
+- 4 - Follow and un-follow friend
+- 5 - Reset password
 ---
 - Some others features are that:
 - 1 - User receive reset link in their email accounts(Which ever email account)
