@@ -14,7 +14,7 @@ The app allows users to post, reply, like and comment, and share a topic.
 ------
 - ```git clone: https://github.com/paulBit3/Tekit.git```
 
-Features
+Features that Users can do:
 -
 The App has a security algorithms implemented using JWT for authentication and authorization system for users to login and logout, and follow and un-follow others users. It also contains a password reset system which allows users to request a password reset link, which their receive in their email to reset their password. 
 The App is deployed in AWS cloud Lightsail(A Virtual Private  server and Web Hosting).
