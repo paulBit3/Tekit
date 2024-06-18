@@ -19,6 +19,15 @@ Features
 The App has a security algorithms implemented using JWT for authentication and authorization system for users to login and logout, and follow and un-follow others users. It also contains a password reset system which allows users to request a password reset link, which their receive in their email to reset their password. 
 The App is deployed in AWS cloud Lightsail(A Virtual Private  server and Web Hosting).
 
+---------
+Challenges and What I Did on the Project
+-
+I've built the entire full stack project. The most challenges  parts of the project are below:
+1- I implemented a secure authentication/authorization system using  JWT security algorithms, for users to login/logout, and follow/un-follow others users. 
+2- I implemented a password reset system which allows users to request a password reset link, 
+3- I implemented a messaging system which allows users to receive their password reset link in their Email. 
+4- I deployed the  App is deployed on AWS cloud Lightsail environment.
+
 Feature that Users can do:
 -
 - 1 - Post and comment on topic 
