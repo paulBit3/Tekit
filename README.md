@@ -8,8 +8,8 @@ A social full-stack web application that makes easier for user to share technolo
 The app allows users to post, reply, like and comment, and share a topic.
 
 -------
-- Front-end techs stack: HTML, CSS, JavaScript, React 
-- Back-end techs stack: Python/Django
+- Front-end techs stack: HTML, CSS, JavaScript 
+- Back-end techs stack: Python/Django, PostgreSQL
 
 ------
 - ```git clone: https://github.com/paulBit3/Tekit.git```
